@@ -1,0 +1,28 @@
+************************************************************************
+** COLIN optimizer wrapper example
+************************************************************************
+**
+**	This example illustrates the process of extending COLIN to add
+**	a user-defined optimizer.  In this example, this is the 'hooke()'
+**	optimizer, which is wrapped with the interfaces::Hooke class.
+**
+**      Note: the hooke() function is included in the lib3po.a library.
+**
+**      Note: this example mirrors the interfaces::Hooke solver that is
+**      included in the Interfaces library.
+**
+************************************************************************
+
+0)	build acro with COLIN
+
+1)	make
+
+Now you should have the executable file "colintest"
+
+2)	./colintest --help-solvers
+
+This lists the solvers supported in this executable: hooke and Hooke.
+
+3)	./colintest testfunc.xml
+
+This runs the COLIN Hooke solver!

@@ -1,0 +1,58 @@
+#! /usr/bin/env python
+##
+## A python script that emulates a simulator.  This sits, waiting
+## for a file "Pairs and Strategy.txt".  It then computes objectives
+## and writes the file "Duration and Cost.txt"
+##
+
+import sys
+import re
+import os
+import time
+
+debug=True
+
+#
+# Loop forever
+#
+while (1):
+  #
+  # Wait for input file
+  #
+  while (not os.path.exists("Pairs and Strategy.txt")):
+    time.sleep(0.1)
+  #
+  # Parse the input file
+  #
+  TMPFILE = open("Pairs and Strategy.txt")
+  data = ""
+  for line in TMPFILE:
+    data = data + " " + line.strip()
+  print "INPUT",data
+  tokens = re.split("[\t ]+", data.strip())
+  vals = []
+  for token in tokens:
+    vals = vals + [ eval(token) ]
+  TMPFILE.close()
+  os.unlink("Pairs and Strategy.txt")
+  #
+  # Compute the response
+  #
+  ss = 0.00001
+  for val in vals:
+    ss = ss + val*val
+  #
+  # Write the 'Duration and Cost.txt'
+  #
+  OUTPUT = open("Duration and Cost.txt","w")
+  print >>OUTPUT, ss,
+  print >>OUTPUT, 1.0/ss
+  OUTPUT.close()
+  #
+  # Debugging I/O
+  #
+  INFILE = open("Duration and Cost.txt","r")
+  for line in INFILE:
+    print "OUTPUT",line.strip()
+  INFILE.close()
+

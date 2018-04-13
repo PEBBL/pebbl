@@ -1,0 +1,28 @@
+<!-- 
+	MO_NLP0 problem being passed to a MO_NLP solver.
+	Minimize just continuous variables.
+  -->
+
+<ColinInput>
+  <Problem type="MO_UMINLP0">
+     <Domain>
+	<IntegerVars num="3">
+	    <Lower value="0"/>
+	    <Upper value="20"/>
+	</IntegerVars>
+     </Domain>
+     <Objectives num="2"/>
+     <Driver>
+        <Command>python simopt_fn</Command>
+     </Driver>
+  </Problem>
+
+  <Solver type="colin:ls">
+     <InitialPoint>
+       i:(3: 10 10 10)
+     </InitialPoint>
+     <Options>
+        <Option name="max_iters">20</Option>
+     </Options>
+  </Solver>
+</ColinInput>

@@ -1,0 +1,10 @@
+admin     https://software.sandia.gov/svn/public/acro/common/trunk/admin
+bin       https://software.sandia.gov/svn/public/acro/common/trunk/bin
+bootstrap https://software.sandia.gov/svn/public/acro/common/trunk/bootstrap
+cmake     https://software.sandia.gov/svn/acro/common/trunk/cmake
+config    https://software.sandia.gov/svn/public/acro/common/trunk/config
+doc       https://software.sandia.gov/svn/public/acro/common/trunk/doc
+include   https://software.sandia.gov/svn/public/acro/common/trunk/include
+mvs       https://software.sandia.gov/svn/public/acro/common/trunk/mvs
+test      https://software.sandia.gov/svn/public/acro/common/trunk/test
+userapps  https://software.sandia.gov/svn/public/acro/common/trunk/userapps

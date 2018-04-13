@@ -1,0 +1,54 @@
+************************************************************************
+** PICO  "sucasa" example
+************************************************************************
+**
+**	This example illustrates the process of extending PICO via the
+** 	"sucasa" mechanism.  The latter provides convenient 
+**	mappings from data structures with AMPL's parameter and variable
+**	names and indices to the indices of solver variables and 
+**	constraints.
+**
+**	This example shows how to include a user-defined incumbent 
+**	heuristic.
+**
+**	This example concerns a MIP for a simple 1|prec|sum_j{w_j*C_j}
+**	scheduling problem (one machine, precedence constraints, 
+**	minimizing total weighted completion time.  The file
+**	simple-sched.mod contains an ampl model, and simple-sched.dat
+**	contains the data for a small instance that has a fractional
+**	LP relaxation, and hence forces the invocation of the incumbent
+**	heuristic after the LP solve. 
+**      
+**      See the presentation in the doc directory for more details.
+************************************************************************
+
+0)	build acro with PICO
+
+1)	make sure that ampl is in your path
+
+2)	../../bin/sucasa -g simple-sched.mod 
+
+2.1) Edit the *.map file to change the change the sets for everything from either reals or literals to integers.
+2.2) ../../bin/sucasa -g -m simple-sched.mod
+
+3)	change the haveIncumentHeuristic method in simple_sched_milp.h to
+	return true.
+
+4.1)	uncomment the incumbentHeuristic() method declaration in
+	simple_sched_milp.h.
+4.2)	uncomment the extractSolution() method declaration in
+	simple_sched_milp.h.
+
+5)	make
+
+now you should have the executable file "PICO_simple_sched".  But this needs some
+auxiliary files to run.  sucasa bundles the various operations, calling ampl to
+generate the auxiliary files and then calling PICO_simple_sched, with a .nl file (by default)
+
+6)	../../bin/sucasa simple-sched.mod simple-sched.dat
+
+you just ran your PICO app; the solution is in simple_sched.solution.dat
+
+This simple example solves the scheduling problem described in the
+PowerPoint presentation in the "doc" directory.  Specifically,
+look at the incumbent heuristic method in simple_sched_extras.cpp.

@@ -1,0 +1,71 @@
+$Id: README 4190 2006-12-22 21:55:59Z lafisk $
+
+Check that the TOPBUILD variable in the Makefile is set to 
+the top of your acro build directory, where lib and include are
+located.
+
+Make sure the bin directory of TOPBUILD is in your PATH,
+because gen_*_app calls setupMappedMILP.  You also need
+to have AMPL in your PATH.
+
+You must have the parameter file "ufl.par" in your
+current working directory when you run pmedian.  
+
+================== gen_milp_app instructions =============
+
+gen_milp_app creates a pmedian application for a given
+ampl model and data file:
+
+../bin/gen_milp_app pmedian.mod pmedian.dat
+
+In pmedian_milp.h:
+
+  In the pmedian::MILP class, uncomment the declarations of:
+    serialPrintSolution
+    newIncumbentEffect
+    printAllStatistics
+
+  In the pmedian::MILPNode class, uncomment the declarations of:
+    boundComputation
+    updateIncumbent
+
+"make" creates the pmedian application
+
+To run the problem:  pmedian pmedian.mps
+
+================== gen_lazy_app instructions =============
+
+gen_lazy_app is very similar, but it writes code to the
+setup() method in pmedian_milp.cpp which creates a .val
+file at runtime containing the data in the data file provided
+at runtime.  In this way, the generated application can be
+run on different datasets (for the same model).
+
+(In gen_milp_app, the .val file is created by AMPL in
+gen_milp_app, instead of later on when the application runs.
+The .val file is required by PICO to solve the problem.)
+
+make really-clean
+
+../bin/gen_lazy_app {model file} {data file #1}
+
+"make" creates the pmedian application
+
+To run the problem:  pmedian {model file} {data file #2}
+
+The pmedian application was created with GeneralSP.mod in mind, 
+If you look at boundComputation in pmedian_extras.cpp, you'll 
+see it assumes that GoalBound is indexed by (ns, total), and that 
+numEvents is indexed by mc.
+
+The model file should be the model used to build pmedian.  The
+data file can be different, but needs to be data for the model
+that built pmedian.
+
+==========================================================
+
+"make clean" removes built objects and executables
+
+"make really-clean" 
+  removes everything that "clean" removes, plus all the 
+  gen_milp_app'd files, plus any files written by pmedian

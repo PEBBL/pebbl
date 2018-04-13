@@ -1,0 +1,7 @@
+set A := a b c;
+
+param B :=
+a 1
+b 2
+c -4
+;
