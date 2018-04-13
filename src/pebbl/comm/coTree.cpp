@@ -19,8 +19,8 @@
 // Jonathan Eckstein
 //
 
-#include <acro_config.h>
-#include <pebbl/coTree.h>
+#include <pebbl_config.h>
+#include <pebbl/comm/coTree.h>
 
 #ifdef ACRO_HAVE_MPI
 

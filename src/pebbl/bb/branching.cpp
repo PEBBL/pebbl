@@ -18,7 +18,7 @@
 //
 
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 
 #include <math.h>
 
@@ -28,14 +28,14 @@
 #define nextafter _nextafter
 #endif
 
-#include <utilib/_math.h>
-#include <utilib/nicePrint.h>
-#include <utilib/seconds.h>
-#include <utilib/hash_fn.h>
-#include <utilib/file_util.h>
+#include <pebbl/utilib/_math.h>
+#include <pebbl/utilib/nicePrint.h>
+#include <pebbl/utilib/seconds.h>
+#include <pebbl/utilib/hash_fn.h>
+#include <pebbl/utilib/file_util.h>
 
-#include <pebbl/branching.h>
-#include <pebbl/gRandom.h>
+#include <pebbl/bb/branching.h>
+#include <pebbl/misc/gRandom.h>
 
 #include <iostream>
 #include <iomanip>

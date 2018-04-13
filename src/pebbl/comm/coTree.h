@@ -18,7 +18,7 @@
 #ifndef pebbl_coTree_h
 #define pebbl_coTree_h
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 
 
 //  JE allows MPI compiles with partially developed CMake
@@ -32,9 +32,9 @@
 #include <utilib/CommonIO.h>
 #include <utilib/mpiUtil.h>
 #include <utilib/BasicArray.h>
-#include <pebbl/MessageID.h>
-#include <pebbl/treeTopology.h>
-#include <pebbl/fundamentals.h>
+#include <pebbl/comm/MessageID.h>
+#include <pebbl/misc/treeTopology.h>
+#include <pebbl/misc/fundamentals.h>
 
 namespace pebbl {
 

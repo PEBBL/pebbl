@@ -14,7 +14,7 @@
 
 #include <acro_config.h>
 #include <utilib/std_headers.h>
-#include <pebbl/MessageID.h>
+#include <pebbl/comm/MessageID.h>
 
 
 #ifdef ACRO_HAVE_MPI

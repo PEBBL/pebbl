@@ -19,8 +19,8 @@
 // Jonathan Eckstein
 //
 
-#include <acro_config.h>
-#include <pebbl/pebblBase.h>
+#include <pebbl_config.h>
+#include <pebbl/bb/pebblBase.h>
 
 using namespace std;
 

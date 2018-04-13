@@ -17,10 +17,10 @@
 // Jonathan Eckstein
 //
 
-#include <acro_config.h>
-#include <utilib/mpiUtil.h>
-#include <pebbl/loadObject.h>
-#include <pebbl/branching.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/mpiUtil.h>
+#include <pebbl/bb/loadObject.h>
+#include <pebbl/bb/branching.h>
 
 using namespace std;
 

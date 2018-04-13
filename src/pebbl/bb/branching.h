@@ -25,23 +25,23 @@
 #define ACRO_HAVE_MPI
 #endif
 
-#include <acro_config.h>
-#include <utilib/seconds.h>
-#include <utilib/BasicArray.h>
-#include <utilib/CharString.h>
-#include <utilib/LinkedList.h> 
-#include <utilib/GenericHeap.h>
-#include <utilib/exception_mngr.h>
-#include <utilib/memdebug.h>
-#include <utilib/ParameterList.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/seconds.h>
+#include <pebbl/utilib/BasicArray.h>
+#include <pebbl/utilib/CharString.h>
+#include <pebbl/utilib/LinkedList.h> 
+#include <pebbl/utilib/GenericHeap.h>
+#include <pebbl/utilib/exception_mngr.h>
+#include <pebbl/utilib/memdebug.h>
+#include <pebbl/utilib/ParameterList.h>
 #ifdef   ACRO_HAVE_MPI
-#include <utilib/PackBuf.h>
+#include <pebbl/utilib/PackBuf.h>
 #endif
-#include <pebbl/memUtil.h>
-#include <pebbl/fundamentals.h>
-#include <pebbl/pebblBase.h>
-#include <pebbl/pebblParams.h>
-#include <pebbl/loadObject.h>
+#include <pebbl/misc/memUtil.h>
+#include <pebbl/misc/fundamentals.h>
+#include <pebbl/bb/pebblBase.h>
+#include <pebbl/bb/pebblParams.h>
+#include <pebbl/bb/loadObject.h>
 
 extern "C" void pebbl_abort_handler(int code);
 

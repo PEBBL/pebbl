@@ -12,10 +12,10 @@
 // pebblParams.cpp
 //
 
-#include <acro_config.h>
-#include <pebbl/pebblParams.h>
-#include <pebbl/pebblBase.h>
-#include <pebbl/gRandom.h>
+#include <pebbl_config.h>
+#include <pebbl/bb/pebblParams.h>
+#include <pebbl/bb/pebblBase.h>
+#include <pebbl/misc/gRandom.h>
 
 namespace pebbl {
 

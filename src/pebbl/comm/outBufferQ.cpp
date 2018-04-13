@@ -19,7 +19,7 @@
 #include <acro_config.h>
 #include <utilib/exception_mngr.h>
 #include <utilib/mpiUtil.h>
-#include <pebbl/outBufferQ.h>
+#include <pebbl/comm/outBufferQ.h>
 
 #ifdef ACRO_HAVE_MPI
 
