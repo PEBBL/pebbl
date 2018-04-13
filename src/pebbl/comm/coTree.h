@@ -18,7 +18,7 @@
 #ifndef pebbl_coTree_h
 #define pebbl_coTree_h
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 
 
 //  JE allows MPI compiles with partially developed CMake

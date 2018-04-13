@@ -18,7 +18,7 @@
 #ifndef pebbl_MessageID_h
 #define pebbl_MessageID_h
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 
 //  JE allows MPI compiles with partially developed CMake
 #if     defined(HAVE_MPI) && !defined(ACRO_HAVE_MPI)

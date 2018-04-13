@@ -9,7 +9,7 @@
  *  _________________________________________________________________________
  */
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <pebbl/parKnapsack.h>
 
 using namespace pebbl;

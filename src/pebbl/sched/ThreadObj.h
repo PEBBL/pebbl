@@ -19,7 +19,7 @@
 #ifndef pebbl_ThreadObj_h
 #define pebbl_ThreadObj_h
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <utilib/CommonIO.h>
 
 //  JE allows MPI compiles with partially developed CMake

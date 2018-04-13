@@ -20,7 +20,7 @@
 #ifndef pebbl_loadBal_h
 #define pebbl_loadBal_h
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <mpi.h>
 #include <utilib/PM_LCG.h>
 #include <utilib/default_rng.h>

@@ -11,7 +11,7 @@
 // parMonomial.cpp
 // Noam Goldberg 11/2/2008
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <utilib/exception_mngr.h>
 
 #include <stdlib.h>

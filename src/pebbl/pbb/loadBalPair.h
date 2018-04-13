@@ -21,7 +21,7 @@
 #ifndef pebbl_loadBalPair_h
 #define pebbl_loadBalPair_h
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <utilib/std_headers.h>
 
 namespace pebbl {

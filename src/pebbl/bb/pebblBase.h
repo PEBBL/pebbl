@@ -18,7 +18,7 @@
 #ifndef pebbl_pebblBase_h
 #define pebbl_pebblBase_h
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <utilib/_math.h>
 #include <pebbl/memUtil.h>
 

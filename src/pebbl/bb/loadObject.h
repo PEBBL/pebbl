@@ -19,7 +19,7 @@
 #ifndef pebbl_loadObject_h
 #define pebbl_loadObject_h
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <utilib/CommonIO.h>
 #include <utilib/DoubleVector.h>
 #include <pebbl/memUtil.h>

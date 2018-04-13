@@ -15,7 +15,7 @@
 //
 
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <utilib/std_headers.h>
 #include <pebbl/parKnapsack.h>
 

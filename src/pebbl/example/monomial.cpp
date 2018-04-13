@@ -7,7 +7,7 @@
  *  _________________________________________________________________________
  */
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <utilib/seconds.h>
 
 #ifdef ACRO_USING_COIN_CBC

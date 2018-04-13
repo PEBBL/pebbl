@@ -25,7 +25,7 @@
 #ifndef pebbl_serialLipshitzian_h
 #define pebbl_serialLipshitzian_h
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <utilib/Ereal.h>
 #include <utilib/BasicArray.h>
 #include <pebbl/branching.h>

@@ -17,7 +17,7 @@
 #ifndef Docking_h
 #define Docking_h
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <utilib/exception_mngr.h>
 #include <utilib/BitArray.h>
 #include <utilib/BasicArray.h>

@@ -16,7 +16,7 @@
  * \todo Depricate this header.
  */
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #if 0
 GLOBAL_PARAMETER(depthFirst);
 GLOBAL_PARAMETER(breadthFirst);

@@ -18,7 +18,7 @@
 //
 
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <utilib/CharString.h>
 #include <utilib/mpiUtil.h>
 #include <utilib/nicePrint.h>

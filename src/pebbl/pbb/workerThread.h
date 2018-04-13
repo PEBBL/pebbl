@@ -19,7 +19,7 @@
 #ifndef pebbl_workerThread_h
 #define pebbl_workerThread_h
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <pebbl/parBranching.h>
 #include <pebbl/parBranchThreads.h>
 

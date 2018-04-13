@@ -16,7 +16,7 @@
 // Jonathan Eckstein
 //
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <utilib/_math.h>
 #include <utilib/CommonIO.h>
 #include <pebbl/memUtil.h>

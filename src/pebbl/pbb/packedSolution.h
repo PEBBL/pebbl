@@ -21,7 +21,7 @@
 #define pebbl_packedSolution_h
 
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <utilib/mpiUtil.h>
 #include <pebbl/branching.h>
 #include <pebbl/parPebblBase.h>

@@ -18,7 +18,7 @@
 #ifndef pebbl_pebblParams_h
 #define pebbl_pebblParams_h
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <utilib/ParameterSet.h>
 
 namespace pebbl {

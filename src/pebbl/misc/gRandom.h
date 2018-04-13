@@ -19,7 +19,7 @@
 #ifndef pebbl_gRandom_h
 #define pebbl_gRandom_h
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <utilib/RNG.h>
 #include <utilib/Uniform.h>
 //#include <utilib/paramTable.h>

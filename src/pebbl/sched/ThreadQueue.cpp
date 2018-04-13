@@ -14,7 +14,7 @@
 // Just to get the pragmas to work right for gcc
 //
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <utilib/_math.h>
 #include <pebbl/ThreadQueue.h>
 

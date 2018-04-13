@@ -14,7 +14,7 @@
 // Bill Hart
 //
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <utilib/_math.h>
 #include <utilib/seconds.h>
 #include <utilib/mpiUtil.h>

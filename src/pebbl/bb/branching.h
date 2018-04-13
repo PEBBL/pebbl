@@ -25,7 +25,7 @@
 #define ACRO_HAVE_MPI
 #endif
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <utilib/seconds.h>
 #include <utilib/BasicArray.h>
 #include <utilib/CharString.h>

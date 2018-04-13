@@ -19,7 +19,7 @@
 #ifndef pebbl_serialCore_h
 #define pebbl_serialCore_h
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <pebbl/branching.h>
 
 namespace pebbl_CoreExample {

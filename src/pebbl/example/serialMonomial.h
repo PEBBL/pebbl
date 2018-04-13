@@ -25,7 +25,7 @@
 #include <stdexcept>
 #include <functional>
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 
 #include <utilib/_math.h>
 #include <utilib/ParameterSet.h>

@@ -20,7 +20,7 @@
 #ifndef pebbl_knapsack_h
 #define pebbl_knapsack_h
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <pebbl/branching.h>
 #include <utilib/CharString.h>
 #include <utilib/BasicArray.h>

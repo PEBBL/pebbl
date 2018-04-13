@@ -17,7 +17,7 @@
 // Jonathan Eckstein
 //
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <utilib/seconds.h>
 #include <pebbl/parBranching.h>
 

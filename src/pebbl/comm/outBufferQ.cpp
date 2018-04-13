@@ -16,7 +16,7 @@
 // Jonathan Eckstein
 //
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <utilib/exception_mngr.h>
 #include <utilib/mpiUtil.h>
 #include <pebbl/outBufferQ.h>

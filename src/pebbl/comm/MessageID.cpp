@@ -12,7 +12,7 @@
 // MessageID.cpp
 //
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <utilib/std_headers.h>
 #include <pebbl/MessageID.h>
 

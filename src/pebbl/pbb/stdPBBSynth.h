@@ -23,7 +23,7 @@
 // To declare the beginning of the definition of the parallel
 // master class.
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #define declareParMaster(MASTERCLASS,BASEMASTERCLASS,SPCLASS,BASESPCLASS) \
 class SPCLASS; \
   \

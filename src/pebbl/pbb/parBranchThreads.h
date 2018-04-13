@@ -19,7 +19,7 @@
 #ifndef pebbl_parBranchThreads_h
 #define pebbl_parBranchThreads_h
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 
 #include <utilib/mpiUtil.h>
 #include <utilib/logEvent.h>

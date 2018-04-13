@@ -20,7 +20,7 @@
 #ifndef pebbl_reposThreads_h
 #define pebbl_reposThreads_h
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 
 #include <pebbl/parBranchThreads.h>
 

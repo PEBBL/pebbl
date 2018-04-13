@@ -12,7 +12,7 @@
 // Noam Goldberg 9/4/2007
 
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <utilib/exception_mngr.h>
 #include <stdlib.h>
 #include <fstream>
