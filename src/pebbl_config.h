@@ -1,5 +1,8 @@
 // This file is massive KLUDGE just to see if we can get a compile
 
+#define ACRO_VALIDATING 1
+
+
 #ifndef _INCLUDE_ACRO_CONFIG_H
 #define _INCLUDE_ACRO_CONFIG_H 1
  
