@@ -20,8 +20,8 @@
 #define pebbl_loadObject_h
 
 #include <pebbl_config.h>
-#include <utilib/CommonIO.h>
-#include <utilib/DoubleVector.h>
+#include <pebbl/utilib/CommonIO.h>
+#include <pebbl/utilib/DoubleVector.h>
 #include <pebbl/memUtil.h>
 #include <pebbl/fundamentals.h>
 #include <pebbl/pebblBase.h>

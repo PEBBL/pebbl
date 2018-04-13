@@ -17,8 +17,8 @@
 //
 
 #include <pebbl_config.h>
-#include <utilib/exception_mngr.h>
-#include <utilib/mpiUtil.h>
+#include <pebbl/utilib/exception_mngr.h>
+#include <pebbl/utilib/mpiUtil.h>
 #include <pebbl/outBufferQ.h>
 
 #ifdef ACRO_HAVE_MPI

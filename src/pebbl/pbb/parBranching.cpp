@@ -19,7 +19,7 @@
 
 #include <pebbl_config.h>
 
-#include <utilib/mpiUtil.h>
+#include <pebbl/utilib/mpiUtil.h>
 #include <pebbl/parBranching.h>
 
 

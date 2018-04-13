@@ -20,7 +20,7 @@
 #define pebbl_memutil_h
 
 #include <pebbl_config.h>
-#include <utilib/ParameterSet.h>
+#include <pebbl/utilib/ParameterSet.h>
 #include <pebbl/fundamentals.h>
 
 namespace pebbl {

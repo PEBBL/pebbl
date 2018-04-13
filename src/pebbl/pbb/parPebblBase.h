@@ -32,12 +32,12 @@
 #endif
 
 
-#include <utilib/logEvent.h>
+#include <pebbl/utilib/logEvent.h>
 
 #ifdef ACRO_HAVE_MPI
 
-#include <utilib/std_headers.h>
-#include <utilib/logEvent.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/logEvent.h>
 #include <pebbl/pebblBase.h>
 
 namespace pebbl {

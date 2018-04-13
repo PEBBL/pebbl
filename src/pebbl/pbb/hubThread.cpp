@@ -25,7 +25,7 @@
 #ifdef ACRO_HAVE_MPI
 
 #include <pebbl/packPointer.h>
-#include <utilib/logEvent.h>
+#include <pebbl/utilib/logEvent.h>
 
 using namespace std;
 

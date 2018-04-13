@@ -22,7 +22,7 @@
 #include <pebbl_config.h>
 #include <pebbl/serialLipshitzian.h>
 #ifdef ACRO_HAVE_MPI
-#include <utilib/CharString.h>
+#include <pebbl/utilib/CharString.h>
 #include <pebbl/parBranching.h>
 
 namespace pebbl {

@@ -13,14 +13,14 @@
 //
 
 #include <pebbl_config.h>
-#include <utilib/std_headers.h>
+#include <pebbl/utilib/std_headers.h>
 #include <pebbl/MessageID.h>
 
 
 #ifdef ACRO_HAVE_MPI
 
 #include <mpi.h>
-#include <utilib/mpiUtil.h>
+#include <pebbl/utilib/mpiUtil.h>
 
 
 namespace pebbl {

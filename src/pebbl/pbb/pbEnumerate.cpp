@@ -23,7 +23,7 @@
  
 #ifdef ACRO_HAVE_MPI
 
-#include <utilib/nicePrint.h>
+#include <pebbl/utilib/nicePrint.h>
 
 
 using namespace std;

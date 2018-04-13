@@ -32,10 +32,10 @@
 #ifdef ACRO_HAVE_MPI
 #include <mpi.h>
 #endif
-#include <utilib/BitArray.h>
-#include <utilib/LinkedList.h>
-#include <utilib/QueueList.h>
-#include <utilib/BasicArray.h>
+#include <pebbl/utilib/BitArray.h>
+#include <pebbl/utilib/LinkedList.h>
+#include <pebbl/utilib/QueueList.h>
+#include <pebbl/utilib/BasicArray.h>
 #include <pebbl/ThreadObj.h>
 #include <pebbl/ThreadQueue.h>
 

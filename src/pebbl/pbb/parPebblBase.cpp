@@ -24,7 +24,7 @@
  
 #ifdef ACRO_HAVE_MPI
 
-#include <utilib/logEvent.h>
+#include <pebbl/utilib/logEvent.h>
 
 #ifdef EVENT_LOGGING_PRESENT
 using utilib::logEvent;

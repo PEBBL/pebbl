@@ -18,12 +18,12 @@
 #define Docking_h
 
 #include <pebbl_config.h>
-#include <utilib/exception_mngr.h>
-#include <utilib/BitArray.h>
-#include <utilib/BasicArray.h>
-#include <utilib/Ereal.h>
-#include <utilib/ValuedContainer.h>
-#include <utilib/stl_auxiliary.h>
+#include <pebbl/utilib/exception_mngr.h>
+#include <pebbl/utilib/BitArray.h>
+#include <pebbl/utilib/BasicArray.h>
+#include <pebbl/utilib/Ereal.h>
+#include <pebbl/utilib/ValuedContainer.h>
+#include <pebbl/utilib/stl_auxiliary.h>
 #include <pebbl/branching.h>
 #include <pebbl/DockingProblem.h>
 #include <pebbl/gRandom.h>

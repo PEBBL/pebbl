@@ -28,7 +28,7 @@
 
 #ifdef ACRO_HAVE_MPI
 
-#include <utilib/mpiUtil.h>
+#include <pebbl/utilib/mpiUtil.h>
 #include <pebbl/fundamentals.h>
 
 namespace pebbl {

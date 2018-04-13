@@ -20,7 +20,7 @@
 #define pebbl_packPointer_h
 
 #include <pebbl_config.h>
-#include <utilib/PackBuf.h>
+#include <pebbl/utilib/PackBuf.h>
 
 namespace pebbl {
 

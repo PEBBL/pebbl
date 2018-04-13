@@ -15,9 +15,9 @@
 //
 
 #include <pebbl_config.h>
-#include <utilib/_math.h>
-#include <utilib/seconds.h>
-#include <utilib/mpiUtil.h>
+#include <pebbl/utilib/_math.h>
+#include <pebbl/utilib/seconds.h>
+#include <pebbl/utilib/mpiUtil.h>
 #include <pebbl/Scheduler.h>
 
 using namespace std;

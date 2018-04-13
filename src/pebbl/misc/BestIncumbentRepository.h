@@ -19,8 +19,8 @@
 #define pebbl_BestIncumbentRepository_h
 
 #include <pebbl_config.h>
-#include <utilib/SimpleSplayTree.h>
-#include <utilib/LinkedList.h>
+#include <pebbl/utilib/SimpleSplayTree.h>
+#include <pebbl/utilib/LinkedList.h>
 
 namespace pebbl {
 

@@ -30,8 +30,8 @@
 
 
 #include <pebbl_config.h>
-#include <utilib/_math.h>
-#include <utilib/ParameterList.h>
+#include <pebbl/utilib/_math.h>
+#include <pebbl/utilib/ParameterList.h>
 #include <pebbl/fundamentals.h>
 
 #if defined(NO_STRING_STREAM)

@@ -18,7 +18,7 @@
 //
 
 #include <pebbl_config.h>
-#include <utilib/seconds.h>
+#include <pebbl/utilib/seconds.h>
 #include <pebbl/fundamentals.h>
 #include <pebbl/SelfAdjustThread.h>
 

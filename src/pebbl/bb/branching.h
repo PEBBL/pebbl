@@ -26,16 +26,16 @@
 #endif
 
 #include <pebbl_config.h>
-#include <utilib/seconds.h>
-#include <utilib/BasicArray.h>
-#include <utilib/CharString.h>
-#include <utilib/LinkedList.h> 
-#include <utilib/GenericHeap.h>
-#include <utilib/exception_mngr.h>
-#include <utilib/memdebug.h>
-#include <utilib/ParameterList.h>
+#include <pebbl/utilib/seconds.h>
+#include <pebbl/utilib/BasicArray.h>
+#include <pebbl/utilib/CharString.h>
+#include <pebbl/utilib/LinkedList.h> 
+#include <pebbl/utilib/GenericHeap.h>
+#include <pebbl/utilib/exception_mngr.h>
+#include <pebbl/utilib/memdebug.h>
+#include <pebbl/utilib/ParameterList.h>
 #ifdef   ACRO_HAVE_MPI
-#include <utilib/PackBuf.h>
+#include <pebbl/utilib/PackBuf.h>
 #endif
 #include <pebbl/memUtil.h>
 #include <pebbl/fundamentals.h>

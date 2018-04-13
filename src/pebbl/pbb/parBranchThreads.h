@@ -21,10 +21,10 @@
 
 #include <pebbl_config.h>
 
-#include <utilib/mpiUtil.h>
-#include <utilib/logEvent.h>
-#include <utilib/PackBuf.h>
-#include <utilib/_math.h>
+#include <pebbl/utilib/mpiUtil.h>
+#include <pebbl/utilib/logEvent.h>
+#include <pebbl/utilib/PackBuf.h>
+#include <pebbl/utilib/_math.h>
 #include <pebbl/parPebblBase.h>
 #include <pebbl/ThreadObj.h>
 #include <pebbl/SelfAdjustThread.h>
