@@ -12,7 +12,7 @@
 
 #include <pebbl/utilib/CommonIO.h>
 #include <pebbl/utilib/seconds.h>
-#include <pebbl/Docking.h>
+#include <pebbl/example/Docking.h>
 
 using namespace pebbl;
 

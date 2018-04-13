@@ -20,8 +20,8 @@
 #define pebbl_workerThread_h
 
 #include <pebbl_config.h>
-#include <pebbl/parBranching.h>
-#include <pebbl/parBranchThreads.h>
+#include <pebbl/pbb/parBranching.h>
+#include <pebbl/pbb/parBranchThreads.h>
 
 #ifdef ACRO_HAVE_MPI
 

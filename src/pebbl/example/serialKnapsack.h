@@ -21,7 +21,7 @@
 #define pebbl_knapsack_h
 
 #include <pebbl_config.h>
-#include <pebbl/branching.h>
+#include <pebbl/bb/branching.h>
 #include <pebbl/utilib/CharString.h>
 #include <pebbl/utilib/BasicArray.h>
 #include <pebbl/utilib/BitArray.h>
@@ -32,7 +32,7 @@
 #ifdef ACRO_HAVE_MPI
 #include <pebbl/utilib/PackBuf.h>
 #endif
-#include <pebbl/chunkAlloc.h>
+#include <pebbl/misc/chunkAlloc.h>
 
 
 namespace pebbl {

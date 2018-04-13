@@ -14,7 +14,7 @@
 
 #include <pebbl_config.h>
 #include <pebbl/utilib/std_headers.h>
-#include <pebbl/ThreadObj.h>
+#include <pebbl/sched/ThreadObj.h>
 
 using namespace std;
 

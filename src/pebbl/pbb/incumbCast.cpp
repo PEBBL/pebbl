@@ -19,11 +19,11 @@
 
 #include <pebbl_config.h>
 
-#include <pebbl/parBranching.h>
+#include <pebbl/pbb/parBranching.h>
  
 #ifdef ACRO_HAVE_MPI               // If no MPI, this module is a stub.
 
-#include <pebbl/treeTopology.h>
+#include <pebbl/misc/treeTopology.h>
 
 using namespace std;
 

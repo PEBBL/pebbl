@@ -20,10 +20,10 @@
 #define pebbl_parallelLipshitzian_h
 
 #include <pebbl_config.h>
-#include <pebbl/serialLipshitzian.h>
+#include <pebbl/example/serialLipshitzian.h>
 #ifdef ACRO_HAVE_MPI
 #include <pebbl/utilib/CharString.h>
-#include <pebbl/parBranching.h>
+#include <pebbl/pbb/parBranching.h>
 
 namespace pebbl {
 

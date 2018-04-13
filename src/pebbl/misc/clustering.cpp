@@ -18,8 +18,8 @@
 
 
 #include <pebbl_config.h>
-#include <pebbl/fundamentals.h>
-#include <pebbl/clustering.h>
+#include <pebbl/misc/fundamentals.h>
+#include <pebbl/misc/clustering.h>
 
 using namespace std;
 

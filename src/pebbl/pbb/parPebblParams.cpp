@@ -15,7 +15,7 @@
 
 #include <pebbl_config.h>
 #include <pebbl/utilib/std_headers.h>
-#include <pebbl/parPebblParams.h>
+#include <pebbl/pbb/parPebblParams.h>
 
 #ifdef ACRO_HAVE_MPI
 

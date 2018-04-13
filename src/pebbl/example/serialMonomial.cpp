@@ -20,7 +20,7 @@
 #include <algorithm>
 
 
-#include "serialMonomial.h"
+#include <pebbl/example/serialMonomial.h>
 //#define __DEBUG
 
 

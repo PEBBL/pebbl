@@ -19,8 +19,8 @@
 #include <pebbl_config.h>
 #include <pebbl/utilib/seconds.h>
 #include <pebbl/utilib/logEvent.h>
-#include <pebbl/parBranching.h>
-#include <pebbl/parBranchThreads.h>
+#include <pebbl/pbb/parBranching.h>
+#include <pebbl/pbb/parBranchThreads.h>
 
 #ifdef ACRO_HAVE_MPI
 

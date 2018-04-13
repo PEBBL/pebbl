@@ -26,9 +26,9 @@
 #include <pebbl/utilib/default_rng.h>
 #include <pebbl/utilib/IntVector.h>
 #include <pebbl/utilib/IntMatrix.h>
-#include <pebbl/clusterTree.h>
-#include <pebbl/loadBalPair.h>
-#include <pebbl/parLoadObject.h>
+#include <pebbl/misc/clusterTree.h>
+#include <pebbl/pbb/loadBalPair.h>
+#include <pebbl/pbb/parLoadObject.h>
 //#include <pebbl/parBranching.h>
 
 

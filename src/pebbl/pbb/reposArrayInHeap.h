@@ -22,7 +22,7 @@
 
 #include <pebbl_config.h>
 #include <pebbl/utilib/std_headers.h>
-#include <pebbl/branching.h>
+#include <pebbl/bb/branching.h>
 
 
 namespace pebbl {

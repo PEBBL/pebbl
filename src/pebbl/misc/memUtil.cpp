@@ -19,7 +19,7 @@
 #include <pebbl_config.h>
 #include <pebbl/utilib/_math.h>
 #include <pebbl/utilib/CommonIO.h>
-#include <pebbl/memUtil.h>
+#include <pebbl/misc/memUtil.h>
 
 #ifdef COUGAR
 

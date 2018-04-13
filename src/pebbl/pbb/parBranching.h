@@ -21,7 +21,7 @@
 
 #include <pebbl_config.h>
 
-#include <pebbl/branching.h>
+#include <pebbl/bb/branching.h>
 
 #ifdef ACRO_HAVE_MPI
 
@@ -29,28 +29,28 @@
 #include <pebbl/utilib/PackBuf.h>
 #include <pebbl/utilib/seconds.h>
 #include <pebbl/utilib/logEvent.h>
-#include <pebbl/parPebblBase.h>
-#include <pebbl/parPebblParams.h>
-#include <pebbl/clustering.h>
-#include <pebbl/outBufferQ.h>
-#include <pebbl/parLoadObject.h>
-#include <pebbl/Scheduler.h>
-#include <pebbl/workerThread.h>
-#include <pebbl/workerAuxThread.h>
-#include <pebbl/earlyOutputThread.h>
-#include <pebbl/hubThread.h>
-#include <pebbl/incumbSearchThread.h>
-#include <pebbl/incumbCast.h>
-#include <pebbl/spReceiver.h>
-#include <pebbl/spServer.h>
-#include <pebbl/loadBal.h>
-#include <pebbl/reposThreads.h>
-#include <pebbl/llChainer.h>
-#include <pebbl/scatterObj.h>
-#include <pebbl/workerInHeap.h>
-#include <pebbl/reposArrayInHeap.h>
-#include <pebbl/packedSolution.h>
-#include <pebbl/chunkAlloc.h>
+#include <pebbl/pbb/parPebblBase.h>
+#include <pebbl/pbb/parPebblParams.h>
+#include <pebbl/misc/clustering.h>
+#include <pebbl/comm/outBufferQ.h>
+#include <pebbl/pbb/parLoadObject.h>
+#include <pebbl/sched/Scheduler.h>
+#include <pebbl/pbb/workerThread.h>
+#include <pebbl/pbb/workerAuxThread.h>
+#include <pebbl/pbb/earlyOutputThread.h>
+#include <pebbl/pbb/hubThread.h>
+#include <pebbl/pbb/incumbSearchThread.h>
+#include <pebbl/pbb/incumbCast.h>
+#include <pebbl/pbb/spReceiver.h>
+#include <pebbl/pbb/spServer.h>
+#include <pebbl/pbb/loadBal.h>
+#include <pebbl/pbb/reposThreads.h>
+#include <pebbl/pbb/llChainer.h>
+#include <pebbl/misc/scatterObj.h>
+#include <pebbl/pbb/workerInHeap.h>
+#include <pebbl/pbb/reposArrayInHeap.h>
+#include <pebbl/pbb/packedSolution.h>
+#include <pebbl/misc/chunkAlloc.h>
 
 
 // John S's magic so we don't need an operator= for GenericHeaps

@@ -22,7 +22,7 @@
 
 #include <pebbl_config.h>
 
-#include <pebbl/parBranchThreads.h>
+#include <pebbl/pbb/parBranchThreads.h>
 
 #ifdef ACRO_HAVE_MPI
 

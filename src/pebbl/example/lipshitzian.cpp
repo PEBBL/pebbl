@@ -11,7 +11,7 @@
 
 #include <pebbl_config.h>
 #include <pebbl/utilib/seconds.h>
-#include <pebbl/parallelLipshitzian.h>
+#include <pebbl/example/parallelLipshitzian.h>
 
 using namespace pebbl;
 using utilib::BasicArray;

@@ -38,7 +38,7 @@
 
 #include <pebbl/utilib/std_headers.h>
 #include <pebbl/utilib/logEvent.h>
-#include <pebbl/pebblBase.h>
+#include <pebbl/bb/pebblBase.h>
 
 namespace pebbl {
 

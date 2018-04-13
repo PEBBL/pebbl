@@ -20,7 +20,7 @@
 
 #include <pebbl_config.h>
 #include <pebbl/utilib/OrderedList.h>
-#include <pebbl/ThreadObj.h>
+#include <pebbl/sched/ThreadObj.h>
 
 namespace pebbl {
 

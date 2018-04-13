@@ -18,7 +18,7 @@
 #include <pebbl/utilib/_math.h>
 #include <pebbl/utilib/seconds.h>
 #include <pebbl/utilib/mpiUtil.h>
-#include <pebbl/Scheduler.h>
+#include <pebbl/sched/Scheduler.h>
 
 using namespace std;
 using namespace utilib;

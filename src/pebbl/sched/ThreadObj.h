@@ -29,7 +29,7 @@
 
 #ifdef ACRO_HAVE_MPI
 #include <mpi.h>
-#include <pebbl/MessageID.h>
+#include <pebbl/comm/MessageID.h>
 #endif
 
 namespace pebbl {

@@ -24,9 +24,9 @@
 #include <pebbl/utilib/Ereal.h>
 #include <pebbl/utilib/ValuedContainer.h>
 #include <pebbl/utilib/stl_auxiliary.h>
-#include <pebbl/branching.h>
-#include <pebbl/DockingProblem.h>
-#include <pebbl/gRandom.h>
+#include <pebbl/bb/branching.h>
+#include <pebbl/example/DockingProblem.h>
+#include <pebbl/misc/gRandom.h>
 
 namespace pebbl {
 

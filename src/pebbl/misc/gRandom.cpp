@@ -32,7 +32,7 @@
 #include <pebbl/utilib/Uniform.h>
 #include <pebbl/utilib/PM_LCG.h>
 //#include <pebbl/utilib/paramTable.h>
-#include <pebbl/fundamentals.h>
+#include <pebbl/misc/fundamentals.h>
 
 using namespace utilib;
 

@@ -18,4 +18,4 @@
 //
 
 #include <pebbl_config.h>
-#include <pebbl/followerTree.h>
+#include <pebbl/misc/followerTree.h>

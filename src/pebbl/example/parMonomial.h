@@ -29,7 +29,7 @@
 #ifdef ACRO_HAVE_MPI
 #include <pebbl/parBranching.h>
 
-#include "serialMonomial.h"
+#include <pebbl/example/serialMonomial.h>
 
 
 using namespace std;

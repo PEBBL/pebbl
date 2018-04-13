@@ -18,7 +18,7 @@
 //
 
 #include <pebbl_config.h>
-#include <pebbl/scatterObj.h>
+#include <pebbl/misc/scatterObj.h>
 #include <pebbl/utilib/_math.h>
 
 

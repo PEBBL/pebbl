@@ -22,7 +22,7 @@
 #include <pebbl/utilib/CharString.h>
 #include <pebbl/utilib/mpiUtil.h>
 #include <pebbl/utilib/nicePrint.h>
-#include <pebbl/parBranching.h>
+#include <pebbl/pbb/parBranching.h>
 
 #ifdef ACRO_HAVE_MPI
 

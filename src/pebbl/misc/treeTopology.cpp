@@ -13,4 +13,4 @@
 //
 
 #include <pebbl_config.h>
-#include <pebbl/treeTopology.h>
+#include <pebbl/misc/treeTopology.h>

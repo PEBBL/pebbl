@@ -18,4 +18,4 @@
 
 
 #include <pebbl_config.h>
-#include <pebbl/clusterTree.h>
+#include <pebbl/misc/clusterTree.h>

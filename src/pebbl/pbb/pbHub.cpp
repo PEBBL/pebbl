@@ -20,8 +20,8 @@
 #include <pebbl_config.h>
 #include <pebbl/utilib/mpiUtil.h>
 #include <pebbl/utilib/seconds.h>
-#include <pebbl/parBranching.h>
-#include <pebbl/packPointer.h>
+#include <pebbl/pbb/parBranching.h>
+#include <pebbl/comm/packPointer.h>
 
 #ifdef ACRO_HAVE_MPI
 

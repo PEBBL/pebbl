@@ -36,8 +36,8 @@
 #include <pebbl/utilib/LinkedList.h>
 #include <pebbl/utilib/QueueList.h>
 #include <pebbl/utilib/BasicArray.h>
-#include <pebbl/ThreadObj.h>
-#include <pebbl/ThreadQueue.h>
+#include <pebbl/sched/ThreadObj.h>
+#include <pebbl/sched/ThreadQueue.h>
 
 namespace pebbl {
 

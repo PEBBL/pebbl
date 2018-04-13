@@ -22,7 +22,7 @@
 
 #include <pebbl_config.h>
 #include <pebbl/utilib/DoubleVector.h>
-#include <pebbl/ThreadObj.h>
+#include <pebbl/sched/ThreadObj.h>
 
 namespace pebbl {
 

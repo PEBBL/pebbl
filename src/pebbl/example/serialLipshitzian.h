@@ -28,7 +28,7 @@
 #include <pebbl_config.h>
 #include <pebbl/utilib/Ereal.h>
 #include <pebbl/utilib/BasicArray.h>
-#include <pebbl/branching.h>
+#include <pebbl/bb/branching.h>
 
 namespace pebbl {
 

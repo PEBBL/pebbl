@@ -20,7 +20,7 @@
 #define pebbl_serialCore_h
 
 #include <pebbl_config.h>
-#include <pebbl/branching.h>
+#include <pebbl/bb/branching.h>
 
 namespace pebbl_CoreExample {
 

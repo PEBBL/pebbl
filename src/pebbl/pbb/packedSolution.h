@@ -23,8 +23,8 @@
 
 #include <pebbl_config.h>
 #include <pebbl/utilib/mpiUtil.h>
-#include <pebbl/branching.h>
-#include <pebbl/parPebblBase.h>
+#include <pebbl/bb/branching.h>
+#include <pebbl/pbb/parPebblBase.h>
 
 
 namespace pebbl {

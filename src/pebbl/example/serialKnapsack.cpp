@@ -21,9 +21,9 @@
 #include <pebbl/utilib/exception_mngr.h>
 #include <pebbl/utilib/GenericHeap.h>
 #include <pebbl/utilib/comments.h>
-#include <pebbl/serialKnapsack.h>
-#include <pebbl/fundamentals.h>
-#include <pebbl/gRandom.h>
+#include <pebbl/example/serialKnapsack.h>
+#include <pebbl/misc/fundamentals.h>
+#include <pebbl/misc/gRandom.h>
 
 using namespace utilib;
 using namespace std;

@@ -23,8 +23,8 @@
 #include <pebbl/utilib/PackBuf.h>
 #include <pebbl/utilib/BitArray.h>
 #include <pebbl/utilib/std_headers.h>
-#include "parMonomial.h"
-#include "serialMonomial.h"
+#include <pebbl/example/parMonomial.h>
+#include <pebbl/example/serialMonomial.h>
 
 #ifdef ACRO_HAVE_MPI
 
