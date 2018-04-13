@@ -1,43 +1,35 @@
-CFLAGS= -fprofile-arcs -ftest-coverage -fPIC
+CXX    = mpic++
+C      = mpicc
+CFLAGS = -fpermissive -g
 
-all: links
-	$(CXX) $(CFLAGS) -c subdir/A/file1.cpp -o subdir/A/file1.o
-	$(CXX) $(CFLAGS) -c subdir/A/file2.cpp -o subdir/A/file2.o
-	$(CXX) $(CFLAGS) -c subdir/A/file3.cpp -o subdir/A/file3.o
-	$(CXX) $(CFLAGS) -c subdir/A/file4.cpp -o subdir/A/file4.o
-	$(CXX) $(CFLAGS) -c subdir/A/file7.cpp -o subdir/A/file7.o
-	$(CXX) $(CFLAGS) -c subdir/A/C/file5.cpp -o subdir/A/C/file5.o
-	$(CXX) $(CFLAGS) -c subdir/m/n/C/D/file6.cpp -o subdir/m/n/C/D/file6.o
-	$(CXX) $(CFLAGS) -c subdir/B/main.cpp -o subdir/B/main.o
-	$(CXX) $(CFLAGS) subdir/A/file1.o subdir/A/file2.o subdir/A/file3.o subdir/A/file4.o subdir/A/C/file5.o subdir/m/n/C/D/file6.o subdir/A/file7.o subdir/B/main.o -o subdir/testcase
+SRCS = bb/branching.cpp bb/loadObject.cpp bb/pebblBase.cpp bb/pebblParams.cpp \
+       comm/coTree.cpp comm/MessageID.cpp comm/outBufferQ.cpp \
+       example/core_test.cpp example/Docking.cpp example/knapMPS.cpp \
+       example/knapsack.cpp example/lipshitzian.cpp example/logAnalyze.cpp \
+       example/monomial.cpp example/parKnapsack.cpp example/parMonomial.cpp \
+       example/serialKnapsack.cpp example/serialMonomial.cpp \
+       misc/clustering.cpp misc/clusterTree.cpp misc/followerTree.cpp \
+       misc/gRandom.cpp misc/memUtil.cpp misc/scatterObj.cpp \
+       misc/treeTopology.cpp pbb/earlyOutputThread.cpp \
+       pbb/hubThread.cpp pbb/incumbCast.cpp pbb/incumbSearchThread.cpp \
+       pbb/llChainer.cpp pbb/loadBal.cpp pbb/loadBalPair.cpp \
+       pbb/parBranching.cpp pbb/parBranchThreads.cpp pbb/parLoadObject.cpp \
+       pbb/parPebblBase.cpp pbb/parPebblParams.cpp pbb/pbCheckpoint.cpp \
+       pbb/pbEnumerate.cpp pbb/pbHub.cpp pbb/pbOutput.cpp pbb/pbPack.cpp \
+       pbb/pbWorker.cpp pbb/reposThreads.cpp pbb/spReceiver.cpp \
+       pbb/spServer.cpp pbb/workerAuxThread.cpp pbb/workerInHeap.cpp \
+       pbb/workerThread.cpp sched/Scheduler.cpp sched/SelfAdjustThd.cpp \
+       sched/ThreadObj.cpp sched/ThreadQueue.cpp utilib/BitArray.cpp \
+       utilib/CharString.cpp utilib/CommonIO.cpp utilib/Ereal.cpp \
+       utilib/globals.cpp utilib/logEvent.cpp utilib/math_basic.cpp \
+       utilib/mpiUtil.cpp utilib/PackBuf.cpp utilib/Parameter.cpp \
+       utilib/ParameterSet.cpp utilib/PM_LCG.cpp utilib/seconds.cpp
 
-run: txt xml html
+OBJS = $(patsubst %.cpp,%.o,$(SRCS))
 
-txt:
-	./subdir/testcase
-	../../../scripts/gcovr -r . -d -o coverage.txt
+%.o:  %.cpp
+	$(CXX) -c -I. $(CFLAGS) $@
 
-xml:
-	./subdir/testcase
-	../../../scripts/gcovr -r . -d -x -o coverage.xml
+all: $(OBJS)
 
-html:
-	./subdir/testcase
-	../../../scripts/gcovr -r . -d --html --html-details -o coverage.html
 
-clean:
-	rm -Rf subdir
-	rm -f coverage.txt coverage.xml coverage*.html
-
-links:
-	if ! [ -d "subdir" ]; then\
-	   mkdir subdir;\
-	   cd subdir;\
-	   ln -s ../../nested/subdir/B .;\
-	   mkdir -p m;\
-	   cd m;\
-	   ln -s ../../../nested/subdir/A n;\
-	   cd ..;\
-	   ln -s m/n A;\
-	   cd ..;\
-	fi
