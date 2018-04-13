@@ -18,8 +18,8 @@
 #ifndef utilib_PM_LCG_h
 #define utilib_PM_LCG_h
 
-#include <utilib_config.h>
-#include <utilib/RNG.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/RNG.h>
 
 namespace utilib {
 

@@ -20,7 +20,7 @@
 #ifndef utilib_seconds_h
 #define utilib_seconds_h
 
-#include <utilib_config.h>
+#include <pebbl_config.h>
 #ifdef __cplusplus
 extern "C" {
 #endif

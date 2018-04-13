@@ -18,8 +18,8 @@
 #ifndef utilib_sort_h
 #define utilib_sort_h
 
-#include <utilib/std_headers.h>
-#include <utilib/BasicArray.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/BasicArray.h>
 
 namespace utilib {
 			

@@ -9,36 +9,29 @@
  *  _________________________________________________________________________
  */
 
-/**
- * \file QueueList.h
- *
- * Defines the utilib::QueueList class
- */
-
-#ifndef utilib_QueueList_h
-#define utilib_QueueList_h
+//
+// Ereal.cpp
+//
 
 #include <pebbl_config.h>
-#include <pebbl/utilib/std_headers.h>
-#include <pebbl/utilib/LinkedList.h>
+#include <pebbl/utilib/Ereal.h>
+#include <pebbl/utilib/_math.h>
 
 namespace utilib {
 
-/**
- * A data type that defines a queue using a doubly-linked
- * list data structure.  This class is a simple derivation of 
- * LinkedList that sets the the queue mode.
- */
-template <class T>
-class QueueList : public LinkedList<T>
-{
-public:
+#ifndef _MSC_VER
+// For everything other than MSVS, we (correctly) define specific static
+// member definitions here in a single location (compilation unit).
+template<>
+const long double Ereal<long double>::positive_infinity_val = MAXLONGDOUBLE;
+template<>
+const long double Ereal<long double>::negative_infinity_val = -MAXLONGDOUBLE;
 
-  /// Empty constructor
-  QueueList() : LinkedList<T>() {this->mode = this->queueLL;}
-
-};
-
-} // namespace utilib
+template<>
+const double Ereal<double>::positive_infinity_val = MAXDOUBLE;
+template<>
+const double Ereal<double>::negative_infinity_val = -MAXDOUBLE;
 
 #endif
+
+} // namespace utilib

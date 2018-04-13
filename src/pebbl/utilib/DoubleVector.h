@@ -18,8 +18,8 @@
 #ifndef utilib_DoubleVector_h
 #define utilib_DoubleVector_h
 
-#include <utilib_config.h>
-#include <utilib/NumArray.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/NumArray.h>
 
 namespace utilib {
 

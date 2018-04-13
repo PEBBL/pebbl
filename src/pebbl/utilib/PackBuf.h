@@ -38,12 +38,12 @@
 #define utilib_PackBuf_h
 
 #include <memory.h>
-#include <utilib_config.h>
-#include <utilib/std_headers.h>
-#include <utilib/mpi_utilib.h>
-#include <utilib/mpiUtil.h>
-#include <utilib/exception_mngr.h>
-#include <utilib/_generic.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/mpi_utilib.h>
+#include <pebbl/utilib/mpiUtil.h>
+#include <pebbl/utilib/exception_mngr.h>
+#include <pebbl/utilib/_generic.h>
 
 namespace utilib {
 

@@ -18,10 +18,10 @@
 #ifndef utilib_BasicArray_h
 #define utilib_BasicArray_h
 
-#include <utilib_config.h>
-#include <utilib/std_headers.h>
-#include <utilib/ArrayBase.h>
-#include <utilib/Ereal.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/ArrayBase.h>
+#include <pebbl/utilib/Ereal.h>
 
 
 namespace utilib {

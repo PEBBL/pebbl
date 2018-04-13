@@ -23,9 +23,9 @@
 #ifndef utilib_math_h
 #define utilib_math_h
 
-#include <utilib_config.h>
-#include <utilib/math_basic.h>
-#include <utilib/math_array.h>
-#include <utilib/math_matrix.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/math_basic.h>
+#include <pebbl/utilib/math_array.h>
+#include <pebbl/utilib/math_matrix.h>
 
 #endif
