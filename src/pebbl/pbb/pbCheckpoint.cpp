@@ -18,13 +18,13 @@
 //
 
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <sys/types.h>
 #include <dirent.h>
 
-#include <utilib/CharString.h>
-#include <utilib/mpiUtil.h>
-#include <utilib/nicePrint.h>
+#include <pebbl/utilib/CharString.h>
+#include <pebbl/utilib/mpiUtil.h>
+#include <pebbl/utilib/nicePrint.h>
 #include <pebbl/parBranching.h>
 #include <pebbl/gRandom.h>
 

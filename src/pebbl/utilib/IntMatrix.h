@@ -18,8 +18,8 @@
 #ifndef utilib_IntMatrix_h
 #define utilib_IntMatrix_h
 
-#include <utilib_config.h>
-#include <utilib/Num2DArray.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/Num2DArray.h>
 
 namespace utilib {
 

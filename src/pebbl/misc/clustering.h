@@ -19,7 +19,7 @@
 #ifndef pebbl_clustering_h
 #define pebbl_clustering_h
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 
 namespace pebbl {
 

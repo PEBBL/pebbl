@@ -14,8 +14,8 @@
 // Write a knapsack problem in MPS format.
 //
 
-#include <acro_config.h>
-#include <utilib/ParameterSet.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/ParameterSet.h>
 #include <pebbl/serialKnapsack.h>
 
 using namespace utilib;

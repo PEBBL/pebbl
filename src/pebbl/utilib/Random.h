@@ -20,7 +20,7 @@
 
 #if !defined(DOXYGEN)
 
-#include <utilib_config.h>
+#include <pebbl_config.h>
 #if defined(UTILIB_HAVE_STD) || defined(__cplusplus)
 #define _(args) args
 #else
@@ -99,7 +99,7 @@ extern double scauchy1 _((void));
 
 
 /* Setup stuff for the global rng */
-#include <utilib/LEC_rng.h>
+#include <pebbl/utilib/LEC_rng.h>
 
 /*
 ** TODO - What's OLDSTYLE_RANLIB?

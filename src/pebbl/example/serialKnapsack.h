@@ -20,17 +20,17 @@
 #ifndef pebbl_knapsack_h
 #define pebbl_knapsack_h
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <pebbl/branching.h>
-#include <utilib/CharString.h>
-#include <utilib/BasicArray.h>
-#include <utilib/BitArray.h>
-#include <utilib/IntVector.h>
-#include <utilib/DoubleVector.h>
-#include <utilib/_math.h>
-#include <utilib/ParameterSet.h>
+#include <pebbl/utilib/CharString.h>
+#include <pebbl/utilib/BasicArray.h>
+#include <pebbl/utilib/BitArray.h>
+#include <pebbl/utilib/IntVector.h>
+#include <pebbl/utilib/DoubleVector.h>
+#include <pebbl/utilib/_math.h>
+#include <pebbl/utilib/ParameterSet.h>
 #ifdef ACRO_HAVE_MPI
-#include <utilib/PackBuf.h>
+#include <pebbl/utilib/PackBuf.h>
 #endif
 #include <pebbl/chunkAlloc.h>
 

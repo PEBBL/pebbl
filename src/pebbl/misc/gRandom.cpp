@@ -17,7 +17,7 @@
 //
 
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 
 //  JE allows MPI compiles with partially developed CMake
 #if     defined(HAVE_MPI) && !defined(ACRO_HAVE_MPI)
@@ -25,13 +25,13 @@
 #endif
 
 #ifdef ACRO_HAVE_MPI
-#include <utilib/mpiUtil.h>
+#include <pebbl/utilib/mpiUtil.h>
 #endif
-#include <utilib/_math.h>
-#include <utilib/_generic.h>
-#include <utilib/Uniform.h>
-#include <utilib/PM_LCG.h>
-//#include <utilib/paramTable.h>
+#include <pebbl/utilib/_math.h>
+#include <pebbl/utilib/_generic.h>
+#include <pebbl/utilib/Uniform.h>
+#include <pebbl/utilib/PM_LCG.h>
+//#include <pebbl/utilib/paramTable.h>
 #include <pebbl/fundamentals.h>
 
 using namespace utilib;

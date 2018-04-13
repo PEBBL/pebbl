@@ -20,12 +20,12 @@
 #ifndef pebbl_loadBal_h
 #define pebbl_loadBal_h
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <mpi.h>
-#include <utilib/PM_LCG.h>
-#include <utilib/default_rng.h>
-#include <utilib/IntVector.h>
-#include <utilib/IntMatrix.h>
+#include <pebbl/utilib/PM_LCG.h>
+#include <pebbl/utilib/default_rng.h>
+#include <pebbl/utilib/IntVector.h>
+#include <pebbl/utilib/IntMatrix.h>
 #include <pebbl/clusterTree.h>
 #include <pebbl/loadBalPair.h>
 #include <pebbl/parLoadObject.h>

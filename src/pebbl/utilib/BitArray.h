@@ -18,9 +18,9 @@
 #ifndef utilib_BitArray_h
 #define utilib_BitArray_h
 
-#include <utilib_config.h>
-#include <utilib/std_headers.h>
-#include <utilib/BitArrayBase.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/BitArrayBase.h>
 
 namespace utilib {
 

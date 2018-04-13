@@ -20,6 +20,7 @@
 //
 
 #include <pebbl_config.h>
+
 #include <pebbl/comm/coTree.h>
 
 #ifdef ACRO_HAVE_MPI

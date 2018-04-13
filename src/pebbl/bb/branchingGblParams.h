@@ -10,41 +10,19 @@
  */
 
 /**
- * \file incumbSearchThread.h
- * \author Jonathan Eckstein
+ * \file branchingGlblParams.h
  *
- * Thread object to orchestrate asynchronous incumbent search
+ * Defines global parameters for PEBBL.
+ * \todo Depricate this header.
  */
 
-#ifndef pebbl_incumbSearchThread_h
-#define pebbl_incumbSearchThread_h
-
 #include <pebbl_config.h>
-
-#include <pebbl/parBranchThreads.h>
-
-#ifdef ACRO_HAVE_MPI
-
-
-namespace pebbl {
-
-
-class incumbSearchObj :
-public parBranchSelfAdjThread
-{
-public:
-
-  incumbSearchObj(parallelBranching* global_);
-
-  RunStatus runWithinLogging(double* controlParam);
-
-  ThreadState state();
-
-  double nextRunTime;
-};
-
-} // namespace pebbl
-
-#endif
-
+#if 0
+GLOBAL_PARAMETER(depthFirst);
+GLOBAL_PARAMETER(breadthFirst);
+GLOBAL_PARAMETER(lazyBounding);
+GLOBAL_PARAMETER(eagerBounding);
+GLOBAL_PARAMETER(debug);
+GLOBAL_PARAMETER(cdebug); // For Cindy's use in debugging constructors
+GLOBAL_PARAMETER(statusPrintFrequency);
 #endif

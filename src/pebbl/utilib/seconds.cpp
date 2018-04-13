@@ -13,9 +13,9 @@
  * Routines to return time used by processes and wallclock time.
  */
 
-#include <utilib_config.h>
+#include <pebbl_config.h>
 
-#include <utilib/seconds.h>
+#include <pebbl/utilib/seconds.h>
 
 #ifdef __cplusplus
 extern "C" {

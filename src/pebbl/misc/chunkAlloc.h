@@ -19,7 +19,7 @@
 #ifndef pebbl_chunkAlloc_h
 #define pebbl_chunkAlloc_h
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #define INSERT_CHUNKALLOC \
 \
 public:\

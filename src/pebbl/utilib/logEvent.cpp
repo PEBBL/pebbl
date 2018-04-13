@@ -17,10 +17,10 @@
  * \author Jonathan Eckstein
  */
 
-#include <utilib_config.h>
-#include <utilib/CommonIO.h>
-#include <utilib/logEvent.h>
-#include <utilib/mpiUtil.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/CommonIO.h>
+#include <pebbl/utilib/logEvent.h>
+#include <pebbl/utilib/mpiUtil.h>
 
 namespace utilib {
 

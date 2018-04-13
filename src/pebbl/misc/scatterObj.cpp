@@ -17,9 +17,9 @@
 // Jonathan Eckstein
 //
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <pebbl/scatterObj.h>
-#include <utilib/_math.h>
+#include <pebbl/utilib/_math.h>
 
 
 namespace pebbl {

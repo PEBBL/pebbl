@@ -15,11 +15,11 @@
 // Implement the methods for LCG
 //
 
-#include <utilib_config.h>
-#include <utilib/PM_LCG.h>
-#include <utilib/seconds.h>
-#include <utilib/_generic.h>
-#include <utilib/_math.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/PM_LCG.h>
+#include <pebbl/utilib/seconds.h>
+#include <pebbl/utilib/_generic.h>
+#include <pebbl/utilib/_math.h>
  
 extern "C" int PMrand(int*);
 

@@ -20,8 +20,8 @@
 #ifndef pebbl_SelfAdjustThread_h
 #define pebbl_SelfAdjustThread_h
 
-#include <acro_config.h>
-#include <utilib/DoubleVector.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/DoubleVector.h>
 #include <pebbl/ThreadObj.h>
 
 namespace pebbl {

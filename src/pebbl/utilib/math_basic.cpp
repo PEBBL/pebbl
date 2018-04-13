@@ -9,7 +9,7 @@
  *  _________________________________________________________________________
  */
 
-#include <utilib/math_basic.h>
+#include <pebbl/utilib/math_basic.h>
 
 namespace utilib {
 

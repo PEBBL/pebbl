@@ -18,9 +18,9 @@
 #ifndef pebbl_BestIncumbentRepository_h
 #define pebbl_BestIncumbentRepository_h
 
-#include <acro_config.h>
-#include <utilib/SimpleSplayTree.h>
-#include <utilib/LinkedList.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/SimpleSplayTree.h>
+#include <pebbl/utilib/LinkedList.h>
 
 namespace pebbl {
 

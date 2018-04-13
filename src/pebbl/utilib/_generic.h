@@ -20,7 +20,7 @@
 #ifndef utilib_generic_h
 #define utilib_generic_h
 
-#include <utilib/std_headers.h>
+#include <pebbl/utilib/std_headers.h>
 #include <sys/types.h>
 
 #if defined(__cplusplus)

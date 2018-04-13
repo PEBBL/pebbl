@@ -18,10 +18,10 @@
 #ifndef utilib_CharString_h
 #define utilib_CharString_h
 
-#include <utilib/std_headers.h>
-#include <utilib/exception_mngr.h>
-#include <utilib/BasicArray.h>
-#include <utilib/comments.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/exception_mngr.h>
+#include <pebbl/utilib/BasicArray.h>
+#include <pebbl/utilib/comments.h>
 
 namespace utilib {
 

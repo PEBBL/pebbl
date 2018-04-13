@@ -23,7 +23,7 @@
 #ifndef utilib_std_headers_h
 #define utilib_std_headers_h
 
-#include <utilib_config.h>
+#include <pebbl_config.h>
 #ifdef UTILIB_HAVE_UNISTD_H
 #include <unistd.h>
 #endif

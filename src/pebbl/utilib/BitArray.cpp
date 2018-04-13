@@ -15,9 +15,9 @@
 // All internal arrays are indexed 0..n-1
 //
 
-#include <utilib/std_headers.h>
-#include <utilib/BitArray.h>
-#include <utilib/TypeManager.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/BitArray.h>
+#include <pebbl/utilib/TypeManager.h>
 
 #ifdef UTILIB_HAVE_NAMESPACES
 using namespace std;

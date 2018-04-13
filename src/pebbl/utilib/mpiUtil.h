@@ -21,7 +21,7 @@
 #ifndef utilib_mpiUtil_H
 #define utilib_mpiUtil_H
 
-#include <utilib_config.h>
+#include <pebbl_config.h>
 
 //  JE allows MPI compiles with partially developed CMake
 #if     defined(HAVE_MPI) && !defined(UTILIB_HAVE_MPI)
@@ -31,8 +31,8 @@
 #ifdef UTILIB_HAVE_MPI
 #include <mpi.h>
 #endif
-#include <utilib/_generic.h>
-#include <utilib/exception_mngr.h>
+#include <pebbl/utilib/_generic.h>
+#include <pebbl/utilib/exception_mngr.h>
 
 //
 // To compile code for logging of all messages.

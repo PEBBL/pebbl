@@ -10,8 +10,8 @@
  */
 
 
-#include <utilib/CommonIO.h>
-#include <utilib/seconds.h>
+#include <pebbl/utilib/CommonIO.h>
+#include <pebbl/utilib/seconds.h>
 #include <pebbl/Docking.h>
 
 using namespace pebbl;

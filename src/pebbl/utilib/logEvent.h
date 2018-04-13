@@ -20,7 +20,7 @@
 #ifndef utilib_logEvent_H
 #define utilib_logEvent_H
 
-#include <utilib_config.h>
+#include <pebbl_config.h>
 
 
 //  JE allows MPI compiles with partially developed CMake
@@ -31,9 +31,9 @@
 #if defined(DOXYGEN) || (defined(UTILIB_HAVE_MPI) && defined(UTILIB_VALIDATING) && defined(UTILIB_HAVE_MPE)) 
 
 #include <values.h>
-#include <utilib/mpiUtil.h>
+#include <pebbl/utilib/mpiUtil.h>
 #include <mpe.h>
-#include <utilib/ParameterSet.h>
+#include <pebbl/utilib/ParameterSet.h>
 
 namespace utilib {
 

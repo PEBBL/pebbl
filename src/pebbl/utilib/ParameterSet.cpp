@@ -13,10 +13,10 @@
 // ParameterSet.cpp
 //
 
-#include <utilib/_math.h>
-#include <utilib/comments.h>
-#include <utilib/ParameterSet.h>
-#include <utilib/ParameterList.h>
+#include <pebbl/utilib/_math.h>
+#include <pebbl/utilib/comments.h>
+#include <pebbl/utilib/ParameterSet.h>
+#include <pebbl/utilib/ParameterList.h>
 
 using namespace std;
 

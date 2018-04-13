@@ -20,10 +20,10 @@
 #ifndef utilib_default_rng_h
 #define utilib_default_rng_h
 
-#include <utilib_config.h>
+#include <pebbl_config.h>
 #if defined(__cplusplus) || defined(DOXYGEN)
 
-#include <utilib/RNG.h>
+#include <pebbl/utilib/RNG.h>
 
 namespace utilib {
 /**

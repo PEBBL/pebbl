@@ -17,7 +17,7 @@
 #ifndef pebbl_pebbl_dll_h
 #define pebbl_pebbl_dll_h
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #ifdef _MSC_VER
 #ifdef PEBBL_EXPORTS
 #define PEBBL_API __declspec(dllexport)

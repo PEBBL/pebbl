@@ -9,7 +9,7 @@
  *  _________________________________________________________________________
  */
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <pebbl/serialCore.h>
 #include <pebbl/parallelCore.h>
 

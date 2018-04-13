@@ -19,7 +19,7 @@
 #ifndef pebbl_parPebblParams_h
 #define pebbl_parPebblParams_h
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 
 //  JE allows MPI compiles with partially developed CMake
 #if     defined(HAVE_MPI) && !defined(ACRO_HAVE_MPI)
@@ -29,7 +29,7 @@
 
 #ifdef ACRO_HAVE_MPI
 
-#include <utilib/ParameterSet.h>
+#include <pebbl/utilib/ParameterSet.h>
 
 namespace pebbl {
 

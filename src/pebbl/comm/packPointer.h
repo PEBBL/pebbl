@@ -19,8 +19,8 @@
 #ifndef pebbl_packPointer_h
 #define pebbl_packPointer_h
 
-#include <acro_config.h>
-#include <utilib/PackBuf.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/PackBuf.h>
 
 namespace pebbl {
 

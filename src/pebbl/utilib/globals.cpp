@@ -16,11 +16,11 @@
 // o  Stream operators for RNG classes
 //
 
-#include <utilib_config.h>
-#include <utilib/Uniform.h>
-#include <utilib/Random.h>
-#include <utilib/AnyRNG.h>
-#include <utilib/default_rng.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/Uniform.h>
+#include <pebbl/utilib/Random.h>
+#include <pebbl/utilib/AnyRNG.h>
+#include <pebbl/utilib/default_rng.h>
 
 using namespace std;
 

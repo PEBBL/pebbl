@@ -18,10 +18,10 @@
 #ifndef pebbl_fundamentals_h
 #define pebbl_fundamentals_h
 
-#include <acro_config.h>
-#include <utilib/_generic.h>
-#include <utilib/exception_mngr.h>
-#include <utilib/_math.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/_generic.h>
+#include <pebbl/utilib/exception_mngr.h>
+#include <pebbl/utilib/_math.h>
 
 namespace pebbl {
 

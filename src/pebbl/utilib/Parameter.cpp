@@ -9,8 +9,8 @@
  *  _________________________________________________________________________
  */
 
-#include <utilib/Parameter.h>
-#include <utilib/stl_auxiliary.h>
+#include <pebbl/utilib/Parameter.h>
+#include <pebbl/utilib/stl_auxiliary.h>
 #include <sstream>
 
 namespace utilib

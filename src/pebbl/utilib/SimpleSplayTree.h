@@ -19,9 +19,9 @@
 #ifndef utilib_SimpleSplayTree_h
 #define utilib_SimpleSplayTree_h
 
-#include <utilib/_generic.h>
-#include <utilib/AbstractSplayTree.h>
-#include <utilib/compare.h>
+#include <pebbl/utilib/_generic.h>
+#include <pebbl/utilib/AbstractSplayTree.h>
+#include <pebbl/utilib/compare.h>
 
 namespace utilib {
 

@@ -18,19 +18,19 @@
 #ifndef utilib_AbstractSplayTree_h
 #define utilib_AbstractSplayTree_h
 
-#include <utilib_config.h>
-#include <utilib/std_headers.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/std_headers.h>
 
 #ifdef _MSC_VER
 /* TODO - Try compiling with msvc and find out if this is needed.*/
 #include "crtdbg.h"
 #endif
 
-#include <utilib/_generic.h>
-#include <utilib/AbstractSplayTree.h>
-#include <utilib/exception_mngr.h>
-#include <utilib/compare.h>
-#include <utilib/PackBuf.h>
+#include <pebbl/utilib/_generic.h>
+#include <pebbl/utilib/AbstractSplayTree.h>
+#include <pebbl/utilib/exception_mngr.h>
+#include <pebbl/utilib/compare.h>
+#include <pebbl/utilib/PackBuf.h>
 
 namespace utilib {
 

@@ -17,9 +17,9 @@
 //
 
 
-#include <acro_config.h>
-#include <utilib/mpiUtil.h>
-#include <utilib/seconds.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/mpiUtil.h>
+#include <pebbl/utilib/seconds.h>
 #include <pebbl/parBranching.h>
 #include <pebbl/packPointer.h>
 

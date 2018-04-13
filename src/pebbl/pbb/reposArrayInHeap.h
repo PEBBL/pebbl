@@ -20,8 +20,8 @@
 #ifndef pebbl_reposArrayInHeap_h
 #define pebbl_reposArrayInHeap_h
 
-#include <acro_config.h>
-#include <utilib/std_headers.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/std_headers.h>
 #include <pebbl/branching.h>
 
 

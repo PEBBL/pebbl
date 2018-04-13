@@ -18,7 +18,7 @@
  * \todo The parallelCore example needs to be reworked!
  */
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #if 0
 
 #ifndef pebbl_parallelCore_h

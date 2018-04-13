@@ -22,10 +22,10 @@
 #ifndef utilib_ParameterSet_h
 #define utilib_ParameterSet_h
 
-#include <utilib/std_headers.h>
-#include <utilib/exception_mngr.h>
-#include <utilib/Parameter.h>
-#include <utilib/BitArray.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/exception_mngr.h>
+#include <pebbl/utilib/Parameter.h>
+#include <pebbl/utilib/BitArray.h>
 
 namespace utilib {
 

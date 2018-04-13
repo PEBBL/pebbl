@@ -19,7 +19,7 @@
 #ifndef pebbl_parKnapsack_h
 #define pebbl_parKnapsack_h
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <pebbl/serialKnapsack.h>
 #ifdef ACRO_HAVE_MPI
 #include <pebbl/parBranching.h>

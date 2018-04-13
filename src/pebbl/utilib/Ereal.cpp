@@ -13,9 +13,9 @@
 // Ereal.cpp
 //
 
-#include <utilib_config.h>
-#include <utilib/Ereal.h>
-#include <utilib/_math.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/Ereal.h>
+#include <pebbl/utilib/_math.h>
 
 namespace utilib {
 

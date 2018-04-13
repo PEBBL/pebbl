@@ -19,16 +19,16 @@
 #ifndef pebbl_parBranching_h
 #define pebbl_parBranching_h
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 
 #include <pebbl/branching.h>
 
 #ifdef ACRO_HAVE_MPI
 
-#include <utilib/IntVector.h>
-#include <utilib/PackBuf.h>
-#include <utilib/seconds.h>
-#include <utilib/logEvent.h>
+#include <pebbl/utilib/IntVector.h>
+#include <pebbl/utilib/PackBuf.h>
+#include <pebbl/utilib/seconds.h>
+#include <pebbl/utilib/logEvent.h>
 #include <pebbl/parPebblBase.h>
 #include <pebbl/parPebblParams.h>
 #include <pebbl/clustering.h>

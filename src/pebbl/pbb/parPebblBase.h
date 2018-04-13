@@ -24,7 +24,7 @@
 #ifndef pebbl_parPebblBase_h
 #define pebbl_parPebblBase_h
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 
 //  JE allows MPI compiles with partially developed CMake
 #if     defined(HAVE_MPI) && !defined(ACRO_HAVE_MPI)
@@ -32,12 +32,12 @@
 #endif
 
 
-#include <utilib/logEvent.h>
+#include <pebbl/utilib/logEvent.h>
 
 #ifdef ACRO_HAVE_MPI
 
-#include <utilib/std_headers.h>
-#include <utilib/logEvent.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/logEvent.h>
 #include <pebbl/pebblBase.h>
 
 namespace pebbl {

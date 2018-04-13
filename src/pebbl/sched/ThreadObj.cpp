@@ -12,8 +12,8 @@
 // ThreadObj.cpp
 //
 
-#include <acro_config.h>
-#include <utilib/std_headers.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/std_headers.h>
 #include <pebbl/ThreadObj.h>
 
 using namespace std;

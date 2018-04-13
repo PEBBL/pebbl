@@ -17,10 +17,10 @@
 // Jonathan Eckstein
 //
 
-#include <acro_config.h>
-#include <utilib/exception_mngr.h>
-#include <utilib/GenericHeap.h>
-#include <utilib/comments.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/exception_mngr.h>
+#include <pebbl/utilib/GenericHeap.h>
+#include <pebbl/utilib/comments.h>
 #include <pebbl/serialKnapsack.h>
 #include <pebbl/fundamentals.h>
 #include <pebbl/gRandom.h>

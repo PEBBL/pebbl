@@ -12,15 +12,16 @@
 // MessageID.cpp
 //
 
-#include <acro_config.h>
-#include <utilib/std_headers.h>
+
+#include <pebbl_config.h>
+#include <pebbl/utilib/std_headers.h>
 #include <pebbl/comm/MessageID.h>
 
 
 #ifdef ACRO_HAVE_MPI
 
 #include <mpi.h>
-#include <utilib/mpiUtil.h>
+#include <pebbl/utilib/mpiUtil.h>
 
 
 namespace pebbl {

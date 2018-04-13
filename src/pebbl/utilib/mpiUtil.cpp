@@ -17,14 +17,14 @@
  * \author Jonathan Eckstein
  */
 
-#include <utilib_config.h>
-#include <utilib/mpiUtil.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/mpiUtil.h>
 
 #ifdef UTILIB_HAVE_MPI
 
 #include <unistd.h>
-#include <utilib/std_headers.h>
-#include <utilib/CommonIO.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/CommonIO.h>
 
 
 #ifdef UTILIB_HAVE_NAMESPACES

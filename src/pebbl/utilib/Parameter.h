@@ -22,11 +22,11 @@
 #ifndef utilib_Parameter_h
 #define utilib_Parameter_h
 
-#include <utilib/std_headers.h>
-#include <utilib/exception_mngr.h>
-#include <utilib/ValidateParameter.h>
-#include <utilib/SmartPtr.h>
-#include <utilib/PackObject.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/exception_mngr.h>
+#include <pebbl/utilib/ValidateParameter.h>
+#include <pebbl/utilib/SmartPtr.h>
+#include <pebbl/utilib/PackObject.h>
 
 namespace utilib
 {

@@ -18,10 +18,10 @@
 #ifndef utilib_math_matrix_h
 #define utilib_math_matrix_h
 
-#include <utilib_config.h>
-#include <utilib/math_array.h>
-#include <utilib/Basic2DArray.h>
-#include <utilib/DoubleMatrix.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/math_array.h>
+#include <pebbl/utilib/Basic2DArray.h>
+#include <pebbl/utilib/DoubleMatrix.h>
 
 namespace utilib {
 

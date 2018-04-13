@@ -18,9 +18,9 @@
 #ifndef utilib_ValuedContainer_h
 #define utilib_ValuedContainer_h
 
-#include <utilib_config.h>
-#include <utilib/std_headers.h>
-#include <utilib/PackObject.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/PackObject.h>
 
 namespace utilib {
 

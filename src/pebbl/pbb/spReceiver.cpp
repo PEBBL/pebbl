@@ -16,7 +16,7 @@
 // Jonathan Eckstein
 //
 
-#include <acro_config.h>
+#include <pebbl_config.h>
 #include <pebbl/parBranching.h>
 #include <pebbl/packPointer.h>
 #include <pebbl/outBufferQ.h>

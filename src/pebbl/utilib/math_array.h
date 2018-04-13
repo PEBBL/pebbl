@@ -18,14 +18,14 @@
 #ifndef utilib_math_array_h
 #define utilib_math_array_h
 
-#include <utilib/math_basic.h>
-#include <utilib/DUniform.h>
-#include <utilib/Uniform.h>
-#include <utilib/IntVector.h>
-#include <utilib/DoubleVector.h>
-#include <utilib/BasicArray.h>
-#include <utilib/default_rng.h>
-#include <utilib/BitArray.h>
+#include <pebbl/utilib/math_basic.h>
+#include <pebbl/utilib/DUniform.h>
+#include <pebbl/utilib/Uniform.h>
+#include <pebbl/utilib/IntVector.h>
+#include <pebbl/utilib/DoubleVector.h>
+#include <pebbl/utilib/BasicArray.h>
+#include <pebbl/utilib/default_rng.h>
+#include <pebbl/utilib/BitArray.h>
 
 namespace utilib {
 
