@@ -2,6 +2,8 @@ CXX    = mpic++
 C      = mpicc
 CFLAGS = -fpermissive -g
 
+VPATH  = bb:comm:example:misc:pbb/utilib
+
 SRCS = bb/branching.cpp bb/loadObject.cpp bb/pebblBase.cpp bb/pebblParams.cpp \
        comm/coTree.cpp comm/MessageID.cpp comm/outBufferQ.cpp \
        example/core_test.cpp example/Docking.cpp example/knapMPS.cpp \
@@ -23,13 +25,18 @@ SRCS = bb/branching.cpp bb/loadObject.cpp bb/pebblBase.cpp bb/pebblParams.cpp \
        utilib/CharString.cpp utilib/CommonIO.cpp utilib/Ereal.cpp \
        utilib/globals.cpp utilib/logEvent.cpp utilib/math_basic.cpp \
        utilib/mpiUtil.cpp utilib/PackBuf.cpp utilib/Parameter.cpp \
-       utilib/ParameterSet.cpp utilib/PM_LCG.cpp utilib/seconds.cpp
+       utilib/ParameterSet.cpp utilib/PM_LCG.cpp utilib/seconds.cpp \
+       utilib/nicePrint.cpp utilib/hash_fn.cpp utilib/memdebug.cpp \
+       utilib/ParameterList.cpp
 
-OBJS = $(patsubst %.cpp,%.o,$(SRCS))
+PSRCS = $(patsubst %,pebbl/%,$(SRCS))
 
-%.o:  %.cpp
-	$(CXX) -c -I. $(CFLAGS) $@
+OBJS = $(patsubst %.cpp,%.o,$(PSRCS))
 
-all: $(OBJS)
+%.o : %.cpp
+	$(CXX) -c -I. $(CFLAGS) $< -o $@
 
+all : $(OBJS)
 
+# all: 
+# 	$(CXX) -c -I. $(CFLAGS) $(SRCS)
