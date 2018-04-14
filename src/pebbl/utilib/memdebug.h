@@ -23,7 +23,7 @@
 
 #if !defined(DOXYGEN)
 
-#include <utilib_config.h>
+#include <pebbl_config.h>
 #ifdef  UTILIB_YES_MEMDEBUG
 #include <utilib/std_headers.h>
 
@@ -31,9 +31,9 @@
 using namespace std;
 #endif
 
-#include <utilib/BasicArray.h>
-#include <utilib/CharString.h>
-#include <utilib/IntVector.h>
+#include <pebbl/utilib/BasicArray.h>
+#include <pebbl/utilib/CharString.h>
+#include <pebbl/utilib/IntVector.h>
 
 
 #define MEMDEBUG_START_NEW(this)					\

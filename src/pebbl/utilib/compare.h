@@ -18,7 +18,7 @@
 #ifndef utilib_compare_h
 #define utilib_compare_h
 
-#include <utilib_config.h>
+#include <pebbl_config.h>
 
 namespace utilib {
 

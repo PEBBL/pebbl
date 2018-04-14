@@ -24,8 +24,10 @@
 #include <pebbl/utilib/PackObject.h>
 #include <pebbl/utilib/traits.h>
 
+#ifdef HAVE_SERIALIZER
 #include <pebbl/utilib/TypeManager.h>
 #include <pebbl/utilib/Serialize.h>
+#endif
 
 namespace utilib {
 
@@ -1621,6 +1623,8 @@ protected:
    */
   static const Type negative_infinity_val;
 
+#ifdef HAVE_SERIALIZER
+
 private:
   /// A flag to force the automagic registration of the Ereal serializer
   static const volatile bool registrations_complete;
@@ -1670,6 +1674,9 @@ private:
            &stream_cast<Ereal<Type>, Type> );
       return true;
    }
+
+#endif
+
 }; //end class
 
 

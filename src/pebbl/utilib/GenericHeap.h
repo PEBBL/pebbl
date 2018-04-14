@@ -20,9 +20,9 @@
 #ifndef utilib_GenericHeap_h
 #define utilib_GenericHeap_h
 
-#include <utilib_config.h>
-#include <utilib/_generic.h>
-#include <utilib/AbstractHeap.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/_generic.h>
+#include <pebbl/utilib/AbstractHeap.h>
  
 namespace utilib {
 

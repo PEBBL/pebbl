@@ -20,9 +20,9 @@
 #ifndef utilib_RandomVariable_h
 #define utilib_RandomVariable_h
 
-#include <utilib/std_headers.h>
-#include <utilib/exception_mngr.h>
-#include <utilib/AnyRNG.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/exception_mngr.h>
+#include <pebbl/utilib/AnyRNG.h>
 
 namespace utilib {
 

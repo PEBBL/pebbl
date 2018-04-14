@@ -10,9 +10,9 @@
  */
 
 #if 1
-#include <utilib/ParameterSet.h>
-#include <utilib/ParameterList.h>
-#include <utilib/comments.h>
+#include <pebbl/utilib/ParameterSet.h>
+#include <pebbl/utilib/ParameterList.h>
+#include <pebbl/utilib/comments.h>
 
 using namespace std;
 

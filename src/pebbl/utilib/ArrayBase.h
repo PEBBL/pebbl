@@ -18,11 +18,13 @@
 #ifndef utilib_ArrayBase_h
 #define utilib_ArrayBase_h
 
-#include <utilib/std_headers.h>
-#include <utilib/_generic.h>
-#include <utilib/exception_mngr.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/_generic.h>
+#include <pebbl/utilib/exception_mngr.h>
 
-#include <utilib/Serialize.h>
+#ifdef   HAVE_SERIALIZER
+#include <pebbl/utilib/Serialize.h>
+#endif
 
 namespace utilib {
 
@@ -442,7 +444,7 @@ void ArrayBase<A,P>::debug_print(std::ostream& str, int /*max_elements*/ )
   //dump_data(str,max_elements);
 }
 
-
+#ifdef HAVE_SERIALIZER
 /** Serialize an ArrayBase object.  Note: as no one will ever create a
  *  ArrayBase object, we will not bother to register this with the
  *  Serializer().
@@ -468,6 +470,8 @@ int ArrayBase<A,P>::serializer( SerialObject::elementList_t& serial,
       
    return 0;
 }
+#endif   
+
 
 } // namespace utilib
 
