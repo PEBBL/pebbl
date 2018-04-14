@@ -2,13 +2,9 @@ CXX    = mpic++
 C      = mpicc
 CFLAGS = -fpermissive -g
 
-VPATH  = bb:comm:example:misc:pbb/utilib
-
-SRCS = bb/branching.cpp bb/loadObject.cpp bb/pebblBase.cpp bb/pebblParams.cpp \
+LIBSRCS = bb/branching.cpp bb/loadObject.cpp bb/pebblBase.cpp bb/pebblParams.cpp \
        comm/coTree.cpp comm/MessageID.cpp comm/outBufferQ.cpp \
-       example/core_test.cpp example/Docking.cpp example/knapMPS.cpp \
-       example/knapsack.cpp example/lipshitzian.cpp example/logAnalyze.cpp \
-       example/monomial.cpp example/parKnapsack.cpp example/parMonomial.cpp \
+       example/parKnapsack.cpp example/parMonomial.cpp \
        example/serialKnapsack.cpp example/serialMonomial.cpp \
        misc/clustering.cpp misc/clusterTree.cpp misc/followerTree.cpp \
        misc/gRandom.cpp misc/memUtil.cpp misc/scatterObj.cpp \
@@ -29,14 +25,26 @@ SRCS = bb/branching.cpp bb/loadObject.cpp bb/pebblBase.cpp bb/pebblParams.cpp \
        utilib/nicePrint.cpp utilib/hash_fn.cpp utilib/memdebug.cpp \
        utilib/ParameterList.cpp
 
-PSRCS = $(patsubst %,pebbl/%,$(SRCS))
+EXESRCS = example/core_test.cpp example/Docking.cpp example/knapMPS.cpp \
+          example/knapsack.cpp example/lipshitzian.cpp example/logAnalyze.cpp \
+          example/monomial.cpp
 
-OBJS = $(patsubst %.cpp,%.o,$(PSRCS))
+PLIBSRCS = $(patsubst %,pebbl/%,$(LIBSRCS))
+PEXESRCS = $(patsubst %,pebbl/%,$(EXESRCS))
+
+LIBOBJS = $(patsubst %.cpp,%.o,$(PLIBSRCS))
+EXEOBJS = $(patsubst %.cpp,%.o,$(PEXESRCS))
+OBJS    = $(LIBOBJS) $(EXEOBJS)
+
+EXES = $(patsubst %.cpp,%,$(PEXESRCS))
 
 %.o : %.cpp
 	$(CXX) -c -I. $(CFLAGS) $< -o $@
 
-all : $(OBJS)
+% : %.o
+	$(CXX) $(CFLAGS) -o $@ $< $(LIBOBJS)
 
-# all: 
-# 	$(CXX) -c -I. $(CFLAGS) $(SRCS)
+all : $(OBJS) $(EXES)
+
+clean: 
+	rm -f $(EXES) $(OBJS)
