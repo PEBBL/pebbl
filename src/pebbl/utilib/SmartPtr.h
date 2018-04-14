@@ -18,7 +18,7 @@
 #ifndef pico_SmartPtr_h
 #define pico_SmartPtr_h
 
-#include <utilib/CachedAllocator.h>
+#include <pebbl/utilib/CachedAllocator.h>
 
 namespace utilib {
 
