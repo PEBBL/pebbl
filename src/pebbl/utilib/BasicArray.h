@@ -362,7 +362,9 @@ public:
      : ArrayBase<T,BasicArray<T> >(array), 
        BasicArrayBounds<size_type>(array)
   {
+  #ifdef HAVE_SERIALIZER
      static_cast<void>(&registrations_complete);
+  #endif
      this->construct(array.size(), array.data(), DataOwned); 
   }
 
@@ -527,6 +529,9 @@ public:
 
 
 protected:
+
+#ifdef HAVE_SERIALIZER
+
    static int serializer( SerialObject::elementList_t& serial, 
                           Any& data, bool serialize );
 private:
@@ -540,7 +545,12 @@ private:
       to.set<TO>() << from.template expose<FROM>();
       return OK;
    }
+
+#endif
+
 };
+
+#ifdef HAVE_SERIALIZER
 
 /// Structure containing method to register type conversions and serialization.
 /** Indirection structure containing method to register type conversions
@@ -573,6 +583,8 @@ template<typename T>
 const volatile bool BasicArray<T>::registrations_complete = 
    BasicArray_registration<T>::registrar();
 
+
+#endif
 
 //============================================================================
 //
@@ -750,6 +762,8 @@ else
 
 //============================================================================
 
+#ifdef HAVE_SERIALIZER
+
 /// Serialize a BasicArray object
 template <class T>
 int BasicArray<T>::serializer( SerialObject::elementList_t& serial, 
@@ -766,6 +780,8 @@ int BasicArray<T>::serializer( SerialObject::elementList_t& serial,
    // actual serial stream.
    return ArrayBase<T,BasicArray<T> >::serializer(serial, tmp, serialize); 
 }
+
+#endif
 
 template<class T>
 class Any::Comparator<BasicArray<T> > 

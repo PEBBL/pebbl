@@ -207,9 +207,11 @@ protected:
   virtual void dump_data(std::ostream& /*str*/, unsigned int /*max_elements*/=0)
 	{}
 
+#ifdef HAVE_SERIALIZER
   /// The general serializer for all ArrayBase derivatives.
   static int serializer( SerialObject::elementList_t& serial, 
                          Any& data, bool serialize );
+#endif
 
 };
 

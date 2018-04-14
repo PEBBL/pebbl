@@ -200,7 +200,10 @@ public:
   Ereal(const Ereal& num)
      : PackObject(num)
   {
+  // JE hope this is OK
+  #ifdef HAVE_SERIALIZER
     static_cast<void>(&registrations_complete);
+  #endif
     val    = num.val;
     Finite = num.Finite;
   }
@@ -1034,7 +1037,13 @@ protected:
    * \param f_flag \p true is this Ereal is finite, \p false otherwise.
    */
   Ereal(const Type num, const bool f_flag) : val(num), Finite(f_flag) 
-  { static_cast<void>(&registrations_complete); }
+  { 
+  // This method doesn't seem to do what it claims.  Commmented out
+  // apparently serializer-dependent stuff
+  #ifdef HAVE_SERIALIZER
+    static_cast<void>(&registrations_complete); 
+  #endif
+  }
 
 #ifdef DARWIN
  protected:
@@ -1711,6 +1720,7 @@ if (Finite) {
    }
 }
 
+#ifdef HAVE_SERIALIZER
 // Ereals support operator<() && operator==()
 template<typename T>
 class Any::Comparator<Ereal<T> > : public Any::DefaultComparable<Ereal<T> > 
@@ -1725,7 +1735,6 @@ template<typename T>
 const volatile bool 
 Ereal<T>::registrations_complete = Ereal<T>::register_aux_functions();
 
-
 /// Construct an Ereal from num
 template <class Type>
 inline Ereal<Type>::Ereal(const Type num)
@@ -1738,6 +1747,7 @@ inline Ereal<Type>::Ereal(const Type num)
   check_if_infinite(val,Finite);
 }
 
+#endif
 
 /// Coerce Ereal to Type
 template <class Type>

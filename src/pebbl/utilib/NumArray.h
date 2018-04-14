@@ -76,7 +76,11 @@ public:
   
   /// Copy constructor.
   NumArray(const NumArray& array) : BasicArray<T>(array) 
-  { static_cast<void>(&registrations_complete); };
+  { 
+  #ifdef HAVE_SERIALIZER
+    static_cast<void>(&registrations_complete);
+  #endif
+  };
   
   /// Default destructor.
   virtual ~NumArray() {}
@@ -160,6 +164,9 @@ protected:
   void initialize(T* data, const size_type start, const size_type stop);
 
 private:
+
+#ifdef HAVE_SERIALIZER
+
    static const volatile bool registrations_complete;
 
    static int serializer( SerialObject::elementList_t& serial, 
@@ -198,12 +205,17 @@ private:
  
       return true;
     }
+
+#endif
+
 };
 
 template<class T>
 class Any::Comparator<NumArray<T> > 
    : public STL_Any_AuxFcns::SequenceComparator<NumArray<T> > 
 {};
+
+#ifdef HAVE_SERIALIZER
 
 template<class T>
 class Any::Printer<NumArray<T> > 
@@ -216,6 +228,7 @@ template<typename T>
 const volatile bool NumArray<T>::registrations_complete = 
    NumArray<T>::register_aux_functions();
 
+#endif
 
 //============================================================================
 

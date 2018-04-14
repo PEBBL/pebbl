@@ -296,9 +296,12 @@ protected:
   /// To dump data for debugging
   void dump_data(std::ostream& str, unsigned int max_elements=0);
 
+#ifdef HAVE_SERIALIZER
   /// The BitArrayBase serializer / deserializer 
   static int serializer( SerialObject::elementList_t& serial, 
                          Any& data, bool serialize );
+#endif
+
 };
 
 
@@ -565,6 +568,8 @@ void BitArrayBase<k,T,P>::dump_data(std::ostream& str, unsigned int max_elements
 }
 
 
+#ifdef HAVE_SERIALIZER
+
 /** Serialize a BitArrayBase object.  Note: as no one will ever create a
  *  BitArrayBase object, we will not bother to register this with the
  *  Serializer().
@@ -589,7 +594,7 @@ int BitArrayBase<k,T,P>::serializer( SerialObject::elementList_t& serial,
    return ArrayBase<bitword,P>::serializer(serial, tmp, serialize); 
 }
 
-
+#endif
 
 } // namespace utilib
 

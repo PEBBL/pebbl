@@ -274,11 +274,17 @@ protected:
     void dump_data(std::ostream& str, unsigned int max_elements=0);
 
 private:
+
+#ifdef HAVE_SERIALIZER
+  
    ///
    static const int register_serializer;
    ///
    static int serializer( SerialObject::elementList_t& serial, 
                           Any& data, bool serialize );
+
+#endif
+
 };
 
 

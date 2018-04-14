@@ -126,9 +126,12 @@ private:
    static const volatile bool registrations_complete;
    static bool register_aux_functions();
 
+#ifdef HAVE_SERIALIZER
    /// The BitArray serializer / deserializer
    static int serializer( SerialObject::elementList_t& serial, 
                           Any& data, bool serialize );
+#endif
+   
 };
 
 
