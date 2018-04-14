@@ -21,7 +21,7 @@
 #ifndef utilib_mpi_utilib_h
 #define utilib_mpi_utilib_h
 
-#include <utilib_config.h>
+#include <pebbl_config.h>
 
 //  JE allows MPI compiles with partially developed CMake
 #if     defined(HAVE_MPI) && !defined(UTILIB_HAVE_MPI)

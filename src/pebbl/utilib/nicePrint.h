@@ -20,8 +20,8 @@
 #ifndef utilib_nicePrint_h
 #define utilib_nicePrint_h
 
-#include <utilib_config.h>
-#include <utilib/std_headers.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/std_headers.h>
 
 namespace utilib {
 

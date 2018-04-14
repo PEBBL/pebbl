@@ -17,9 +17,9 @@
  * \author Jonathan Eckstein
  */
 
-#include <utilib/std_headers.h>
-#include <utilib/_math.h>
-#include <utilib/nicePrint.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/_math.h>
+#include <pebbl/utilib/nicePrint.h>
 
 using namespace std;
 
