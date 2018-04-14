@@ -19,6 +19,10 @@
 #define utilib_ValidateParameter_h
 
 #include <pebbl/utilib/std_headers.h>
+
+// JE disable tihs module for now
+#ifdef HAVE_SERIALIZER
+
 #include <utilib/TypeManager.h>
 #include <utilib/Any.h>
 
@@ -215,5 +219,6 @@ inline std::ostream& operator<< (std::ostream& ostr, const utilib::ParameterVali
  item)
 { item.write(ostr); return ostr; }
 
+#endif
 
 #endif
