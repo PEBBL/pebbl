@@ -591,7 +591,7 @@
 #define UTILIB_PACKAGE_NAME  "utilib" 
 #endif
 
- Define to the full name and version of this package. 
+// Define to the full name and version of this package. 
 #ifndef UTILIB_PACKAGE_STRING 
 #define UTILIB_PACKAGE_STRING  "utilib VOTD" 
 #endif
