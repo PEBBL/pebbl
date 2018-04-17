@@ -1,5 +1,5 @@
-CXX    = mpic++
-C      = mpicc
+#CXX    = mpic++
+#C      = mpicc
 CFLAGS = -fpermissive -g
 
 LIBSRCS = bb/branching.cpp bb/loadObject.cpp bb/pebblBase.cpp bb/pebblParams.cpp \
@@ -10,7 +10,7 @@ LIBSRCS = bb/branching.cpp bb/loadObject.cpp bb/pebblBase.cpp bb/pebblParams.cpp
        misc/gRandom.cpp misc/memUtil.cpp misc/scatterObj.cpp \
        misc/treeTopology.cpp pbb/earlyOutputThread.cpp \
        pbb/hubThread.cpp pbb/incumbCast.cpp pbb/incumbSearchThread.cpp \
-       pbb/llChainer.cpp pbb/loadBal.cpp pbb/loadBalPair.cpp \
+       pbb/llChainer.cpp pbb/loadBal.cpp \
        pbb/parBranching.cpp pbb/parBranchThreads.cpp pbb/parLoadObject.cpp \
        pbb/parPebblBase.cpp pbb/parPebblParams.cpp pbb/pbCheckpoint.cpp \
        pbb/pbEnumerate.cpp pbb/pbHub.cpp pbb/pbOutput.cpp pbb/pbPack.cpp \

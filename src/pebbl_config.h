@@ -46,8 +46,8 @@
 #endif
 
 /* define that mpi is being used */
-#define ACRO_HAVE_MPI 1
-#define UTILIB_HAVE_MPI 1
+//#define ACRO_HAVE_MPI 1
+//#define UTILIB_HAVE_MPI 1
 
 /* define if the compiler implements namespaces */
 #ifndef ACRO_HAVE_NAMESPACES 
