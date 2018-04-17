@@ -18,10 +18,10 @@
 // AbstractHashTable are well-suited for these hash functions.
 //
 
-#include <utilib_config.h>
-#include <utilib/BasicArray.h>
-#include <utilib/BitArray.h>
-#include <utilib/MixedIntVars.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/BasicArray.h>
+#include <pebbl/utilib/BitArray.h>
+#include <pebbl/utilib/MixedIntVars.h>
 
 namespace utilib {
 

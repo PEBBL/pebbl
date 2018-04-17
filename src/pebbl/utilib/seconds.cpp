@@ -32,6 +32,15 @@ extern "C" {
 #endif
 #endif
 
+
+// JE random hacking her to get a compile without a config system
+#ifdef UTILIB_HAVE_GETRUSAGE
+#include <sys/time.h>
+#include <sys/resource.h>
+#endif
+// End JE random hacking
+
+
 #ifdef _WIN32
 #include <windows.h>
 #endif

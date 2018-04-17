@@ -383,14 +383,14 @@
 #endif
 
 /* Define to 1 if you have the `getrusage' function. */
-/* #ifndef UTILIB_HAVE_GETRUSAGE */
-/* #define UTILIB_HAVE_GETRUSAGE  1 */
-/* #endif */
+#ifndef UTILIB_HAVE_GETRUSAGE 
+#define UTILIB_HAVE_GETRUSAGE  1 
+#endif 
 
 /* Define to 1 if you have the `gettimeofday' function. */
-/* #ifndef UTILIB_HAVE_GETTIMEOFDAY */
-/* #define UTILIB_HAVE_GETTIMEOFDAY  1 */
-/* #endif */
+#ifndef UTILIB_HAVE_GETTIMEOFDAY
+#define UTILIB_HAVE_GETTIMEOFDAY  1
+#endif
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #ifndef UTILIB_HAVE_INTTYPES_H 

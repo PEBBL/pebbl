@@ -49,6 +49,8 @@ int cast_vector_to_bitArray(const Any& from, Any& to)
 
 } // namespace utilib::(local)
 
+#ifdef HAVE_SERIALIZER
+
 const volatile bool BitArray::registrations_complete = 
    BitArray::register_aux_functions();
 
@@ -66,6 +68,8 @@ bool BitArray::register_aux_functions()
 
    return true;
 }
+
+#endif
 
 
 size_type BitArray::nbits() const
@@ -177,7 +181,7 @@ if (size() < min_length)
   return 0;
 }
 
-
+#ifdef HAVE_SERIALIZER
 int BitArray::serializer( SerialObject::elementList_t& serial, 
                           Any& data, bool serialize )
 {
@@ -191,6 +195,7 @@ int BitArray::serializer( SerialObject::elementList_t& serial,
    // actual serial stream.
    return BitArrayBase<0,int,BitArray>::serializer(serial, tmp, serialize); 
 }
+#endif
 
 
 } // namespace utilib

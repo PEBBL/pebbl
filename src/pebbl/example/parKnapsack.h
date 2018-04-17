@@ -22,7 +22,7 @@
 #include <pebbl_config.h>
 #include <pebbl/example/serialKnapsack.h>
 #ifdef ACRO_HAVE_MPI
-#include <pebbl/bb/parBranching.h>
+#include <pebbl/pbb/parBranching.h>
 
 namespace pebbl {
 

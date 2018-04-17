@@ -24,6 +24,8 @@ using namespace std;
 
 namespace utilib {
 
+#ifdef HAVE_SERIALIZER
+
 int CharString::serializer( SerialObject::elementList_t& serial, 
                             Any& data, bool serialize )
 {
@@ -41,6 +43,8 @@ int CharString::serializer( SerialObject::elementList_t& serial,
 const int CharString::register_serializer = 
    Serializer().register_serializer<CharString>( "utilib::CharString", 
                                                  &CharString::serializer );
+   
+#endif
 
 
 CharString::CharString(const char* str, const EnumDataOwned o)

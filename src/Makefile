@@ -23,7 +23,7 @@ LIBSRCS = bb/branching.cpp bb/loadObject.cpp bb/pebblBase.cpp bb/pebblParams.cpp
        utilib/mpiUtil.cpp utilib/PackBuf.cpp utilib/Parameter.cpp \
        utilib/ParameterSet.cpp utilib/PM_LCG.cpp utilib/seconds.cpp \
        utilib/nicePrint.cpp utilib/hash_fn.cpp utilib/memdebug.cpp \
-       utilib/ParameterList.cpp
+       utilib/ParameterList.cpp utilib/exception_mngr.cpp utilib/lookupa.cpp
 
 EXESRCS = example/core_test.cpp example/Docking.cpp example/knapMPS.cpp \
           example/knapsack.cpp example/lipshitzian.cpp example/logAnalyze.cpp \

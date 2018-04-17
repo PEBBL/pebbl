@@ -986,7 +986,7 @@ return temp;
 #ifdef ACRO_HAVE_MPI
 }
 
-#include <pebbl/parBranching.h>
+#include <pebbl/pbb/parBranching.h>
 
 namespace pebbl {
 

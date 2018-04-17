@@ -20,7 +20,7 @@
 //
 
 #include <pebbl_config.h>
-#include <pebbl/parPebblBase.h>
+#include <pebbl/pbb/parPebblBase.h>
  
 #ifdef ACRO_HAVE_MPI
 

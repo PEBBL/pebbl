@@ -18,10 +18,10 @@
 #ifndef utilib_Simple2DArray_h
 #define utilib_Simple2DArray_h
 
-#include <utilib/std_headers.h>
-#include <utilib/_generic.h>
-#include <utilib/Basic2DArray.h>
-#include <utilib/PackBuf.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/_generic.h>
+#include <pebbl/utilib/Basic2DArray.h>
+#include <pebbl/utilib/PackBuf.h>
 
 namespace utilib {
 

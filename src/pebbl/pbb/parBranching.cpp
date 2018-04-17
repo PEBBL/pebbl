@@ -22,6 +22,12 @@
 #include <pebbl/utilib/mpiUtil.h>
 #include <pebbl/pbb/parBranching.h>
 
+// These may be system dependent and may have to get taken over by
+// the build system (JE)
+
+#include <sys/types.h>
+#include <unistd.h>
+
 
 #ifdef ACRO_HAVE_MPI
 

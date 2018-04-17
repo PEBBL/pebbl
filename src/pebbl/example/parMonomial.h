@@ -27,7 +27,7 @@
 #endif
 
 #ifdef ACRO_HAVE_MPI
-#include <pebbl/parBranching.h>
+#include <pebbl/pbb/parBranching.h>
 
 #include <pebbl/example/serialMonomial.h>
 

@@ -18,10 +18,10 @@
 #ifndef utilib_MixedIntVars_h
 #define utilib_MixedIntVars_h
 
-#include <utilib/std_headers.h>
-#include <utilib/BitArray.h>
-#include <utilib/NumArray.h>
-#include <utilib/Any.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/BitArray.h>
+#include <pebbl/utilib/NumArray.h>
+#include <pebbl/utilib/Any.h>
 
 namespace utilib {
 
@@ -226,11 +226,16 @@ protected:
 private:
    static const volatile bool registrations_complete;
 
+#ifdef HAVE_SERIALIZER
+   
    /// The MixedIntVars serializer / deserializer
    static int serializer( SerialObject::elementList_t& serial, 
                           Any& data, bool serialize );
 
    static bool register_aux_functions();
+
+#endif
+
 };
 
 } // namespace utilib

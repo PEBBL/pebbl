@@ -20,11 +20,8 @@
 
 #include <pebbl/utilib/std_headers.h>
 
-// JE disable tihs module for now
-#ifdef HAVE_SERIALIZER
-
-#include <utilib/TypeManager.h>
-#include <utilib/Any.h>
+#include <pebbl/utilib/TypeManager.h>
+#include <pebbl/utilib/Any.h>
 
 namespace utilib {
 
@@ -219,6 +216,5 @@ inline std::ostream& operator<< (std::ostream& ostr, const utilib::ParameterVali
  item)
 { item.write(ostr); return ostr; }
 
-#endif
 
 #endif
