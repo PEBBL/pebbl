@@ -20,7 +20,7 @@
 
 #if !defined(DOXYGEN)
 
-#include <utilib_config.h>
+#include <pebbl_config.h>
 #if defined(__cplusplus)
 extern "C" {
 #endif

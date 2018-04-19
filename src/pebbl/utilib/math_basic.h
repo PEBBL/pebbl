@@ -191,9 +191,10 @@ std::string pscientific(const double t, int mantissa=6, int expwidth=3,
  *
  */
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+// JE removed this -- now everything is C++
+// #ifdef __cplusplus
+// extern "C" {
+// #endif
 
 /** Compute the number of lines in file filename. */
 int calc_filesize(char* filename);
@@ -246,9 +247,9 @@ unsigned int bitWidth(unsigned int x);
 unsigned int gcd(unsigned int a, unsigned int b);
 
 
-#ifdef __cplusplus
-}
-#endif
+// #ifdef __cplusplus
+// }
+// #endif
 
 #if 0
 /**

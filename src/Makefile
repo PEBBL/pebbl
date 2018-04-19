@@ -19,13 +19,15 @@ LIBSRCS = bb/branching.cpp bb/loadObject.cpp bb/pebblBase.cpp bb/pebblParams.cpp
        pbb/workerThread.cpp sched/Scheduler.cpp sched/SelfAdjustThd.cpp \
        sched/ThreadObj.cpp sched/ThreadQueue.cpp utilib/BitArray.cpp \
        utilib/CharString.cpp utilib/CommonIO.cpp utilib/Ereal.cpp \
-       utilib/globals.cpp utilib/logEvent.cpp utilib/math_basic.cpp \
+       utilib/globals.cpp utilib/logEvent.cpp \
        utilib/mpiUtil.cpp utilib/PackBuf.cpp utilib/Parameter.cpp \
        utilib/ParameterSet.cpp utilib/PM_LCG.cpp utilib/seconds.cpp \
        utilib/nicePrint.cpp utilib/hash_fn.cpp utilib/memdebug.cpp \
-       utilib/ParameterList.cpp utilib/exception_mngr.cpp utilib/lookupa.cpp
+       utilib/ParameterList.cpp utilib/exception_mngr.cpp utilib/lookupa.cpp \
+       utilib/Any.cpp utilib/ParkMiller.cpp utilib/TypeManager.cpp \
+       utilib/comments.cpp utilib/math_basic.cpp 
 
-EXESRCS = example/core_test.cpp example/Docking.cpp example/knapMPS.cpp \
+EXESRCS = example/core_test.cpp example/knapMPS.cpp example/Docking.cpp \
           example/knapsack.cpp example/lipshitzian.cpp example/logAnalyze.cpp \
           example/monomial.cpp
 

@@ -65,7 +65,9 @@ public:
   { 
      // This equality test appears to be necessary to prevent icc/ld
      // from optimizing away the serialization registration
+#ifdef HAVE_SERIALIZER
      BitArray::registrations_complete == true; 
+#endif
   }
 
   /// Disconnect from any prior data and copy the data from object \b array

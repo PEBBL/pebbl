@@ -24,8 +24,9 @@
 #include <pebbl/utilib/PackObject.h>
 #include <pebbl/utilib/traits.h>
 
-#ifdef HAVE_SERIALIZER
 #include <pebbl/utilib/TypeManager.h>
+
+#ifdef HAVE_SERIALIZER
 #include <pebbl/utilib/Serialize.h>
 #endif
 
@@ -1720,7 +1721,6 @@ if (Finite) {
    }
 }
 
-#ifdef HAVE_SERIALIZER
 // Ereals support operator<() && operator==()
 template<typename T>
 class Any::Comparator<Ereal<T> > : public Any::DefaultComparable<Ereal<T> > 
@@ -1731,15 +1731,19 @@ template<typename T>
 class Any::Printer<Ereal<T> > : public Any::DefaultPrinter<Ereal<T> > 
 {};
 
+#ifdef HAVE_SERIALIZER
 template<typename T>
 const volatile bool 
 Ereal<T>::registrations_complete = Ereal<T>::register_aux_functions();
+#endif
 
 /// Construct an Ereal from num
 template <class Type>
 inline Ereal<Type>::Ereal(const Type num)
 {
+#ifdef HAVE_SERIALIZER
   static_cast<void>(registrations_complete);
+#endif
   if (is_real<Type>::value == false)
      EXCEPTION_MNGR(std::runtime_error, "Ereal must be defined with a 'real' type: float or double.");
   val = num;
@@ -1747,7 +1751,6 @@ inline Ereal<Type>::Ereal(const Type num)
   check_if_infinite(val,Finite);
 }
 
-#endif
 
 /// Coerce Ereal to Type
 template <class Type>
