@@ -407,7 +407,7 @@ namespace pebblMonom {
 				 "Write application-specific verification "
 				 "log(s)",
 				 "Maximum Monomial");
-  };
+  }
 
 
   //  To read in the problem.
@@ -2575,7 +2575,7 @@ namespace pebblMonom {
   maxMonomSolution::maxMonomSolution(maxMonomSolution* toCopy) 
   { 
     copy(toCopy); 
-  };
+  }
 
 
   void maxMonomSolution::copy(maxMonomSolution* toCopy)

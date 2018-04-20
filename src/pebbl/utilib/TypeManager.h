@@ -46,7 +46,7 @@ namespace utilib {
 namespace warning {
 const int Typemanager_OverrideCastFcn    = 1;
 const int Typemanager_NonexistentCastFcn = 2;
-}; // namespace utilib::warning
+} // namespace utilib::warning
 namespace error {
 const int TypeManager_EmptySrc           = -200;
 const int TypeManager_NoCastRoute        = -201;
@@ -56,7 +56,7 @@ const int TypeManager_DuplicateContext   = -204;
 const int TypeManager_NoContextCastRoute = -205;
 const int TypeManager_InvalidContext     = -206;
 const int TypeManager_Exception          = -207;
-}; // namespace utilib::error
+} // namespace utilib::error
 
 
 /// An exception class used by Type_Manager when a lexical_cast fails or DNE

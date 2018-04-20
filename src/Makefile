@@ -1,6 +1,6 @@
 #CXX    = mpic++
 #C      = mpicc
-CFLAGS = -fpermissive -g
+CFLAGS = -Wpedantic #-fpermissive -g
 
 LIBSRCS = bb/branching.cpp bb/loadObject.cpp bb/pebblBase.cpp bb/pebblParams.cpp \
        comm/coTree.cpp comm/MessageID.cpp comm/outBufferQ.cpp \

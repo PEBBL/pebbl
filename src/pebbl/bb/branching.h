@@ -1703,13 +1703,13 @@ inline std::ostream& operator<<(std::ostream& s, pebbl::coreSPInfo* p)
 {
   p->debugPrint(s);
   return s;
-};
+}
 
 
 inline std::ostream& operator<<(std::ostream& s, pebbl::solutionIdentifier* p)
 {
   p->write(s);
   return s;
-};
+}
 
 #endif

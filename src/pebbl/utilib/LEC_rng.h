@@ -41,7 +41,7 @@ extern void initgn(long isdtyp);
 extern void gscgn(long getset,long *g);
 
 #ifdef __cplusplus
-};
+}
 #endif
 
 #endif

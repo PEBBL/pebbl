@@ -186,7 +186,7 @@ void mistakeSP(ostream& errorStream,int p,int s)
   if (processors > 1)
     errorStream << p << ':';
   mistake(errorStream << s);
-};
+}
 
 
 void countCheck(int count,

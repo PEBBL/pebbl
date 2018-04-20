@@ -40,7 +40,7 @@ return local_runif();
 //extern "C" double (*global_runif)(void) = LEC_runif;
 extern "C" {
 double (*global_runif)(void) = global_Uniform_func;
-};
+}
 
 
 namespace utilib {

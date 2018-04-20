@@ -80,7 +80,7 @@ void branchSubId::branchSubIdFromBranching(branching* global)
 #else
   creatingProcessor = 0;
 #endif
-};
+}
 
 
 // This is used to compare subproblems in a way that varies
@@ -134,7 +134,7 @@ int coreSPInfo::dynamicSPCompare(const coreSPInfo& sp2) const
 
   return compare(sp2);
 
-};
+}
 
 
 int coreSPInfo::compare(const coreSPInfo& sp2) const
@@ -190,7 +190,7 @@ int coreSPInfo::compare(const coreSPInfo& sp2) const
 
   return 0;
 
-};
+}
 
 
 // Guts of the standard constructors for "branching"
@@ -661,7 +661,7 @@ double branching::relGap()
 { 
   loadObject l = updatedLoad();
   return relGap(l); 
-};
+}
 
 
 // This function computes a value v such that any subproblem with
@@ -920,7 +920,7 @@ void branchSub::recycle()
 #endif
   delete this;
   MEMORY_TRACK(temp,"Recycled subproblem");
-};
+}
 
 
 // Minimal implementation of setRoot() (to tell a problem it's a root).
@@ -1414,7 +1414,7 @@ loadObject branching::load()
     l += *currentSP;
 
   return l;
-};
+}
 
 
 loadObject branching::updatedLoad()
@@ -1424,7 +1424,7 @@ loadObject branching::updatedLoad()
     l += *currentSP;
 
   return l;
-};
+}
 
 
 // To print status lines.
@@ -1988,7 +1988,7 @@ branchSub::branchSub()
   poolPtr = 0; 
   childrenLeft = 1;
   state = boundable;
-};
+}
   
 
 void branchSub::branchSubAsChildOf(branchSub* parent)
@@ -1998,7 +1998,7 @@ void branchSub::branchSubAsChildOf(branchSub* parent)
   bound = parent->bound;
   integralityMeasure = parent->integralityMeasure;
   depth = parent->depth + 1;
-};
+}
 
 
 // Basic methods for the solutionIdentifier class
@@ -2048,7 +2048,7 @@ solution::solution(branching* bGlobal) :
   refCounter(1)
 {
   serial = ++(bGlobal->solSerialCounter);
-};
+}
 
 
 void solution::creationStamp(branching* bGlobal,int typeId_)

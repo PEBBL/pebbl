@@ -663,7 +663,7 @@ Type_Manager::lexical_castable( const std::type_info& srcType,
       return false;
    else
       return isExact || ( ! force_exact );
-};
+}
 
 
 bool
@@ -676,7 +676,7 @@ Type_Manager::lexical_castable( const std::type_info& srcType,
    type_t to   = getMainType(destType);
 
    return lexical_castable(from, to, isExact, pathLength);
-};
+}
 
 
 

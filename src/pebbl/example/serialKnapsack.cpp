@@ -47,7 +47,7 @@ CHUNK_ALLOCATOR_DEF(knapsackItem,100);
   branchingInit(maximization, relTolerance, absTolerance);
   workingSol.serial = 0;
   workingSol.sense  = maximization;
-};
+}
 
 
 //  To read in the problem.  This routine now makes use of UTILIB
@@ -140,7 +140,7 @@ bool binaryKnapsack::setupProblem(int& argc,char**& argv)
 
   return true;
 
-};
+}
 
 
 void binaryKnapsack::preprocess() 
@@ -191,7 +191,7 @@ solution* binaryKnapsack::initialGuess()
   guess->completeGreedy();
   DEBUGPR(200,ucout << "Initial Greedy solution:\n"; guess->print(ucout));
   return guess;
-};
+}
 
 
 binKnapSolution::binKnapSolution(binaryKnapsack* global_) :
@@ -204,7 +204,7 @@ binKnapSolution::binKnapSolution(binaryKnapsack* global_) :
   // so typeId can just be 0.
   typeId = 0;
   genItem.resize(maxGenSize());
-};
+}
 
 
 binKnapSolution::binKnapSolution(binKnapSolution* toCopy) 
@@ -213,7 +213,7 @@ binKnapSolution::binKnapSolution(binKnapSolution* toCopy)
 	   << (void*) this << " from " << toCopy << endl);
   copy(toCopy);
   serial = ++(global->solSerialCounter);
-};
+}
 
 
 
@@ -278,7 +278,7 @@ void binKnapSub::binKnapSubFromKnapsack(binaryKnapsack* master)
   tSplitInitial = notSplit;
 
   DEBUGPR(20,ucout << "Created blank problem.\n");
-};
+}
 
 
 void binKnapSub::binKnapSubAsChildOf(binKnapSub* parent,int whichChild)
@@ -383,7 +383,7 @@ void binKnapSub::setRootComputation()
   DEBUGPR(10,ucout << "binKnapSub::setRootComputation() invoked.\n");
   DEBUGPR(100,ucout << "inList:  ";  inList.debug_print(ucout));
   DEBUGPR(100,ucout << "outList: "; outList.debug_print(ucout));
-};
+}
 
 
 
@@ -545,7 +545,7 @@ void binKnapSolution::completeGreedy()
       addItem(i);
   DEBUGPRX(20,global,'{' << left << ',' << value << "}\n");
   DEBUGPRX(200,global,"shared= " << genItem.shared_mem() << '\n');
-};
+}
 
 
 // Complete a partial solution in a random, GRASP-like way.  Only consider 
@@ -562,7 +562,7 @@ void binKnapSolution::completeRandom()
   DEBUGPRXP(20,global,'{' << left << ',' << value << "} (squeezeIn) ");
   DEBUGPRX(210,global,"shared= " << genItem.shared_mem() << '\n');
   squeezeInGreedy();
-};
+}
 
 
 //  This is similar to completeGreedy, but considers objects that we might
@@ -755,7 +755,7 @@ void binKnapSolution::printContents(ostream& outStream)
     }
   outStream << '\n';
   outStream << "Free Space = " << left << endl;
-};
+}
 
 
 double binKnapSolution::sequenceData() 
