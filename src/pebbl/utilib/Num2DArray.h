@@ -18,9 +18,9 @@
 #ifndef utilib_Num2DArray_h
 #define utilib_Num2DArray_h
 
-#include <utilib_config.h>
-#include <utilib/NumArray.h>
-#include <utilib/Simple2DArray.h>
+#include <pebbl_config.h>
+#include <pebbl/utilib/NumArray.h>
+#include <pebbl/utilib/Simple2DArray.h>
 
 namespace utilib {
 
