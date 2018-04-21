@@ -1,6 +1,6 @@
 CXX    = mpic++
 C      = mpicc
-CFLAGS = -fpermissive -g
+CFLAGS = -g
 
 LIBSRCS = bb/branching.cpp bb/loadObject.cpp bb/pebblBase.cpp bb/pebblParams.cpp \
        comm/coTree.cpp comm/MessageID.cpp comm/outBufferQ.cpp \
@@ -47,6 +47,7 @@ EXES = $(patsubst %.cpp,%,$(PEXESRCS))
 	$(CXX) $(CFLAGS) -o $@ $< $(LIBOBJS)
 
 all : $(OBJS) $(EXES)
+	
 
 clean: 
 	rm -f $(EXES) $(OBJS)

@@ -78,6 +78,9 @@ public:
   /// Return the key.
   T& key() {return *Keyptr;};
 
+  /// Return the heap location -- added by JE 4/20/2018
+  int heapLocation() {return element;};
+
 private:
 
   /// A pointer to a key object.
@@ -169,7 +172,11 @@ protected:
 
   ///
   void moveEffect(GenericHeapItem<T>* item)
-	{item->key().location=element(item);};
+	{
+    //  JE changed this 4/20/2018
+    //  item->key().location=element(item);
+    item->key().location = item->heapLocation();
+  };
 
 };
 
