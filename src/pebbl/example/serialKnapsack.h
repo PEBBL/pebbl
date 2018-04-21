@@ -321,7 +321,7 @@ public:
 };
 
 
-inline int& binKnapSolution::maxGenSize() { return global->maxGenSize; };
+inline int& binKnapSolution::maxGenSize() { return global->maxGenSize; }
 
 
 //  For use in the constructor compiled code, and also in derived
@@ -339,27 +339,27 @@ branching(maximization,relTolerance(),absTolerance())
 inline int binKnapSolution::numItems() 
 {
   return global->numItems; 
-};
+}
   
 inline double binKnapSolution::itemWeight(int i) 
 { 
   return global->item[i].weight; 
-};
+}
   
 inline double binKnapSolution::itemValue(int i)
 { 
   return global->item[i].value; 
-};
+}
   
 inline CharString& binKnapSolution::itemName(int i)
 { 
   return global->item[i].name; 
-};
+}
 
 inline void binKnapSolution::foundSolution(syncType sync) 
 { 
   global->foundSolution(new binKnapSolution(this),sync); 
-};
+}
 
 
 //  The branchSub class...
@@ -465,7 +465,7 @@ inline branchSub* binaryKnapsack::blankSub()
   binKnapSub *temp = new binKnapSub();
   temp->binKnapSubFromKnapsack(this);
   return temp;
-};
+}
 
 
 // This little utility class is used by binaryKnapsack::boundComputation...

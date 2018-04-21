@@ -1,6 +1,5 @@
-CXX    = mpic++
-C      = mpicc
-CFLAGS = -g
+CXX      = mpic++
+CXXFLAGS = -g
 
 LIBSRCS = bb/branching.cpp bb/loadObject.cpp bb/pebblBase.cpp bb/pebblParams.cpp \
        comm/coTree.cpp comm/MessageID.cpp comm/outBufferQ.cpp \
@@ -10,7 +9,7 @@ LIBSRCS = bb/branching.cpp bb/loadObject.cpp bb/pebblBase.cpp bb/pebblParams.cpp
        misc/gRandom.cpp misc/memUtil.cpp misc/scatterObj.cpp \
        misc/treeTopology.cpp pbb/earlyOutputThread.cpp \
        pbb/hubThread.cpp pbb/incumbCast.cpp pbb/incumbSearchThread.cpp \
-       pbb/llChainer.cpp pbb/loadBal.cpp pbb/loadBalPair.cpp \
+       pbb/llChainer.cpp pbb/loadBal.cpp \
        pbb/parBranching.cpp pbb/parBranchThreads.cpp pbb/parLoadObject.cpp \
        pbb/parPebblBase.cpp pbb/parPebblParams.cpp pbb/pbCheckpoint.cpp \
        pbb/pbEnumerate.cpp pbb/pbHub.cpp pbb/pbOutput.cpp pbb/pbPack.cpp \
@@ -41,10 +40,10 @@ OBJS    = $(LIBOBJS) $(EXEOBJS)
 EXES = $(patsubst %.cpp,%,$(PEXESRCS))
 
 %.o : %.cpp
-	$(CXX) -c -I. $(CFLAGS) $< -o $@
+	$(CXX) -c -I. $(CXXFLAGS) $< -o $@
 
 % : %.o
-	$(CXX) $(CFLAGS) -o $@ $< $(LIBOBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $< $(LIBOBJS)
 
 all : $(OBJS) $(EXES)
 	

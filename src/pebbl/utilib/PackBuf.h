@@ -54,7 +54,7 @@ typedef unsigned char unsigned_char;
 typedef unsigned short unsigned_short;
 typedef unsigned int unsigned_int;
 typedef unsigned long unsigned_long;
-typedef long long long_long;
+//typedef long long long_long;
 #endif
 
 
@@ -137,11 +137,13 @@ public:
   ///
   void pack(const unsigned_long& data) {pack(&data,1);}
 
+#if 0
   ///
   void pack(const long long int* data, const int num);
 
   ///
   void pack(const long long int& data) {pack(&data,1);}
+#endif
 
   ///
   void pack(const short* data, const int num);
@@ -386,11 +388,13 @@ public:
   ///
   void unpack(long& data) {unpack(&data,1);}
 
+#if 0
   ///
   void unpack(long long* data, const int num);
 
   ///
   void unpack(long long& data) {unpack(&data,1);}
+#endif
 
   ///
   void unpack(unsigned_long* data, const int num);
@@ -656,7 +660,7 @@ Index += curr;\
 PACKBUF(int)
 PACKBUF(unsigned_int)
 PACKBUF(long)
-PACKBUF(long long)
+//PACKBUF(long long)
 PACKBUF(unsigned_long)
 PACKBUF(short)
 PACKBUF(unsigned_short)
@@ -728,7 +732,7 @@ UNPACKBUF(unsigned_char)
 UNPACKBUF(double)
 UNPACKBUF(long double)
 UNPACKBUF(float)
-UNPACKBUF(long long)
+//UNPACKBUF(long long)
 
 #endif 
 
@@ -750,9 +754,11 @@ inline utilib::PackBuffer& operator<< (utilib::PackBuffer& buff, const long doub
 /// Stream operator to pack a float
 inline utilib::PackBuffer& operator<< (utilib::PackBuffer& buff, const float& data)
 	{buff.pack(data); return buff;}
+#if 0
 /// Stream operator to pack a long int
 inline utilib::PackBuffer& operator<< (utilib::PackBuffer& buff, const long long int& data)
 	{buff.pack(data); return buff;}
+#endif
 /// Stream operator to pack a long int
 inline utilib::PackBuffer& operator<< (utilib::PackBuffer& buff, const long int& data)
 	{buff.pack(data); return buff;}
@@ -765,9 +771,11 @@ inline utilib::PackBuffer& operator<< (utilib::PackBuffer& buff, const short int
 /// Stream operator to pack a char
 inline utilib::PackBuffer& operator<< (utilib::PackBuffer& buff, const char& data)
 	{buff.pack(data); return buff;}
+#if 0
 /// Stream operator to pack a unsigned long long int
 inline utilib::PackBuffer& operator<< (utilib::PackBuffer& buff, const unsigned long long int& data)
 	{buff.pack(data); return buff;}
+#endif
 /// Stream operator to pack a unsigned long int
 inline utilib::PackBuffer& operator<< (utilib::PackBuffer& buff, const unsigned long int& data)
 	{buff.pack(data); return buff;}
@@ -835,9 +843,11 @@ inline utilib::UnPackBuffer& operator>> (utilib::UnPackBuffer& buff, long double
 /// Stream opreator to unpack a float
 inline utilib::UnPackBuffer& operator>> (utilib::UnPackBuffer& buff, float& data)
 	{buff.unpack(data); return buff;}
+#if 0
 /// Stream opreator to unpack a long long int
 inline utilib::UnPackBuffer& operator>> (utilib::UnPackBuffer& buff, long long int& data)
 	{buff.unpack(data); return buff;}
+#endif
 /// Stream opreator to unpack a long int
 inline utilib::UnPackBuffer& operator>> (utilib::UnPackBuffer& buff, long int& data)
 	{buff.unpack(data); return buff;}
@@ -850,9 +860,11 @@ inline utilib::UnPackBuffer& operator>> (utilib::UnPackBuffer& buff, short int& 
 /// Stream opreator to unpack a char
 inline utilib::UnPackBuffer& operator>> (utilib::UnPackBuffer& buff, char& data)
 	{buff.unpack(data); return buff;}
+#if 0
 /// Stream opreator to unpack a unsigned long long int
 inline utilib::UnPackBuffer& operator>> (utilib::UnPackBuffer& buff, unsigned long long int& data)
 	{buff.unpack(data); return buff;}
+#endif
 /// Stream opreator to unpack a unsigned long int
 inline utilib::UnPackBuffer& operator>> (utilib::UnPackBuffer& buff, unsigned long int& data)
 	{buff.unpack(data); return buff;}

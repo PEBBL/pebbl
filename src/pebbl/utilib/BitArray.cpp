@@ -56,8 +56,10 @@ const volatile bool BitArray::registrations_complete =
 
 bool BitArray::register_aux_functions()
 {
+#ifdef   HAVE_SERIALIZER
    Serializer().register_serializer<BitArray>
       ( "utilib::BitArray", BitArray::serializer );
+#endif
 
    TypeManager()->register_lexical_cast
       ( typeid(BitArray), typeid(std::vector<bool>), 

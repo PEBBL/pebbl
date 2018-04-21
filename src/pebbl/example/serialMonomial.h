@@ -859,7 +859,7 @@ namespace pebblMonom {
       temp = new maxMonomSub();
     temp->maxMonomSubFromData(this);
     return temp;
-  };
+  }
 
 } // namespace pebbl
 

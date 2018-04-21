@@ -83,7 +83,7 @@ extern double scauchy1 _((void));
 
 
 #ifdef __cplusplus
-};
+}
 #endif
 
 
@@ -113,7 +113,7 @@ extern "C" {
 #endif
 extern double (*global_runif) _((void));
 #ifdef __cplusplus
-};
+}
 #endif
 #define set_global_runif(func)	global_runif = func
 #endif

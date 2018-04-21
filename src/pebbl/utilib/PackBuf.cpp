@@ -154,7 +154,7 @@ void UnPackBuffer::reset(size_type message_size)
      EXCEPTION_MNGR(runtime_error, "UnPackBuffer has length " << Size << ", but message has size " << message_size);
   MessageLength = message_size;
   status_flag   = true;
-};
+}
 
 } // namespace utilib
 

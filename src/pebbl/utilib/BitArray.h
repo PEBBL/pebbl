@@ -171,7 +171,8 @@ if (ndx >= Len)
   Data[ndx >> index_shift] ^= 1 << (ndx & index_mask);
 }
 
-DEFINE_DEFAULT_ANY_PRINTER(BitArray);
+// WEH
+//DEFINE_DEFAULT_ANY_PRINTER(BitArray);
 
 } // namespace utilib
 

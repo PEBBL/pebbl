@@ -216,5 +216,4 @@ inline std::ostream& operator<< (std::ostream& ostr, const utilib::ParameterVali
  item)
 { item.write(ostr); return ostr; }
 
-
 #endif
