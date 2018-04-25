@@ -12,6 +12,7 @@
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
 ###############################################################################
+message(FATAL_ERROR "${CMAKE_CURRENT_LIST_FILE} was called.")
 if(DL_INCLUDE_DIR)
   set(DL_FIND_QUIETLY TRUE)
 endif()

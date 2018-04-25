@@ -1,5 +1,6 @@
 # Make an executable target called ${package_name}-runner but a binary
 # called runner
+message(FATAL_ERROR "${CMAKE_CURRENT_LIST_FILE} was called.")
 function(acro_add_cxxtest_runner package_name
     runner_cxxtest_src runner_static_src
     runner_include_directories runner_link_libraries)

@@ -1,3 +1,4 @@
+message(FATAL_ERROR "${CMAKE_CURRENT_LIST_FILE} was called.")
 
 add_library(utilib 
   gencau.c   

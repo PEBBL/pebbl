@@ -1,4 +1,5 @@
 # Utilib tests depend on acro-utilib for a function definition
+message(FATAL_ERROR "${CMAKE_CURRENT_LIST_FILE} was called.")
 if(ENABLE_TESTS)
 
   include(AcroAddCxxtestRunner)

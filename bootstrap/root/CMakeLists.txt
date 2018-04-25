@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
+message(FATAL_ERROR "${CMAKE_CURRENT_LIST_FILE} was called.")
 project(Acro CXX C)
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})

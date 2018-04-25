@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 2.6)
+message(FATAL_ERROR "${CMAKE_CURRENT_LIST_FILE} was called.")
 
 project(Acro-Packages)
 
