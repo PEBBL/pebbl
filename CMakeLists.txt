@@ -6,6 +6,10 @@ option(enable_mpi "Enable MPI build. Will require MPI wrappers for compilers." O
 option(enable_serializer "Enable serializer funtionality." OFF)
 option(enable_examples "Enable example programs." ON)
 
+if(enable_examples)
+ enable_testing()
+endif()
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive")
 
 if(enable_mpi)
@@ -20,6 +24,13 @@ endif()
 
 if(enable_serializer)
   set(HAVE_SERIALIZER 1)
+endif()
+
+if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/packages/pebbl/etc/monomial)
+  set(monomial_test_dir ${CMAKE_CURRENT_SOURCE_DIR}/packages/pebbl/etc/monomial)
+endif()
+if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/packages/pebbl/etc/knapsack/problems)
+  set(knapsack_test_dir ${CMAKE_CURRENT_SOURCE_DIR}/packages/pebbl/etc/knapsack/problems)
 endif()
 
 add_subdirectory(src)
