@@ -6,7 +6,13 @@ file(GLOB sched_srcs  sched/*.cpp)
 file(GLOB utilib_srcs utilib/*.cpp)
 
 add_library(pebbl ${bb_srcs} ${comm_srcs} ${misc_srcs} ${pebbl_srcs} ${sched_srcs} ${utilib_srcs})
-
+if(enable_mpi)
+  if(MPI_CXX_COMPILE_FLAGS)
+    target_compile_options(pebbl ${MPI_CXX_COMPILE_FLAGS})
+  endif()
+  set_target_properties(pebbl PROPERTIES LINK_FLAGS ${MPI_CXX_LINK_FLAGS})
+  target_link_libraries(pebbl ${MPI_CXX_LIBRARIES})
+endif()
 
 if(enable_examples)
   add_subdirectory(example)

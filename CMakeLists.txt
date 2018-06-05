@@ -10,13 +10,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive")
 
 if(enable_mpi)
   message("MPI enabled.")
-  check_include_file_cxx(mpi.h have_mpi_h)
-  if(NOT have_mpi_h)
-    #verify mpi is available.
-    message("MPI is enabled, but compiler cannot find mpi.h.")
-    message("Please provide the mpi wrappers for your compilers to CMAKE_<lang>_COMPILER.")
-    message(FATAL_ERROR "Aborting configure.")
-  endif()
+  find_package(MPI REQUIRED)
+
+  include_directories(${MPI_CXX_INCLUDE_PATH})
+
   set(ACRO_HAVE_MPI 1)
   set(UTILIB_HAVE_MPI 1)
 endif()
