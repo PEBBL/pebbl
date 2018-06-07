@@ -11,6 +11,10 @@ option(enable_mpi "Enable MPI build. Will require MPI wrappers for compilers." O
 option(enable_serializer "Enable serializer funtionality." OFF)
 option(enable_examples "Enable example programs." ON)
 
+if(CMAKE_BUILD_TYPE STREQUAL "")
+  set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Set by default in PEBBL" FORCE)
+endif()
+
 if(enable_examples)
  enable_testing()
 endif()
