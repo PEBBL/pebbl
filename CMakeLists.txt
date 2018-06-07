@@ -15,13 +15,11 @@ if(enable_examples)
  enable_testing()
 endif()
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive")
-
 if(enable_mpi)
   message("MPI enabled.")
   find_package(MPI REQUIRED)
 
-  include_directories(${MPI_CXX_INCLUDE_PATH})
+  include_directories(SYSTEM ${MPI_CXX_INCLUDE_PATH})
 
   set(ACRO_HAVE_MPI 1)
   set(UTILIB_HAVE_MPI 1)
