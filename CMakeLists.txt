@@ -29,6 +29,12 @@ if(enable_mpi)
   set(UTILIB_HAVE_MPI 1)
 endif()
 
+string(TOLOWER ${CMAKE_BUILD_TYPE} build_type_lower)
+if(build_type_lower MATCHES debug)
+  message("Debug mode enabled.")
+  set(UTILIB_YES_DEBUGPR 1)
+endif()
+
 if(enable_serializer)
   set(HAVE_SERIALIZER 1)
 endif()
