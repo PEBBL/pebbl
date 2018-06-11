@@ -1,5 +1,6 @@
 # Build the UTILIB libraries
 # Warning - does not include the CXX-TEST tools at this time
+message(FATAL_ERROR "${CMAKE_CURRENT_LIST_FILE} was called.")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 add_subdirectory(libs)

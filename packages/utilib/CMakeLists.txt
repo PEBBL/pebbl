@@ -5,6 +5,7 @@
 
 
 cmake_minimum_required(VERSION 2.6)
+message(FATAL_ERROR "${CMAKE_CURRENT_LIST_FILE} was called.")
 project(UTILIB)
 set(ExportTarget ${CMAKE_PROJECT_NAME}-targets CACHE STRING 
   "Name for the export target for ${CMAKE_PROJECT_NAME}")

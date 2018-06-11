@@ -1,103 +1,54 @@
-cmake_minimum_required(VERSION 2.8)
-project(Acro CXX C)
+cmake_minimum_required(VERSION 3.5)
+project(PEBBL CXX)
+include(CMakePackageConfigHelpers)
 
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
+set(include_install_dir "include" CACHE PATH "Relative location where to install headers.")
+set(pebbl_header_install_dir ${include_install_dir}/pebbl)
+set(lib_install_dir "lib" CACHE PATH "Relative location where to install libraries.")
+set(package_install_dir ${lib_install_dir}/pebbl)
 
-set(ExportTarget ${CMAKE_PROJECT_NAME}-targets CACHE STRING 
-  "Name for the export target for ${CMAKE_PROJECT_NAME}")
+option(enable_mpi "Enable MPI build. Will require MPI wrappers for compilers." OFF)
+option(enable_serializer "Enable serializer funtionality." OFF)
+option(enable_examples "Enable example programs." ON)
 
-#assume any modern compiler has STD
-add_definitions(-DHAVE_STD)
-
-function(AcroCheckDirExists dirPath)
-  get_filename_component(dirName ${dirPath} NAME)
-  if(EXISTS ${dirPath})
-    string(TOUPPER "${dirName}" DIRNAME)
-    option(HAVE_${DIRNAME} "Build with ${dirName} enabled?" ON)
-  endif()
-endfunction()
-
-
-option(ACRO_HAVE_DLOPEN "Enable dlopen in Acro" ON)
-if (ACRO_HAVE_DLOPEN)
-  find_package(DL)
-  if (DL_FOUND)
-    # Use the same definition as autotools build
-    add_definitions("-DHAVE_DLOPEN")
-    # TODO: add include path in relevant subdirs?
-  else()
-    message(WARNING "dlopen requested, but not found")
-  endif()
+if(CMAKE_BUILD_TYPE STREQUAL "")
+  set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Set by default in PEBBL" FORCE)
 endif()
 
-option(ENABLE_TESTS "Enable testing in Acro" OFF)
-
-if(ENABLE_TESTS)
-
-  # Install Python virtual environment for testing
-  find_package(PythonInterp)
-  if (NOT PYTHONINTERP_FOUND)
-    message(SEND_ERROR "Python interpreter required for ENABLE_TESTS")
-  endif()
-
-  #file(GLOB acro_python_packages packages/*/python)
-  #foreach(x ${acro_python_packages})
-  #  list(APPEND PYTHON_PACKAGES " -p %s/${x}")
-  #endforeach()
-
-  # TODO: OUTPUT python binary  OUTPUT python/bin/python
-  add_custom_command(
-    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/python
-           ${CMAKE_CURRENT_BINARY_DIR}/python.log
-	   ${CMAKE_CURRENT_BINARY_DIR}/python/bin/cxxtestgen
-    MAIN_DEPENDENCY ${CMAKE_CURRENT_SOURCE_DIR}/admin/vpy/python.zip
-    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/bin/pyomo_install
-            ${CMAKE_CURRENT_SOURCE_DIR}/setup
-            ${CMAKE_CURRENT_SOURCE_DIR}/admin/setup.py
-            ${CMAKE_CURRENT_SOURCE_DIR}/admin/vpy/dev.ini
-    COMMAND ${CMAKE_COMMAND}
-    ARGS -E remove_directory ${CMAKE_CURRENT_BINARY_DIR}/python
-    COMMAND ${PYTHON_EXECUTABLE}
-    ARGS ${CMAKE_CURRENT_SOURCE_DIR}/setup
-  )
-
-  add_custom_target(acro-python-env DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/python)
-  add_custom_target(acro-cxxtestgen
-    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/python/bin/cxxtestgen)
-
-endif() # ENABLE_TESTS
-
-# In Acro, presence of a local tecuhos/optpp means Acro needs it,
-# but it might be provided externally by the user, e.g., in Trilinos.
-# Take care in case HAVE_TEUCHOS set by a parent instead of locally.
-if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/tpl/teuchos)
-  option(HAVE_TEUCHOS "Build with Teuchos enabled?" ON)
-  # when building inside Trilinos, the path to Teuchos will already be set
-  if (NOT BUILD_IN_TRILINOS)
-    # first probe for system-installed Trilinos
-    # this will respect Trilinos_DIR if already set
-    find_package(Trilinos QUIET)
-    if (NOT Trilinos_DIR)
-      # if no one has configured a local src Teuchos, do so
-      # this will respect Teuchos_DIR if already set
-      if(NOT Teuchos_DIR)
-        set(Teuchos_DIR ${CMAKE_CURRENT_BINARY_DIR}/tpl/teuchos)
-        message("Setting Teuchos_DIR to ${Teuchos_DIR}")
-        add_subdirectory(tpl/teuchos)
-      else()
-        message("in ${CMAKE_CURRENT_BINARY_DIR} Teuchos_DIR already set to ${Teuchos_DIR}")
-      endif()
-      find_package(Teuchos NO_MODULE REQUIRED)
-    else()
-      message("Using system trilinos in ${Trilinos_DIR}")
-    endif()
-  endif()
+if(enable_examples)
+ enable_testing()
 endif()
 
-add_subdirectory(tpl)
+if(enable_mpi)
+  message("MPI enabled.")
+  find_package(MPI REQUIRED)
 
-set(Coin_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tpl/coin-cbc/cbc)
-set(TINYXML_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tpl/tinyxml)
-set(COBYLA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tpl/3po/cobyla2c)
+  include_directories(SYSTEM ${MPI_CXX_INCLUDE_PATH})
 
-add_subdirectory(packages)
+  set(ACRO_HAVE_MPI 1)
+  set(UTILIB_HAVE_MPI 1)
+endif()
+
+string(TOLOWER ${CMAKE_BUILD_TYPE} build_type_lower)
+if(build_type_lower MATCHES debug)
+  message("Debug mode enabled.")
+  set(UTILIB_YES_DEBUGPR 1)
+endif()
+
+if(enable_serializer)
+  set(HAVE_SERIALIZER 1)
+endif()
+
+if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/packages/pebbl/etc/monomial)
+  set(monomial_test_dir ${CMAKE_CURRENT_SOURCE_DIR}/packages/pebbl/etc/monomial)
+endif()
+if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/packages/pebbl/etc/knapsack/problems)
+  set(knapsack_test_dir ${CMAKE_CURRENT_SOURCE_DIR}/packages/pebbl/etc/knapsack/problems)
+endif()
+
+add_subdirectory(src)
+
+configure_package_config_file(cmake/pebbl-config.cmake.in pebbl-config.cmake
+                              INSTALL_DESTINATION ${package_install_dir}
+                              PATH_VARS include_install_dir)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/pebbl-config.cmake DESTINATION ${package_install_dir})
