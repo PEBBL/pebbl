@@ -1,3 +1,4 @@
+message(FATAL_ERROR "${CMAKE_CURRENT_LIST_FILE} was called.")
 set(TPLs 
   "${CMAKE_CURRENT_SOURCE_DIR}/3po"
   "${CMAKE_CURRENT_SOURCE_DIR}/ampl"
