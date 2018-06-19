@@ -1,0 +1,5 @@
+This is a test commit to make sure that I can push my work to my github fork.
+
+TODOs:
+Ensure that the repository & git function correctly.
+Start merging in the partition code in small chunks
