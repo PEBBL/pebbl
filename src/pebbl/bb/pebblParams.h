@@ -145,6 +145,10 @@ public:
   ///
   int printSpTimes;
 
+  /// The preferred size for groups of bounding processors.
+  /// This count includes the worker that is in the head communicator.
+  int boundingGroupSize;
+
 };
 
 } // namespace pebbl
