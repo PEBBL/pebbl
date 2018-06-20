@@ -39,18 +39,46 @@ int uMPI::size   = 1;
 int uMPI::ioProc = 0;
 int uMPI::iDoIO  = 1;
 
+MPI_Comm uMPI::boundComm = MPI_COMM_NULL;
+int uMPI::boundSize = 1;
+int uMPI::boundRank = -1;
+bool uMPI::isHead = false;
+
 int uMPI::errorCode = 0;
 
 
-void uMPI::init(int* argcP, char*** argvP, MPI_Comm comm_)
+void uMPI::splitCommunicator(MPI_Comm comm_, int boundingGroupSize, 
+			     MPI_Comm *headCommunicator, 
+			     MPI_Comm *boundingCommunicator) 
 {
-  if (!running())
+  *headCommunicator = comm_; // dummy
+}
+
+
+bool uMPI::init(int* argcP, char*** argvP, MPI_Comm comm_, 
+		int boundingGroupSize)
+{
+  char *prev_dir;
+  bool alreadyRunning = running();
+  if (!alreadyRunning)
     {
-      char* prev_dir = getcwd(0,256);
+      prev_dir = getcwd(0,256);
       errorCode = MPI_Init(argcP,argvP);
       if (errorCode)
 	 ucerr << "MPI_Init failed, code " << errorCode << endl;
-      init(comm_);
+    }
+
+  splitCommunicator(comm_, boundingGroupSize, &comm, &boundComm);
+  
+  if (comm == MPI_COMM_NULL)
+  {
+    return false;
+  }
+  
+  init(comm);
+
+  if (!alreadyRunning)
+    {
       // Work around an mpich problem: force the current working directory
       // after mpi_init to be the same as before we called it.  This is only
       // applied in serial, since otherwise we assume that mpirun has
@@ -58,9 +86,8 @@ void uMPI::init(int* argcP, char*** argvP, MPI_Comm comm_)
       if (size == 1)
 	 chdir(prev_dir);
       free(prev_dir);
+      return true;
     }
-  else
-    init(comm_);
 }
 
 void uMPI::init(MPI_Comm comm_)

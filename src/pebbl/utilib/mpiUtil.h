@@ -85,6 +85,19 @@ public:
   /// A flag that is \c TRUE if the current process can perform I/O.
   static int iDoIO;
 
+  // The communicator \c comm will use to bound subproblems
+  static MPI_Comm boundComm;
+
+  // Rank of process in boundComm
+  static int boundRank;
+
+  // Number of processes in boundComm
+  static int boundSize;
+
+  // Variable that indicates a process that communicates the results
+  // of the bounding communicator to PEBBL
+  static bool isHead;
+
   /// The error code from the previous MPI call.
   static int errorCode;
 
@@ -120,8 +133,14 @@ public:
   /// Returns the size of an MPI datatype
   static int sizeOf(MPI_Datatype t);
 
+  /// Split a provided communicator into a head group and bounding groups.
+  static void splitCommunicator(MPI_Comm comm_, int boundingGroupSize,
+  				MPI_Comm *headCommunicator,
+				MPI_Comm *boundingCommunicator);
+
   /// Initializes MPI.
-  static void init(int* argcP,char*** argv, MPI_Comm comm_=MPI_COMM_WORLD);
+  static bool init(int* argcP,char*** argv, MPI_Comm comm_=MPI_COMM_WORLD,
+  		   int boundingGroupSize=1);
 
   /// Initializes MPI with a comm object (assumes that MPI is running)
   static void init(MPI_Comm comm_=MPI_COMM_WORLD);

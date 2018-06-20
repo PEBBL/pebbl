@@ -1,7 +1,6 @@
 TODOs:
-Start merging in the partition code in small chunks
 Work on splitting communicator math when the hubs don't work.
+Figure out how the bounding processes should end.
 
 Files that still need to be merged:
-  mpiUtil.cpp/h : init and splitCommunicator
-  parBranching.h : driver changes and parallel exec test 
+  mpiUtil.cpp : splitCommunicator

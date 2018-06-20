@@ -1588,7 +1588,7 @@ template <class B,class PB> int driver(int argc, char** argv)
   try 
     {
       int boundingGroupSize = parallel_bounding_test(argc, argv);
-      uMPI::init(&argc,&argv,MPI_COMM_WORLD);
+      uMPI::init(&argc,&argv,MPI_COMM_WORLD, boundingGroupSize);
       int nprocessors = uMPI::size;
 
       if (parallel_exec_test<parallelBranching>(argc,argv,nprocessors)) 
