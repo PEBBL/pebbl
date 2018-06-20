@@ -130,9 +130,9 @@ public:
   static void done();
 
   /// Executes a synchronous barrier command.
-  static void barrier()
+  static void barrier(MPI_Comm comm_=comm)
 	{
-	errorCode = MPI_Barrier(comm);
+	errorCode = MPI_Barrier(comm_);
 	if (errorCode)
 	   EXCEPTION_MNGR(std::runtime_error, "MPI_Barrier failed, code " 
 								<< errorCode);
@@ -140,19 +140,19 @@ public:
 
   /// Executes a parallel reduction.
   static void reduce(void* sendbuf,void* recvbuf,int count,
-		     MPI_Datatype datatype,MPI_Op op,int root)
+		     MPI_Datatype datatype,MPI_Op op,int root,MPI_Comm comm_=comm)
 	{
-	errorCode = MPI_Reduce(sendbuf,recvbuf,count,datatype,op,root, comm);
+	errorCode = MPI_Reduce(sendbuf,recvbuf,count,datatype,op,root, comm_);
       	if (errorCode)
 	   EXCEPTION_MNGR(std::runtime_error, "MPI_Reduce failed, code " 
 								<< errorCode);
     	}
 
   /// Computes a parallel sum of integers.
-  static int sum(int value,int root = ioProc)
+  static int sum(int value,int root = ioProc,MPI_Comm comm_=comm)
 	{
 	int result = 0;
-	errorCode = MPI_Reduce(&value,&result,1,MPI_INT,MPI_SUM,root, comm);
+	errorCode = MPI_Reduce(&value,&result,1,MPI_INT,MPI_SUM,root, comm_);
         if (errorCode)
 	   EXCEPTION_MNGR(std::runtime_error, "MPI_Reduce failed, code " 
 								<< errorCode);
@@ -160,10 +160,10 @@ public:
         }
 
   /// Computes a parallel sum of doubles.
-  static double sum(double value,int root = ioProc)
+  static double sum(double value,int root = ioProc,MPI_Comm comm_=comm)
 	{
         double result = 0;
-        errorCode = MPI_Reduce(&value,&result,1,MPI_DOUBLE,MPI_SUM,root, comm);
+        errorCode = MPI_Reduce(&value,&result,1,MPI_DOUBLE,MPI_SUM,root, comm_);
         if (errorCode)
 	   EXCEPTION_MNGR(std::runtime_error, "MPI_Reduce failed, code " 
 								<< errorCode);
@@ -171,10 +171,10 @@ public:
         }
 
   /// Computes a parallel maximization of integers.
-  static int max(int value,int root = ioProc)
+  static int max(int value,int root = ioProc,MPI_Comm comm_=comm)
 	{
         int result = 0;
-        errorCode = MPI_Reduce(&value,&result,1,MPI_INT,MPI_MAX,root, comm);
+        errorCode = MPI_Reduce(&value,&result,1,MPI_INT,MPI_MAX,root, comm_);
         if (errorCode)
 	   EXCEPTION_MNGR(std::runtime_error, "MPI_Reduce failed, code " 
 								<< errorCode);
@@ -182,10 +182,10 @@ public:
         }
 
   /// Computes a parallel maximization of doubles.
-  static double max(double value,int root = ioProc)
+  static double max(double value,int root = ioProc,MPI_Comm comm_=comm)
 	{
         double result = 0;
-        errorCode = MPI_Reduce(&value,&result,1,MPI_DOUBLE,MPI_MAX,root, comm);
+        errorCode = MPI_Reduce(&value,&result,1,MPI_DOUBLE,MPI_MAX,root, comm_);
         if (errorCode)
 	   EXCEPTION_MNGR(std::runtime_error, "MPI_Reduce failed, code "
 								<< errorCode);
@@ -193,9 +193,10 @@ public:
         }
 
   /// Perform a broadcast.
-  static void broadcast(void* buffer,int count,MPI_Datatype datatype,int root)
+  static void broadcast(void* buffer,int count,MPI_Datatype datatype,int root,
+  	MPI_Comm comm_=comm)
 	{
-       	errorCode = MPI_Bcast(buffer,count,datatype,root,comm);
+       	errorCode = MPI_Bcast(buffer,count,datatype,root,comm_);
         if (errorCode)
 	   EXCEPTION_MNGR(std::runtime_error, "MPI_Broadcast failed, code "
 								<< errorCode);
@@ -203,9 +204,9 @@ public:
 
   /// Perform a reduction followed by a broadcast of the result.
   static void reduceCast(void* sendbuf,void* recvbuf,int count,
-			 MPI_Datatype datatype,MPI_Op op)
+			 MPI_Datatype datatype,MPI_Op op,MPI_Comm comm_=comm)
 	{
-	  errorCode = MPI_Allreduce(sendbuf,recvbuf,count,datatype,op,comm);
+	  errorCode = MPI_Allreduce(sendbuf,recvbuf,count,datatype,op,comm_);
 	  if (errorCode)
 	    EXCEPTION_MNGR(std::runtime_error,"MPI_Allreduce failed, code "
 			   << errorCode);
@@ -213,10 +214,10 @@ public:
       
   /// Perform MPI_Isend
   static void isend(void* buffer,int count,MPI_Datatype datatype,int dest,
-		    int tag,MPI_Request* request)
+		    int tag,MPI_Request* request,MPI_Comm comm_=comm)
 	{
 	LOG_SEND(dest,tag,count,datatype);
-	errorCode = MPI_Isend(buffer,count,datatype,dest,tag,comm, request);
+	errorCode = MPI_Isend(buffer,count,datatype,dest,tag,comm_, request);
 	if (errorCode)
 	   EXCEPTION_MNGR(std::runtime_error, "MPI_Isend failed, code "
 								<< errorCode);
@@ -237,10 +238,10 @@ public:
 
   /// Perform a Send.
   static void send(void* buffer,int count,MPI_Datatype datatype,int dest,
-		   int tag)
+		   int tag,MPI_Comm comm_=comm)
 	{
 	LOG_SEND(dest,tag,count,datatype);
-	errorCode = MPI_Send(buffer,count,datatype,dest,tag,comm);
+	errorCode = MPI_Send(buffer,count,datatype,dest,tag,comm_);
 	if (errorCode)
    	   EXCEPTION_MNGR(std::runtime_error, "MPI_Send failed, code "
 								<< errorCode);
@@ -248,10 +249,10 @@ public:
 
   /// Perform a Ssend.
   static void ssend(void* buffer,int count,MPI_Datatype datatype,int dest,
-		    int tag)
+		    int tag,MPI_Comm comm_=comm)
 	{
 	LOG_SEND(dest,tag,count,datatype);
-	errorCode = MPI_Ssend(buffer,count,datatype,dest,tag,comm);
+	errorCode = MPI_Ssend(buffer,count,datatype,dest,tag,comm_);
 	if (errorCode)
    	   EXCEPTION_MNGR(std::runtime_error, "MPI_Ssend failed, code "
 								<< errorCode);
@@ -268,10 +269,10 @@ public:
 
   /// Perform an Issend.
   static void issend(void* buffer,int count,MPI_Datatype datatype,int dest,
-		     int tag,MPI_Request* request)
+		     int tag,MPI_Request* request,MPI_Comm comm_=comm)
     	{
       	LOG_SEND(dest,tag,count,datatype);
-      	errorCode = MPI_Issend(buffer,count,datatype,dest,tag,comm, request);
+      	errorCode = MPI_Issend(buffer,count,datatype,dest,tag,comm_, request);
       	if (errorCode)
 	   EXCEPTION_MNGR(std::runtime_error, "MPI_Issend failed, code "
 								<< errorCode);
@@ -279,9 +280,9 @@ public:
 
   /// Perform an Irecv.
   static void irecv(void* buffer,int count,MPI_Datatype datatype,int source,
-		    int tag,MPI_Request* request)
+		    int tag,MPI_Request* request,MPI_Comm comm_=comm)
 	{
-	errorCode = MPI_Irecv(buffer,count,datatype,source,tag,comm, request);
+	errorCode = MPI_Irecv(buffer,count,datatype,source,tag,comm_, request);
 	if (errorCode)
 	   EXCEPTION_MNGR(std::runtime_error, "MPI_Irecv failed, code "
 								<< errorCode);
@@ -289,9 +290,9 @@ public:
 
   /// Perform a Recv.
   static void recv(void* buffer,int count,MPI_Datatype datatype,int source,
-		   int tag,MPI_Status* status)
+		   int tag,MPI_Status* status,MPI_Comm comm_=comm)
 	{
-	errorCode = MPI_Recv(buffer,count,datatype,source,tag,comm, status);
+	errorCode = MPI_Recv(buffer,count,datatype,source,tag,comm_, status);
 	if (errorCode)
 	   EXCEPTION_MNGR(std::runtime_error, "MPI_Recv failed, code "
 								<< errorCode);
