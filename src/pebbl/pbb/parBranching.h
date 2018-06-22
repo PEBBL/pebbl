@@ -52,6 +52,7 @@
 #include <pebbl/pbb/packedSolution.h>
 #include <pebbl/misc/chunkAlloc.h>
 
+#include <iostream> // For debugging of driver
 
 // John S's magic so we don't need an operator= for GenericHeaps
 
@@ -1562,6 +1563,21 @@ for (int i=1; i<argc; i++) {
 return false;
 }
 
+static inline int parallel_bounding_test(int argc, char** argv)
+{
+  int boundingGroupSize = 1;
+  for (int i=1; i<argc; i++) 
+  {
+    if (strncmp(argv[i],"--boundingGroupSize=",20) == 0)
+    {
+      boundingGroupSize = strtol(argv[i] + 20, NULL, 10); 
+      if (boundingGroupSize > 1)
+	return boundingGroupSize;
+      break;
+    }
+  }
+  return 1; 
+}
 
 /// Prepackaged parallel/serial main program
 
@@ -1571,8 +1587,8 @@ template <class B,class PB> int driver(int argc, char** argv)
 
   try 
     {
-
-      uMPI::init(&argc,&argv,MPI_COMM_WORLD);
+      int boundingGroupSize = parallel_bounding_test(argc, argv);
+      uMPI::init(&argc,&argv,MPI_COMM_WORLD, boundingGroupSize);
       int nprocessors = uMPI::size;
 
       if (parallel_exec_test<parallelBranching>(argc,argv,nprocessors)) 
