@@ -318,6 +318,16 @@ public:
 	LOG_RECV(status);
 	}
 
+  // Duplicate a communicator
+  static void duplicate(MPI_Comm comm, MPI_Comm *newcomm)
+  	{
+	errorCode = MPI_Comm_dup(comm, newcomm);
+	if (errorCode)
+	   EXCEPTION_MNGR(std::runtime_error, "MPI_Comm_dup failed, code "
+			   					<< errorCode);
+	LOG_RECV(status);
+	}
+
   /// Get the count from a data type.
   static int getCount(MPI_Status* status,MPI_Datatype datatype)
 	{

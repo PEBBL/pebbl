@@ -13,6 +13,6 @@ with open('tmp.txt', 'r') as f:  # move cursor to beginning of file
 	lines = [map(int, line.split()) for line in lines]
 	lines = sorted(lines,key=findindex)
 	for line in lines:
-		print line[0], line[1], line[2]
+		print line[0], line[1], line[2], line[3]
 
 call(['rm', 'tmp.txt'])
