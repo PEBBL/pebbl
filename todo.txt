@@ -1,6 +1,13 @@
 TODOs:
-Work on splitting communicator math when the hubs don't work.
-Figure out how the bounding processes should end.
+Merge in Monomial code & waitForWork stuff
+Figure out whether refactoring to use the clustering code is appropriate, and
+in which way.
 
-Files that still need to be merged:
-  mpiUtil.cpp : splitCommunicator
+Figure out what the problem is with segfaults.
+
+other error message:
+[mpiexec@saigonkick.srn.sandia.gov] HYDU_sock_write
+(../../../../mpich-3.2.1/src/pm/hydra/utils/sock/sock.c:294): write error (Bad
+file descriptor)
+
+(above message x2)

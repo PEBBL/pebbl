@@ -4,6 +4,7 @@
 #include <sstream>
 using namespace std;
 
+
 // hubs
 // workers
 // bounders
@@ -61,12 +62,13 @@ int main(int argc, char *argv[])
 
 	bool hubsWork = hubsDontWorkSize > clusterSize;
 	int fullClusterSize = clusterSize * prefBoundSize - (1 - hubsWork) * (prefBoundSize - 1);
-	
-//	if (worldRank == 0) 
-//	{
-//		std::cout << "hubsWork: " << hubsWork << std::endl;
-//		std::cout << "fullClusterSize: " << fullClusterSize << std::endl;
-//	}
+	if (worldRank == 0) 
+	{
+		std::stringstream s1;
+		s1 << "hubsWork: " << hubsWork << " fullClusterSize: " << fullClusterSize << std::endl;
+		std::cerr << s1.str();
+	}
+	int boundGroup = -1;	
 
 	if (hubsWork)
 	{
@@ -81,7 +83,7 @@ int main(int argc, char *argv[])
 		{
 			MPI_Comm_free(&headComm);
 		}
-		int boundGroup = worldRank / prefBoundSize;
+		boundGroup = worldRank / prefBoundSize;
 		MPI_Comm_split(comm, boundGroup, worldRank, &boundComm);
 
 		MPI_Comm_rank(boundComm, &boundRank);
@@ -92,7 +94,7 @@ int main(int argc, char *argv[])
 		// this is tightly coupled with the decision making strategy
 		// pebbl uses to decide how ranks are associated to workers/hubs.
 		// Maybe this code shold be moved there, or scrapped to make
-		// something that uses Jonathan's clustering code
+		// something that uses Jonathan's forthcoming MPI code
 		int isHub = worldRank % fullClusterSize == 0;
 		int isHead = ((worldRank % fullClusterSize)) % prefBoundSize == 1;
 		int visibleToPebbl = isHub || isHead;
@@ -106,14 +108,15 @@ int main(int argc, char *argv[])
 		{
 			MPI_Comm_free(&headComm);	
 		}
-
-		// this does not take into account that the hub which is
-		// shorted PEBBL processors might end up working while the
-		// other ones don't
-		int bounder = !isHub;
-		int whichCluster = worldRank / fullClusterSize;
-		MPI_Comm_split(comm, bounder, worldRank, &boundComm);
-		if (bounder)
+		
+		boundGroup = (worldRank - (worldRank / fullClusterSize + 1)) / prefBoundSize;
+		if (worldRank % fullClusterSize == 0 && (worldSize - worldRank > fullClusterSize || worldSize % fullClusterSize <= prefBoundSize * (hubsDontWorkSize - 1)))
+		{ // we are a pure hub
+			boundGroup = -1;
+		}
+		
+		MPI_Comm_split(comm, boundGroup, worldRank, &boundComm);
+		if (boundGroup >= 0)
 		{
 			MPI_Comm_rank(boundComm, &boundRank);
 			MPI_Comm_size(boundComm, &boundSize);
@@ -125,7 +128,7 @@ int main(int argc, char *argv[])
 	}
 
 	std::stringstream s;
-	s << worldRank << " " << headRank << " " << boundRank << " " << std::endl;
+	s << worldRank << " " << headRank << " " << boundRank << " " << boundGroup << std::endl;
 	std::cout << s.str();
 
 	MPI_Finalize();
