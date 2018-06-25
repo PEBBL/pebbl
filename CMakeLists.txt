@@ -39,6 +39,7 @@ endif()
 if(enable_validation)
   set(ACRO_VALIDATING 1)
   set(UTILIB_VALIDATING 1)
+  set(UTILIB_HAVE_EXECINFO_H 1)
 endif()
 
 if(enable_serializer)
