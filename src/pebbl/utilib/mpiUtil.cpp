@@ -61,8 +61,8 @@ void uMPI::splitCommunicator(MPI_Comm comm_, int boundingGroupSize,
 			     MPI_Comm *boundingCommunicator
 			     /*, int hubsDontWorkSize, int clusterSize */) 
 {
-  duplicate(comm, headCommunicator);
-  return;
+  //duplicate(comm, headCommunicator);
+  //return;
 
   int hubsDontWorkSize = 1000; // these two are for testing for now.
   int clusterSize = 64; // Default in parPebblParams
