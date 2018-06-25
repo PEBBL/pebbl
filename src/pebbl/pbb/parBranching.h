@@ -1590,7 +1590,11 @@ template <class B,class PB> int driver(int argc, char** argv)
       int boundingGroupSize = parallel_bounding_test(argc, argv);
       uMPI::init(&argc,&argv,MPI_COMM_WORLD, boundingGroupSize);
       int nprocessors = uMPI::size;
-
+      
+      if (!uMPI::isHead)
+        {
+          goto done;
+        } 
       if (parallel_exec_test<parallelBranching>(argc,argv,nprocessors)) 
 	{
 	  CommonIO::begin();
@@ -1612,6 +1616,7 @@ template <class B,class PB> int driver(int argc, char** argv)
       else 
 	flag = runSerial<B>(argc,argv);
 
+done:
       uMPI::done();
     }
 
