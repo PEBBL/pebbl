@@ -52,8 +52,6 @@
 #include <pebbl/pbb/packedSolution.h>
 #include <pebbl/misc/chunkAlloc.h>
 
-#include <iostream> // For debugging of driver
-
 // John S's magic so we don't need an operator= for GenericHeaps
 
 namespace utilib {
@@ -1555,74 +1553,61 @@ namespace pebbl {
 template <class ParBranchingType>
 inline bool parallel_exec_test(int argc, char** argv, int nproc)
 {
-if (nproc > 1) return true;
-for (int i=1; i<argc; i++) {
-  if (strncmp(argv[i],"--help",6) == 0) return true;
-  if (strncmp(argv[i],"--forceParallel",15) == 0) return true;
-  }
-return false;
-}
-
-static inline int parallel_bounding_test(int argc, char** argv)
-{
-  int boundingGroupSize = 1;
+  if (nproc > 1) return true;
   for (int i=1; i<argc; i++) 
   {
-    if (strncmp(argv[i],"--boundingGroupSize=",20) == 0)
-    {
-      boundingGroupSize = strtol(argv[i] + 20, NULL, 10); 
-      if (boundingGroupSize > 1)
-	return boundingGroupSize;
-      break;
-    }
+    if (strncmp(argv[i],"--help",6) == 0) return true;
+    if (strncmp(argv[i],"--forceParallel",15) == 0) return true;
   }
-  return 1; 
+  return false;
+}
+
+template <class PB> bool runParallel(int argc, char** argv, 
+  MPI_Comm comm_=MPI_COMM_WORLD)
+{
+  bool flag;
+  CommonIO::begin();
+  CommonIO::setIOFlush(1);
+
+  PB instance;
+  utilib::exception_mngr::set_stack_trace(false);
+  flag = instance.setup(argc,argv);
+  utilib::exception_mngr::set_stack_trace(true);
+  if (flag)
+  {
+    instance.reset();
+    instance.printConfiguration();
+    instance.solve();
+  }
+
+  CommonIO::end();
+  return flag;
 }
 
 /// Prepackaged parallel/serial main program
 
-template <class B,class PB> int driver(int argc, char** argv)
+template <class B,class PB> int driver(int argc, char** argv,
+  MPI_Comm comm_=MPI_COMM_WORLD)
 {
   bool flag = true;
-
-  try 
-    {
-      int boundingGroupSize = parallel_bounding_test(argc, argv);
-      uMPI::init(&argc,&argv,MPI_COMM_WORLD, boundingGroupSize);
-      int nprocessors = uMPI::size;
-      
-      if (!uMPI::isHead)
-        {
-          goto done;
-        } 
-      if (parallel_exec_test<parallelBranching>(argc,argv,nprocessors)) 
-	{
-	  CommonIO::begin();
-	  CommonIO::setIOFlush(1);
-
-	  PB instance;
-          utilib::exception_mngr::set_stack_trace(false);
-	  flag = instance.setup(argc,argv);
-          utilib::exception_mngr::set_stack_trace(true);
-	  if (flag)
-	    {
-	      instance.reset();
-	      instance.printConfiguration();
-	      instance.solve();
-	    }
-
-	  CommonIO::end();
-	}
-      else 
-	flag = runSerial<B>(argc,argv);
-
-done:
-      uMPI::done();
-    }
-
+  try
+  {
+    // parse arguments FIRST.
+    // then init MPI and decide whether to split?
+    // then decide serial/parallel
+    // The weird thing is that we need to init MPI in order
+    // to tell whether the program is running in parallel.
+    uMPI::init(&argc, &argv, comm_);
+    int nproc = uMPI::size;
+    if (parallel_exec_test<parallelBranching>(argc, argv, nproc))
+      flag = runParallel<PB>(argc, argv, comm_);
+    else
+      flag = runSerial<B>(argc, argv);
+    uMPI::done();
+  }
   STD_CATCH(CommonIO::end(); uMPI::done();)
 
-  return !flag;
+  return !flag; // 0 if success/true, 1 if failure/false
 }
 
 }

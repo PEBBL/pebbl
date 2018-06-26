@@ -139,8 +139,7 @@ public:
 				MPI_Comm *boundingCommunicator);
 
   /// Initializes MPI.
-  static bool init(int* argcP,char*** argv, MPI_Comm comm_=MPI_COMM_WORLD,
-  		   int boundingGroupSize=1);
+  static bool init(int* argcP,char*** argv, MPI_Comm comm=MPI_COMM_WORLD);
 
   /// Initializes MPI with a comm object (assumes that MPI is running)
   static void init(MPI_Comm comm_=MPI_COMM_WORLD);

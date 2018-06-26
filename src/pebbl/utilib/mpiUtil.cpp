@@ -33,6 +33,8 @@ using namespace std;
 
 namespace utilib {
 
+bool alreadyRunning;
+
 MPI_Comm uMPI::comm = MPI_COMM_WORLD;
 int uMPI::rank   = -1;
 int uMPI::size   = 1;
@@ -134,11 +136,10 @@ void uMPI::splitCommunicator(MPI_Comm comm_, int boundingGroupSize,
 }
 
 
-bool uMPI::init(int* argcP, char*** argvP, MPI_Comm comm_, 
-		int boundingGroupSize)
+bool uMPI::init(int* argcP, char*** argvP, MPI_Comm comm_)
 {
   char *prev_dir;
-  bool alreadyRunning = running();
+  alreadyRunning = running();
   if (!alreadyRunning)
     {
       prev_dir = getcwd(0,256);
@@ -146,15 +147,8 @@ bool uMPI::init(int* argcP, char*** argvP, MPI_Comm comm_,
       if (errorCode)
 	 ucerr << "MPI_Init failed, code " << errorCode << endl;
     }
-
-  splitCommunicator(comm_, boundingGroupSize, &comm, &boundComm);
   
-  if (comm == MPI_COMM_NULL)
-  {
-    return false;
-  }
-  
-  init(comm);
+  init(comm_);
 
   if (!alreadyRunning)
     {
@@ -221,7 +215,8 @@ void uMPI::done()
 {
   if (size > 1) 
      CommonIO::end_tagging();
-  MPI_Finalize();
+  if (!alreadyRunning)
+     MPI_Finalize();
 };
 
 
