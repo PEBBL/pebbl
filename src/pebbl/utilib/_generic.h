@@ -84,9 +84,9 @@ enum { ERR = -999 };
  *
  * Value used to indicate that an operation worked.
  */
-#ifndef OK
-#define OK		0
-#endif
+//#ifndef OK
+//#define OK		0
+//#endif
 
 /**
  * \def NULL
@@ -118,16 +118,16 @@ enum { ERR = -999 };
 
 
 #ifdef DEBUG			/* Debug defines to see if conflicts exist */
-#define TRUE	1
-#define FALSE	0
-#define OK	0
-#define ON	1
-#define OFF	0
-#define YES	1
-#define NO	0
-#define NULL	0
-#define EOF	(-1)
-#define ERR	-999
+//#define TRUE	1
+//#define FALSE	0
+//#define OK	0
+//#define ON	1
+//#define OFF	0
+//#define YES	1
+//#define NO	0
+//#define NULL	0
+//#define EOF	(-1)
+//#define ERR	-999
 #endif
 
 

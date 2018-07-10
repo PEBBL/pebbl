@@ -187,7 +187,7 @@ if (a->Data) {
      for (size_type j=0; j<a->Ncols; j++)
        os << a->Data[i][j];
    }
-return OK;
+return 0;
 }
 
 
@@ -202,7 +202,7 @@ if (a->Data) {
      os << std::endl;
      }
    }
-return OK;
+return 0;
 }
 
 
@@ -217,7 +217,7 @@ for (size_type i=0; i<a->Nrows; i++)
   for (size_type j=0; j<a->Ncols; j++)
     is >> a->Data[i][j];
 
-return OK;
+return 0;
 }
 
 
@@ -227,7 +227,7 @@ int Simple2DArray<T>::read(std::istream& /*is*/)
 {
 //Basic2DArray<T>::free();
 
-return OK;
+return 0;
 }
 
 } // namespace utilib

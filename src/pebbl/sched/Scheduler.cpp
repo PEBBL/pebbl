@@ -297,7 +297,7 @@ while (!termination_flag) {
   }
 
 total_time = getTime() - ttime;
-return OK;
+return 0;
 }
 
 
