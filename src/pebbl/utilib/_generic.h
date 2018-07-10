@@ -73,7 +73,7 @@ enum {BUF_SIZE=256 };
  *
  * The default value of error values.
  */
-enum { ERR = -999 };
+enum { PEBBL_ERR = -999 };
 
 #if defined(__cplusplus)
 } // namespace end
@@ -93,10 +93,10 @@ enum { ERR = -999 };
  *
  * Defines the value of empty pointers.
  */
-#ifdef NULL
-#undef NULL		/* Always override the definition of NULL */
-#endif
-#define NULL		0
+//#ifdef NULL
+//#undef NULL		/* Always override the definition of NULL */
+//#endif
+//#define NULL		0
 
 /**
  * \def PAUSE
@@ -117,7 +117,8 @@ enum { ERR = -999 };
 #endif
 
 
-#ifdef DEBUG			/* Debug defines to see if conflicts exist */
+//#ifdef DEBUG 
+/* Debug defines to see if conflicts exist */
 //#define TRUE	1
 //#define FALSE	0
 //#define OK	0
@@ -128,7 +129,7 @@ enum { ERR = -999 };
 //#define NULL	0
 //#define EOF	(-1)
 //#define ERR	-999
-#endif
+//#endif
 
 
 #if !defined(UTILIB_HAVE_STD) && !defined(__cplusplus)

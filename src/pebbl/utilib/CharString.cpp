@@ -204,7 +204,7 @@ long int aslong(const CharString& str, int& status)
   long int ans=0;
   char *endptr = str.data();   // first invalid character
 
-  status = ERR;
+  status = PEBBL_ERR;
 
   if (str.data() && str.data()[0]){
     ans = strtol(str.data(), &endptr, 10);
@@ -228,7 +228,7 @@ long int aslong(const CharString& str, int& status)
 #else
   // This doesn't recognize ints beginning with '-'
   long int ans=0;
-  status = ERR;
+  status = PEBBL_ERR;
   size_type i=0;
   int j=0;
   while ((i < str.size()) && str[i] && isspace(str[i])) i++;
@@ -268,7 +268,7 @@ double asdouble(const CharString& str, int& status)
   if ((ptr == NULL) || (ptr[0] == '\000'))
     status = 0;
   else
-    status = ERR;
+    status = PEBBL_ERR;
   return ans;
 }
 
