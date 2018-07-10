@@ -62,13 +62,6 @@ enum OrderSense
 #endif
 
 /**
- * \def BUF_SIZE
- *
- * A default size for buffers
- */
-enum {BUF_SIZE=256 };
-
-/**
  * \def ERR
  *
  * The default value of error values.
