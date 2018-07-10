@@ -84,9 +84,9 @@ enum { ERR = -999 };
  *
  * Value used to indicate that an operation worked.
  */
-#ifndef OK
-#define OK		0
-#endif
+//#ifndef OK
+//#define OK		0
+//#endif
 
 /**
  * \def TRUE
