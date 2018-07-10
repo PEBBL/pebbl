@@ -1447,16 +1447,16 @@ void branching::statusPrint(int&        lastPrint,
 	  << ", last=" << lastPrint << (l.mismatch() ? ", mismatch" : "")
 	  << ".\n");
 
-  int needPrint = FALSE;
+  int needPrint = false;
 
   if ((statusPrintCount > 0) &&
       (l.boundedSPs >= lastPrint + statusPrintCount))
-    needPrint = TRUE;
+    needPrint = true;
 
   double now = WallClockSeconds();
   if ((statusPrintSeconds > 0) &&
       (now >= lastPrintTime + statusPrintSeconds))
-    needPrint = TRUE;
+    needPrint = true;
 
   if (needPrint)
     {
@@ -1559,7 +1559,7 @@ void branching::statusLine(loadObject& l, const char* tag)
 int branching::serialNeedEarlyOutput()
 {
   if (WallClockSeconds() < nextOutputTime)
-    return FALSE;
+    return false;
   return sense*(incumbentValue - lastSolValOutput) < 0;
 }
 

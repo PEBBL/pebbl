@@ -89,60 +89,6 @@ enum { ERR = -999 };
 #endif
 
 /**
- * \def TRUE
- *
- * The boolean value for true.
- */
-#ifndef TRUE
-#define TRUE		1
-#endif
-
-/**
- * \def FALSE
- *
- * The boolean value for false.
- */
-#ifndef FALSE
-#define FALSE		0
-#endif
-
-/**
- * \def ON
- *
- * Used to incidate the on state.
- */
-#ifndef ON
-#define ON		1
-#endif
-
-/**
- * \def OFF
- *
- * Used to incidate the off state.
- */
-#ifndef OFF
-#define OFF		0
-#endif
-
-/**
- * \def YES
- *
- * Used to incidate a yes response.
- */
-#ifndef YES
-#define YES		1
-#endif
-
-/**
- * \def NO
- *
- * Used to incidate a no response.
- */
-#ifndef NO
-#define NO		0
-#endif
-
-/**
  * \def NULL
  *
  * Defines the value of empty pointers.
@@ -151,15 +97,6 @@ enum { ERR = -999 };
 #undef NULL		/* Always override the definition of NULL */
 #endif
 #define NULL		0
-
-/**
- * \def EOF
- *
- * The end-of-file value.
- */
-#ifndef EOF
-#define EOF		(-1)
-#endif
 
 /**
  * \def PAUSE

@@ -80,7 +80,7 @@ bool binaryKnapsack::setupProblem(int& argc,char**& argv)
 
   // Read in all the items and throw them on a heap
 
-  int allInteger = TRUE;
+  int allInteger = true;
 
   GenericHeap<knapsackItem> heap;
 
@@ -110,7 +110,7 @@ bool binaryKnapsack::setupProblem(int& argc,char**& argv)
 	{
 	  heap.add(*(new knapsackItem(w,v,tempName)));
 	  if (v != floor(v))
-	    allInteger = FALSE;
+	    allInteger = false;
 	  numItems++;
 	  sumOfAllValues += v;
 	}
@@ -576,7 +576,7 @@ void binKnapSolution::squeezeInGreedy()
       binKnapSolution temp(global);  // Make a temporary solution.
       --(global->solSerialCounter);  // but don't use up a serial number
       temp.reset(initialSequence);
-      int changesMade = FALSE;
+      int changesMade = false;
       itemListCursor alreadyIn(genItems,&genItem);
 
       // Scan items that we may have skipped before.
@@ -594,7 +594,7 @@ void binKnapSolution::squeezeInGreedy()
 	    {
 	      temp.addItem(i);
 	      left -= itemWeight(i);
-	      changesMade = TRUE;
+	      changesMade = true;
 	    }
 	}
 

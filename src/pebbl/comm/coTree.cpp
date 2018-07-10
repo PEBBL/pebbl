@@ -66,13 +66,13 @@ int coTree::run()
 {
   int canContinue;
 
-#define jumpState(newState) { state = newState; canContinue = TRUE; break; }
+#define jumpState(newState) { state = newState; canContinue = true; break; }
 
   do 
 
     {
 
-      canContinue = FALSE;
+      canContinue = false;
 
       switch(state) {
 
