@@ -420,7 +420,7 @@ public:
 class uMPI 
 {
 public:
-  static int running() { return FALSE; };
+  static int running() { return false; };
 
   static int rank;
 };
