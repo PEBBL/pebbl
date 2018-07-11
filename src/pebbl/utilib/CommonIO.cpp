@@ -370,11 +370,6 @@ void CommonIO::flush_stream(strstream& stream, int val)
 void CommonIO::flush_stream(stringstream& stream, int val)
 #endif
 {
-#if 0
-if (CommonIO::common_cout)
-   cerr << "CommonIO::common_cout " << CommonIO::common_cout << " " << CommonIO::common_cout->good() << endl;
-cerr << "BUG " << STREAM(val) << " " << STREAM(val)->good() << " " << (*STREAM(val)).good() << endl;
-#endif
 
 if (!(STREAM(val)->good())) {
    STREAM(val)->clear();

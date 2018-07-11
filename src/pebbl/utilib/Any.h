@@ -1284,7 +1284,6 @@ inline const TYPE &
 anyref_cast(const Any & operand)
   { return operand.template expose<TYPE>(); }
 
-#if 1
 // JDS: NB: I am going to disable this "SOON" (after colin rework is
 //      merged back in)
 // WEH: we must keep this, since the const semantics for any data is
@@ -1300,7 +1299,6 @@ template <typename TYPE>
 inline TYPE & 
 anyref_cast(Any & operand)
   { return const_cast<TYPE&>(operand.template expose<TYPE>()); }
-#endif
 
 /// A shadow class to force implicit coercion of reference (not value) Anys
 /** This is a "shadow class" (no new members, no new methods) that

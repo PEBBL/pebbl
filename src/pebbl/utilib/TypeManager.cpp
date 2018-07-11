@@ -857,60 +857,6 @@ Type_Manager::generateLexicalCastingTable()
       }
    }
 
-#if 0
-   std::set<type_t>   approxVisited;
-   std::list<lNode_t> visitQ;
-
-   lCastMatrix_t::iterator  from_it;
-   lCastMap_t::iterator     to_it;
-   lCastMap_t::iterator     to_itEnd;
-   lCastMatrix_t::iterator  src_it = m_lexCasts.begin();
-   lCastMatrix_t::iterator  src_itEnd = m_lexCasts.end();
-   for ( ; src_it != src_itEnd; ++src_it )
-   {
-      exactVisited.clear();
-      approxVisited.clear();
-      visitQ.clear();
-
-      // Perform a BFS from the src node to all nodes
-      exactVisited.insert(src_it->first);
-      approxVisited.insert(src_it->first);
-      visitQ.push_back(src_it->first);
-      // This is really a while loop, but with the 'continue's, it is
-      // easier to write it as a for loop.
-      for ( ; ! visitQ.empty(); visitQ.pop_front() )
-      {
-         lNode_t &node = visitQ.front();
-         from_it = m_lexCasts.find(node.tail);
-         if ( from_it == m_lexCasts.end() )
-         { continue; }
-
-         to_itEnd = from_it->second.end();
-         for ( to_it = from_it->second.begin(); to_it != to_itEnd; ++to_it )
-         {
-            // Have we been here before?
-            if ( exactVisited.count(to_it->first) != 0 )
-            { continue; }
-
-            // Is this an approx chain, and has another approx chain been here?
-            lCastChain_t tmpChain(node.chain, to_it->second);
-            if (( !tmpChain.exact ) && ( approxVisited.count(to_it->first) != 0 ))
-            { continue; }
-
-            m_fwdLexCast[src_it->first][to_it->first] 
-               = m_revLexCast[to_it->first][src_it->first] 
-               = m_lexCastChains.insert(m_lexCastChains.end(), tmpChain);
-        
-            if ( tmpChain.exact )
-            { exactVisited.insert(to_it->first); }
-            else
-            { approxVisited.insert(to_it->first); }
-            visitQ.push_back(lNode_t(to_it->first, tmpChain));
-         }
-      }
-   }
-
-#endif
    m_lexTableRebuildNeeded = false;
 }
 

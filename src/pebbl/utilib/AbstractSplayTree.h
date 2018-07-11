@@ -412,18 +412,6 @@ T* AbstractSplayTree<T,KEY>::find_rank(int r)
     return tmp;
 }
 
-#if 0
-void AbstractSplayTree<T,KEY>::print_tree(ostream& os, int d, 
-					T* t) {
-    int i;
-    if (tree == NULL) return;
-    print_tree(os,d+1,tree->right);
-    for (i=0; i<d; i++) os << "  ";
-    dowrite(tree,os);
-    //os << "(" << node_size(tree) << "," << tree->ctr << ")" << endl;
-    print_tree(os,d+1,tree->left);
-}
-#endif
 
 
 template <class T, class KEY>

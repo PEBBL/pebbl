@@ -630,47 +630,12 @@ public:
    */
   virtual int splitComputation()
         { 
-// #if 0
-//         double ctr=0;
-//         for (size_type i=0; i<lower.size(); i++)
-//           ctr += std::log(upper[i]-lower[i]+1.0);
-//         ucout << "Subproblem size: " << ctr << std::endl;
-// #endif
-
         if (upper == lower) {
            setState(separated);
            branch_status = serialDocking::no_branch;
            return 0;
            }
 
-        #if 0
-        if (globalPtr->evenly_balanced_branching) {
-           branchVariable = 0;
-           for (unsigned int i=1; i<lower.size(); i++)
-             if (free_rotamers[i].nbits() > free_rotamers[branchVariable].nbits())
-                branchVariable=i;
-           }
-        else {
-           //
-           // Search for dimension with lowest range
-           //
-           double range = upper[0] - lower[0];
-           branchVariable = 0;
-           unsigned int i=1;
-           while ((range == 0.0) && (i < lower.size())) {
-             range = upper[i] - lower[i];
-             branchVariable=i;
-             i++;
-             }
-           for (; i<lower.size(); i++) {
-             double tmp = upper[i] - lower[i];
-             if ((tmp > 0.0) && (tmp > range)) {
-                range = tmp;
-                branchVariable = i;
-                }
-             }
-           }
-        #else
         unsigned int i=0;
         while (lower[i] == upper[i]) i++;
         branchVariable = i;
@@ -687,8 +652,8 @@ public:
           }
         DEBUGPR(3000,ucout << "BranchVariable=" << branchVariable 
                 << " pCostVal: " << globalPtr->pCostVal << std::endl);
-        #endif
-        //
+
+	//
         // Apply DEE to the selected dimension
         //
         if (globalPtr->using_dee && dee_branch[branchVariable] &&
@@ -710,14 +675,14 @@ public:
         setState(separated);
         branch_status = serialDocking::branch_down;
         if ((dee_status.size() > 0) && !(globalPtr->enumerating)) return 1;
-#if 1
+
         //
         // If performing enumeration, get rid of the first part of the
         // dee_status info to help balance the search
         //
         while (dee_status.size() > free_rotamers[branchVariable].nbits()/2)
           dee_status.pop_front();         
-#endif
+
         return 2;
         }
 

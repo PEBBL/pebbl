@@ -9,7 +9,6 @@
  *  _________________________________________________________________________
  */
 
-#if 1
 #include <pebbl/utilib/ParameterSet.h>
 #include <pebbl/utilib/ParameterList.h>
 #include <pebbl/utilib/comments.h>
@@ -285,4 +284,3 @@ while (curr != end) {
 
 
 } // namespace utilib
-#endif

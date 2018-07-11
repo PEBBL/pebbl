@@ -1541,11 +1541,7 @@ void branching::statusLine(loadObject& l, const char* tag)
     {
       ucout << " bnd=" << l.aggregateBound;
       {
-#if 0
-	long defaultFlags = ucout.setf(ios::fixed,ios::floatfield);
-#else
 	ios::fmtflags defaultFlags = ucout.setf(ios::fixed,ios::floatfield);
-#endif
 	ucout.precision(3);
 	ucout << " gap=" << 100*relGap(l.aggregateBound) << '%';
 	ucout.setf(defaultFlags,ios::floatfield);

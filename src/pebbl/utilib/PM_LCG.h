@@ -41,16 +41,6 @@ public:
   /// Empty virtual destructor to silence compiler warnings
   virtual ~PM_LCG() {}
 
-#if 0
-  /** Reseed the rng with a new seed value.
-   *  A seed value with generate a 'random' initial seed.
-   */
-  void reseed(int seed=0) {jseed = seed; reset();}
-
-  /// Returns the seed used to initialize the rng.
-  int getSeed() {return jseed;}
-#endif
-
   ///
   void set_seed(seed_t seed=0) {jseed = seed; reset();}
 

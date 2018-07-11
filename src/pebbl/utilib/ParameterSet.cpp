@@ -472,59 +472,6 @@ bool ParameterSet::process_parameters(int& argc, char**& argv,
 ParameterList plist;
 plist.process_parameters(argc,argv,min_num_required_params);
 set_parameters(plist);
-#if 0
-
-//
-// Go through the argument list
-//
-int i=1;
-while ((i < argc) && ((argv[i][0] == '-') && (argv[i][1] == '-'))) {
-  //
-  // Process an argument
-  //
-  char* tmp = strchr(argv[i],'=');
-  if (tmp) tmp++;
-  if (tmp && (*tmp != '\000')) {
-     *(tmp-1) = '\000';
-     set_parameter_with_string( &(argv[i][2]), tmp);
-     i += 1;
-     }
-  else if (tmp && (*tmp == '\000')) {
-     *(tmp-1) = '\000';
-     set_parameter( &(argv[i][2]), true);
-     i += 1;
-     }
-  else if ( ((i+1) == argc) || 
-            ((argv[i+1][0] == '-') && (argv[i+1][1] == '-'))) {
-     //
-     // Implicitly true flag
-     // Example: -flush -help
-     //
-     set_parameter( &(argv[i][2]), true);
-     i++;
-     }
-  else {
-     set_parameter_with_string( &(argv[i][2]), &(argv[i+1][0]) );
-     i += 2;
-     }
-  }
-
-//
-// Move the argv list to 'eliminate' the processed arguments
-// JE -- modified this to match similar code in ParameterList
-// It would be a lot better if all this code was not duplicated!
-//
-if (i == 1)
-   return true;
-
- int j=1;
- while (i < argc) 
-   argv[j++] = argv[i++];
- argc = j;
- 
- argv[argc] = (char*)0;
-
-#endif
  return (argc == 1) || (argv[1][0] != '-');
 }
 
@@ -553,18 +500,6 @@ catch (const bad_any_cast&) {
                   name << "\".");
   }
 }
-
-
-#if 0
-//============================================================================
-//
-//
-void ParameterSet::add_parameter(const Parameter& param, const string& category)
-{
-Parameter* tparam = new Parameter(param);
-add_parameter(tparam,category);
-}
-#endif
 
 
 //============================================================================

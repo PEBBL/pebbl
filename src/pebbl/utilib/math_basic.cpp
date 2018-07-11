@@ -160,7 +160,6 @@ static double exp_xmax=-999.0;
 static double exp_step=-999.0;
 static double* exp_tab=0;
 
-#if 1
 void setup_bufexp(int tabsz, double xmin, double xmax)
 {
 abort();
@@ -168,34 +167,6 @@ exp_tabsz=tabsz;
 exp_xmin=xmin;
 exp_xmax=xmax;
 }
-#else
-void setup_bufexp(int tabsz, double xmin, double xmax)
-{
-static int flag=1;
-
-if (tabsz < 1) return;
-
-if (flag == 1) {
-   double temp;
-   int i;
-
-   exp_tabsz = tabsz;
-   exp_xmin = xmin;
-   exp_xmax = xmax;
-
-   exp_step = (xmax - xmin)/(double)(tabsz-1.0);
-
-   exp_tab = dvector(0,tabsz-1);
-   for (i=0, temp=exp_xmin; i<tabsz; i++, temp+=exp_step) {
-     exp_tab[i] = exp(temp);
-/*
-     printf("%d\t%lf\t%lf\n",i,temp, exp_tab[i]);
-*/
-     }
-   }
-}
-#endif
-
 
 double bufexp(double x)
 {

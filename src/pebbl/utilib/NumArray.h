@@ -144,20 +144,6 @@ public:
   /// Divides \a z to the elements of the current array.
   NumArray<T>& operator/=  (const T z);
 
-#if 0
-  /// Adds \a z to the elements of the current array.
-  NumArray<T>& operator+=  (const Ereal<T>& z);
-
-  /// Subtracts \a z to the elements of the current array.
-  NumArray<T>& operator-=  (const Ereal<T>& z);
-
-  /// Multiplies \a z to the elements of the current array.
-  NumArray<T>& operator*=  (const Ereal<T>& z);
-
-  /// Divides \a z to the elements of the current array.
-  NumArray<T>& operator/=  (const Ereal<T>& z);
-#endif
-
 protected:
 
   /// Initializes the array to zero from \a start to \a stop.
@@ -330,19 +316,6 @@ for (size_type i=0; i<mylen; i++) \
 return(*this); \
 }
 
-#if 0
-template <class T>\
-NumArray<T>& NumArray<T>::opname(const Ereal<T>& val)\
-{\
-T* tmp = Data;\
-size_type mylen = base_t::size();\
-for (size_type i=0; i<mylen; i++) \
-  tmp[i] op1 val;\
-return(*this); \
-}\
-\
-
-#endif
 
 BINARYOP(operator+=,+=,plus, + )
 BINARYOP(operator-=,-=,minus, - )

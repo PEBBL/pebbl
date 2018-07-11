@@ -137,14 +137,6 @@ public:
   ///
   void pack(const unsigned_long& data) {pack(&data,1);}
 
-#if 0
-  ///
-  void pack(const long long int* data, const int num);
-
-  ///
-  void pack(const long long int& data) {pack(&data,1);}
-#endif
-
   ///
   void pack(const short* data, const int num);
 
@@ -388,14 +380,6 @@ public:
   ///
   void unpack(long& data) {unpack(&data,1);}
 
-#if 0
-  ///
-  void unpack(long long* data, const int num);
-
-  ///
-  void unpack(long long& data) {unpack(&data,1);}
-#endif
-
   ///
   void unpack(unsigned_long* data, const int num);
 
@@ -540,10 +524,6 @@ inline void PackBuffer::pack(const TYPE* data, size_type num)
 resize(PackSize(data[0],num));
 int index = static_cast<int>(Index);
 if (data)
-#if 0
-   MPI_Pack((void*)data, num, mpi_datatype<TYPE>(),
-            buffer, Size, &index, MPI_COMM_WORLD);
-#endif
    MPI_Pack((void*)data, num, mpi_datatype((TYPE*)data),
 			buffer, Size, &index, MPI_COMM_WORLD);
 Index = index;
@@ -754,11 +734,6 @@ inline utilib::PackBuffer& operator<< (utilib::PackBuffer& buff, const long doub
 /// Stream operator to pack a float
 inline utilib::PackBuffer& operator<< (utilib::PackBuffer& buff, const float& data)
 	{buff.pack(data); return buff;}
-#if 0
-/// Stream operator to pack a long int
-inline utilib::PackBuffer& operator<< (utilib::PackBuffer& buff, const long long int& data)
-	{buff.pack(data); return buff;}
-#endif
 /// Stream operator to pack a long int
 inline utilib::PackBuffer& operator<< (utilib::PackBuffer& buff, const long int& data)
 	{buff.pack(data); return buff;}
@@ -771,11 +746,6 @@ inline utilib::PackBuffer& operator<< (utilib::PackBuffer& buff, const short int
 /// Stream operator to pack a char
 inline utilib::PackBuffer& operator<< (utilib::PackBuffer& buff, const char& data)
 	{buff.pack(data); return buff;}
-#if 0
-/// Stream operator to pack a unsigned long long int
-inline utilib::PackBuffer& operator<< (utilib::PackBuffer& buff, const unsigned long long int& data)
-	{buff.pack(data); return buff;}
-#endif
 /// Stream operator to pack a unsigned long int
 inline utilib::PackBuffer& operator<< (utilib::PackBuffer& buff, const unsigned long int& data)
 	{buff.pack(data); return buff;}
@@ -809,25 +779,6 @@ return buff;
 }
 
 
-#if 0
-/// Stream operator to pack a vector of values
-template <class TYPE>
-utilib::PackBuffer& operator<<(utilib::PackBuffer& os, const std::vector<TYPE>& vec)
-{
-os << vec.size();
-if (vec.size() > 0) {
-   typename std::vector<TYPE>::const_iterator curr = vec.begin();
-   typename std::vector<TYPE>::const_iterator last = vec.end();
-   while (curr != last) {
-     os << *curr;
-     ++curr;
-     }
-   }
-return os;
-}
-#endif
-
-
 /// Stream opreator to unpack a void*
 inline utilib::UnPackBuffer& operator>> (utilib::UnPackBuffer& buff, void*)
 	{return buff;}
@@ -843,11 +794,6 @@ inline utilib::UnPackBuffer& operator>> (utilib::UnPackBuffer& buff, long double
 /// Stream opreator to unpack a float
 inline utilib::UnPackBuffer& operator>> (utilib::UnPackBuffer& buff, float& data)
 	{buff.unpack(data); return buff;}
-#if 0
-/// Stream opreator to unpack a long long int
-inline utilib::UnPackBuffer& operator>> (utilib::UnPackBuffer& buff, long long int& data)
-	{buff.unpack(data); return buff;}
-#endif
 /// Stream opreator to unpack a long int
 inline utilib::UnPackBuffer& operator>> (utilib::UnPackBuffer& buff, long int& data)
 	{buff.unpack(data); return buff;}
@@ -860,11 +806,6 @@ inline utilib::UnPackBuffer& operator>> (utilib::UnPackBuffer& buff, short int& 
 /// Stream opreator to unpack a char
 inline utilib::UnPackBuffer& operator>> (utilib::UnPackBuffer& buff, char& data)
 	{buff.unpack(data); return buff;}
-#if 0
-/// Stream opreator to unpack a unsigned long long int
-inline utilib::UnPackBuffer& operator>> (utilib::UnPackBuffer& buff, unsigned long long int& data)
-	{buff.unpack(data); return buff;}
-#endif
 /// Stream opreator to unpack a unsigned long int
 inline utilib::UnPackBuffer& operator>> (utilib::UnPackBuffer& buff, unsigned long int& data)
 	{buff.unpack(data); return buff;}
@@ -897,29 +838,5 @@ for (size_type i=0; i<len; i++)
   buff >> str[i];
 return buff;
 }
-
-#if 0
-/// Stream opreator to unpack into a vector of objects
-template <class TYPE>
-utilib::UnPackBuffer& operator>>(utilib::UnPackBuffer& is, std::vector<TYPE>& vec)
-{
-   size_type tmp;
-   is >> tmp;
-   EXCEPTION_TEST( !is, std::runtime_error, "operator>> - UnPackBuffer problem.");
-   vec.resize(tmp);
-   if (vec.size() > 0) {
-      typename std::vector<TYPE>::iterator curr = vec.begin();
-      typename std::vector<TYPE>::iterator last = vec.end();
-      while (curr != last) {
-         EXCEPTION_TEST( !is, std::runtime_error, "operator>> - UnPackBuffer problem.");
-            is >> *curr;
-         ++curr;
-      }
-   }
-   return is;
-}
-#endif
-
-
 
 #endif // __PackBuf_h

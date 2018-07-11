@@ -922,9 +922,6 @@ while (1) {
 		ctr1 = std::atoi(tmp.data());
 		is >> ctr2;
 		is >> E_inter[ctr1-1][ctr2-1];
-#if 0
-		E_inter[ctr1-1][ctr2-1] = floor(E_inter[ctr1-1][ctr2-1]);
-#endif
 		if ((pctr1 != 0) && (ctr1 != pctr1)) {
 		   rCount[pctr1-1] = pctr2;
 		   E_inter[pctr1-1].resize(pctr2);

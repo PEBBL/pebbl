@@ -117,16 +117,6 @@ public:
   A* data() const
 	{ return Data; }
 
-#if 0
-#ifndef SWIG
-
-  /// A coercion operator returning a pointer to the internal array
-  operator A* () const
-	{ return Data; }
-  
-#endif
-#endif
-
   /// Returns the number of references to the internal array.
   /// This method has to scan the entire share group and is 
   /// now deprecated.

@@ -21,7 +21,6 @@
 
 
 #include <pebbl/example/serialMonomial.h>
-//#define __DEBUG
 
 
 using namespace std;

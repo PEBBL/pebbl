@@ -58,89 +58,9 @@ const long double M_PI = 3.1415926535897932384626433832795029L;
 const long double M_E  = 2.7182818284590452354L;
 #endif
 
-#if 0
-#if defined(DOXYGEN)
-/* A definition for pi. */
-const long double M_PI = 3.1415926535897932384626433832795029L;
-/* A definition for e. */
-const long double M_E  = 2.71828
-#endif
-
-/* TODO: Why these special definitions of PI?  What do we want
- * autoconf to test for?
- * Do we really want to try to define MAXINT when it is not defined
- * in a header file?
- * What is the purpose of the DOXYGEN sections?  Why bother?
- */
-#if defined(DARWIN)
-const double PI      = 3.1415926535897932384626433832795029L;
-
-#elif !defined(UTILIB_AIX_CC)
-const long double PI = 3.1415926535897932384626433832795029L;
-#endif
-
-#ifndef MAXINT
-#define MAXINT (int)(~((int)0) ^ (1 << (sizeof(int)*8-1)))
-#endif
-
-/**
- * \def MAXINT
- *
- * The maximum integer value, which is system dependent.
- */
-#if defined(DOXYGEN)
-#ifdef MAXINT
-#undef MAXINT
-#endif
-#define MAXINT
-#endif
-
-/**
- * \def PI
- *
- * The value of pi, which may be defined by the system.
- */
-#if defined(DOXYGEN)
-#ifdef PI
-#undef PI
-#endif
-#define PI
-#endif
-
-/**
- * \def MAXFLOAT
- *
- * The maximum double value, which is system dependent.
- */
-#if defined(DOXYGEN)
-#ifdef MAXFLOAT
-#undef MAXFLOAT
-#endif
-#define MAXFLOAT
-#endif
-
-/**
- * \def MAXDOUBLE
- *
- * The maximum double value, which is system dependent.
- */
-#if defined(DOXYGEN)
-#ifdef MAXDOUBLE
-#undef MAXDOUBLE
-#endif
-#define MAXDOUBLE
-#endif
-#endif
-
 
 #if defined(__cplusplus)
 namespace utilib {
-
-//#ifdef UTILIB_HAVE_NAMESPACES
-//using std::max;
-//using std::min;
-//using std::swap;
-//#endif
 
 /*
  * 
@@ -191,11 +111,6 @@ std::string pscientific(const double t, int mantissa=6, int expwidth=3,
  *
  */
 
-// JE removed this -- now everything is C++
-// #ifdef __cplusplus
-// extern "C" {
-// #endif
-
 /** Compute the number of lines in file filename. */
 int calc_filesize(char* filename);
 
@@ -221,22 +136,6 @@ long int lround(double x);
  */
 double d_round(double to_round, unsigned int num_digits);
 
-#if 0
-/* Setup the data structures for bufexp. */
-#ifndef DOXYGEN
-void setup_bufexp _((int tabsz, double xmin, double xmax));
-#else
-void setup_bufexp(int tabsz, double xmin, double xmax);
-#endif
-
-/* Compute the exponential function using fast buffered interpolation. */
-#ifndef DOXYGEN
-double bufexp _((double x));
-#else
-double bufexp(double x);
-#endif
-#endif
-
 
 /* Compute number of bits needed to hold an integer value */
 unsigned int bitWidth(unsigned int x);
@@ -245,28 +144,6 @@ unsigned int bitWidth(unsigned int x);
 /* Computes the greatest common divisor of two integers using the */
 /* classical Euclidean algorithm (remainder version).             */
 unsigned int gcd(unsigned int a, unsigned int b);
-
-
-// #ifdef __cplusplus
-// }
-// #endif
-
-#if 0
-/**
- * \def Exp(x)
- *
- * A macro masks the 'exp' function, possibly replacing it with bufexp to 
- * accelerate the calculation of 'exp'.
- *
- * TODO: Do we want BUFFERED_EXP to be determined by a configure
- *       command line option?
- */
-#ifdef BUFFERED_EXP
-#define Exp(x)	bufexp(x)
-#else
-#define Exp(x)	exp(x)
-#endif
-#endif
 
 #endif
 

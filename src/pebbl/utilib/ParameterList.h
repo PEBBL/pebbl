@@ -8,31 +8,6 @@
  *  For more information, see the README file in the top UTILIB directory.
  *  _________________________________________________________________________
  */
-
-#if 0
-#ifndef utilib_ParameterList_h
-#define utilib_ParameterList_h
-
-#include <string>
-#include <map>
-
-namespace utilib {
-
-class ParameterList
-{
-public:
-
-  void add(const std::string& name, const std::string& value)
-    { data[name] = value; }
-
-  std::map<std::string,std::string> data;
-};
-
-}
-
-#endif
-#endif
-#if 1
 /**
  * \file ParameterList.h
  * 
@@ -189,5 +164,4 @@ register_parameters(tmp);
 
 } // namespace utilib
 
-#endif
 #endif

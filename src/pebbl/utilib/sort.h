@@ -107,13 +107,6 @@ public:
 	: array(array_), compare(compare_)
 	{}
 
-#if 0
-  /// Constructor.
-  OrderCompare(const ArrayT& array_)
-	: array(array_)
-	{}
-#endif
-
   /// Copy Constructor.
   OrderCompare(const OrderCompare<ArrayT,CompareT>& comp)
 	: array(comp.array), compare(comp.compare)

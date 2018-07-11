@@ -49,9 +49,6 @@ while (curr != end) {
   }
 }
 
-
-//using utilib::NumArray;
-
 /// Compute the max of a vector
 template <typename TYPE>
 TYPE max(const std::vector<TYPE>& vec)
@@ -72,32 +69,6 @@ return max_val;
 ///
 /// Extensions to STL
 ///
-
-#if 0
-#if !defined(CYGWIN) && !defined(LINUX) && !defined(__GNUC__) && !defined(COUGAR) && !defined(OSF) && !defined(TFLOPS_SERVICE) && !defined(SGI) && !defined(RS6K) && !defined(_MSC_VER)
-inline std::ostream& operator<< (std::ostream& os, bool& flag)
-{
-if (flag)
-   os << "true";
-else
-   os << "false";
-return os;
-}
-#endif
-
-#if 0
-template <class TYPE1, class TYPE2>
-inline std::basic_ostream<TYPE1,TYPE2>& operator<<(std::basic_ostream<TYPE1,TYPE2>& os, bool& flag)
-{
-if (flag)
-   os << "true";
-else
-   os << "false";
-return os;
-}
-#endif
-
-#endif
 
 inline std::istream& parse(std::istream& is, bool& flag)
 {
@@ -173,8 +144,6 @@ return vec;
 }
 
 
-
-
 /// Stream operator for adding one vector with another
 template <class TYPE>
 std::vector<TYPE>& operator+= (std::vector<TYPE>& vec, const std::vector<TYPE>& val)
@@ -195,7 +164,6 @@ return vec;
 template <class TYPE>
 std::vector<TYPE>& operator&= ( std::vector<TYPE>& vec, const std::vector<TYPE>& old)
 { vec = old; return vec; }
-
 
 
 /// Write a map to an output stream

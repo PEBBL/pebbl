@@ -198,34 +198,6 @@ int CharString::compare(const char* s) const
 
 long int aslong(const CharString& str, int& status)
 {
-#if 0
-  /// WEH - I thought that strtol was going to solve this ... but I was wrong
-
-  long int ans=0;
-  char *endptr = str.data();   // first invalid character
-
-  status = ERR;
-
-  if (str.data() && str.data()[0]){
-    ans = strtol(str.data(), &endptr, 10);
-    if (*endptr == NULL) {
-       status = OK;
-       }
-    else if ((endptr[0] == 'e') || (endptr[0] == 'E')) {
-       endptr++;
-       if (endptr[0] == '+') endptr++;
-       char* startptr = endptr;
-       long int tmp = strtol(startptr, &endptr, 10);
-       if (*endptr == NULL) {
-	  for (long int i=0; i<tmp; i++)
-	    ans *= 10;
-          status = OK;
-          }
-       }
-    }
-  
-  return ans;
-#else
   // This doesn't recognize ints beginning with '-'
   long int ans=0;
   status = ERR;
@@ -256,7 +228,6 @@ long int aslong(const CharString& str, int& status)
     ans = ans*10;
   status = OK;
   return ans;
-#endif
 }
 
 

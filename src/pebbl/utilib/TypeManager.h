@@ -114,21 +114,6 @@ public:
    Any m_data;
 };
 
-#if 0
-// This was added in r1799, but I am no longer convinced this is
-// actually needed
-//
-/// Redefine copying UntypedAnyContainer to be a deep (clone) copy
-template<>
-class Any::Copier<UntypedAnyContainer>
-{
-public:
-   static const bool CopyConstructable = true;
-   static void copy(UntypedAnyContainer& lhs, const UntypedAnyContainer& rhs)
-   { lhs.m_data = rhs.m_data.clone(); }
-};
-#endif
-
 class Type_Manager;
 
 /// Global function for accessing single copy of Type_Manager

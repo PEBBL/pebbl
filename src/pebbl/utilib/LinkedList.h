@@ -416,37 +416,7 @@ public:
   ///
   typedef __LinkedList_iterator<_Tp,const _Tp&,const _Tp*,_Node,__LinkedList_Standard_OpClass<_Tp&,_Node> > const_iterator;
 
-#if  defined(COUGAR) || defined(TFLOPS_SERVICE)
-
-#if 0	/// disabled because the coompiler has problems...
-   ///
-   typedef reverse_bidirectional_iterator<const_iterator, value_type,
-	         const_reference, difference_type>
-	const_reverse_iterator;
-
-   ///
-   typedef reverse_bidirectional_iterator<iterator, value_type, reference,
-		difference_type>
-	reverse_iterator;
-#endif
-
-#elif 0 // defined(UTILIB_SOLARIS_CC)
-  // disabled as the Solaris 10 compiler appears to no longer need this
-  // specialization
-
-  ///
-  typedef std::__reverse_bi_iterator<const_iterator,
-      bidirectional_iterator_tag, value_type,
-      const_reference, const_pointer, difference_type>
-      const_reverse_iterator;
-
-  ///
-  typedef std::__reverse_bi_iterator<iterator,
-      bidirectional_iterator_tag, value_type,
-      reference, pointer, difference_type>
-      reverse_iterator;
-
-#else
+#if !defined(COUGAR) && !defined(TFLOPS_SERVICE)
   ///
   typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 

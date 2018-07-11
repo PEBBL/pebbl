@@ -138,11 +138,6 @@ public:
 	/// Returns the number of columns in the 2D array
   size_type ncols() const
 	{return a->Ncols;}
-#if 0
-	/// Coersion operator that returns the internal array of pointers.
-  operator T** () const
-	{return a->Data;}
-#endif
 	/// Returns the internal array of pointers.
   T** data() const
 	{return a->Data;}
@@ -208,19 +203,6 @@ if (this->is_negative(idx) || ((size_type)idx >= a->Nrows))
 return a->Data[idx];
 }
  
-#if 0
-template <class T>
-inline const T* Basic2DArray<T>::operator[](size_type idx) const
-{
-#if (TwoDArraySanityChecking==1)
-if ((idx < 0) || ((size_type)idx >= a->Nrows))
-   EXCEPTION_MNGR(runtime_error, "Basic2DArray<T>::operator[] : iterator out of range. idx=" << idx << " len=" << a->Nrows);
-#endif
- 
-return a->Data[idx];
-}
-#endif
-
 
 template <class T>
 inline T& Basic2DArray<T>::operator()(const size_type row, const size_type col)

@@ -862,46 +862,7 @@ public:
    */
   template <class LType, class NType>
   friend bool operator> (const NType& x, const Ereal<LType>& y);
-
-  
-#if 0
-  /**
-   * \brief Greater-Than-or-Equal operator: Ereal >= Ereal
-   *
-   * \param x The left-hand side operand.
-   *
-   * \param y The right-hand side operand.
-   *
-   * \return \p true if \a x is greater than or equal to \a y, \p false otherwise.
-   *
-   * \throw invalid_argument if an attempt is made to use an indeterminate
-   * value or NaN in a comparison.
-   *
-   * \throw runtime_error if it is passed an Ereal with an invalid internal
-   * state.
-   */
-  template <class LType>
-  friend bool operator<= (const Ereal<LType>&, const Ereal<LType>&);
-
-  
-  /**
-   * \brief Greater-Than-or-Equal operator: Ereal >= Type
-   *
-   * \overload
-   */
-  template <class LType, class NType>
-  friend bool operator<= (const Ereal<LType>&, const NType&);
-
-  
-  /**
-   * \brief Greater-Than-or-Equal operator: Type >= Ereal
-   *
-   * \overload
-   */
-  template <class LType, class NType>
-  friend bool operator<= (const NType& x, const Ereal<LType>& y);
-#endif
-
+ 
 
   /**
    * \brief Check if Ereal is infinite.
