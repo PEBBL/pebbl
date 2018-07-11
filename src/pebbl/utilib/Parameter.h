@@ -16,7 +16,7 @@
  *
  * \todo revise how strings are written/read
  *		empty strings do not generate anything!
- * \todo depricated the 'referenced' value.
+ * \todo deprecated the 'referenced' value.
  */
 
 #ifndef utilib_Parameter_h

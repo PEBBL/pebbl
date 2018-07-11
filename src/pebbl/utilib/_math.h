@@ -27,7 +27,4 @@
 #include <pebbl/utilib/math_basic.h>
 #include <pebbl/utilib/math_array.h>
 
-// JE -- doubt this is needed for PEBBL
-// #include <pebbl/utilib/math_matrix.h>
-
 #endif

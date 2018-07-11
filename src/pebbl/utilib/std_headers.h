@@ -81,7 +81,6 @@
 #ifdef __cplusplus
 #include <utility>
 #include <deque>
-//#include <algobase>
 #include <functional>
 #include <typeinfo>
 #include <iterator>
@@ -99,8 +98,6 @@
 #include <set>
 #include <map>
 #include <new>
-//#include <multimap>
-//#include <pair>
 #include <queue>
 #include <stack>
 #else
@@ -116,8 +113,6 @@
 #include <new.h>
 #include <queue.h>
 #include <stack.h>
-//#include <pair.h>
-//#include <multimap.h>
 #endif
 
 #ifdef UTILIB_HAVE_EXCEPTIONS
