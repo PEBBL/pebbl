@@ -103,7 +103,7 @@ getmem(pid_t child) {
     return -1;
 
 /* Not all processes have a VmSize, e.g. Zombies */
-  while (fscanf(fd, "%255s %ld %*[^\n]", item, &tmp) != EOF) {
+  while (fscanf(fd, "%255s %ld %*[^\n]", item, &tmp) != -1) {
     if (strcmp(item,"VmSize:") == 0) {
 
        mem = tmp;

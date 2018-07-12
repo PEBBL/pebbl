@@ -71,32 +71,22 @@ enum { PEBBL_ERR = -999 };
 #if defined(__cplusplus)
 } // namespace end
 #endif
-
-/**
- * \def OK
- *
- * Value used to indicate that an operation worked.
- */
-//#ifndef OK
-//#define OK		0
-//#endif
-
 /**
  * \def NULL
  *
  * Defines the value of empty pointers.
  */
-//#ifdef NULL
-//#undef NULL		/* Always override the definition of NULL */
-//#endif
-//#define NULL		0
+#ifdef NULL
+#undef NULL		/* Always override the definition of NULL */
+#endif
+#define NULL		0
 
 /**
  * \def PAUSE
  *
  * A macro that waits for the user to hit a key.
  */
-#define PAUSE()	fflush(stdout); while(fgetc(stdin) == EOF);
+#define PAUSE()	fflush(stdout); while(fgetc(stdin) == -1);
 
 /**
  * \def _(args)

@@ -1655,14 +1655,14 @@ private:
    static int assign_cast(const Any& from, Any& to)
    {
       to.set<TO>() = from.template expose<FROM>();
-      return OK;
+      return 0;
    }
 
    template<typename FROM, typename TO>
    static int stream_cast(const Any& from, Any& to)
    {
       to.set<std::vector<TO> >() << from.template expose<std::vector<FROM> >();
-      return OK;
+      return 0;
    }
 
    static bool register_aux_functions()

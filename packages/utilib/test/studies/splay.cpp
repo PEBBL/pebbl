@@ -44,10 +44,10 @@ public:
   T val;
 
   int write(ostream& os) const
-	{os << val; return OK;}
+	{os << val; return 0;}
 
   int read(istream& is)
-	{is >> val; return OK;}
+	{is >> val; return 0;}
 
   A<T>& operator=(A<T>& tmp)
 	{val = tmp.val; return *this;}
@@ -299,5 +299,5 @@ do_stest<int>("Testing int simpleST",cout);
 do_test<CharString>("Testing char* HT with default function",cout);
 }
 
-return OK;
+return 0;
 }

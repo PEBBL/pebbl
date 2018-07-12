@@ -37,13 +37,13 @@ private:
 
       virtual int overflow(int c)
       {
-         if (c == EOF)
-            return !EOF;
+         if (c == -1)
+            return !-1;
          else
          {
             int const ans1 = buffer1->sputc(c);
             int const ans2 = buffer2->sputc(c);
-            return ans1 == EOF || ans2 == EOF ? EOF : c;
+            return ans1 == -1 || ans2 == -1 ? -1 : c;
          }
       }
 
