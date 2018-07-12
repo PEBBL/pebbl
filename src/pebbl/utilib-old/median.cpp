@@ -82,10 +82,10 @@ else
 
 size_type argmedian(double* x, size_type n, size_type* ws, RNG* rng)
 {
-int delete_flag=FALSE;
+int delete_flag=false;
 if (!ws) {
    ws = new size_type [n];
-   delete_flag=TRUE;
+   delete_flag=false;
    }
 for (size_type i=0; i<n; i++)
   ws[i] = i;

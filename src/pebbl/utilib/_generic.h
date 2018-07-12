@@ -72,24 +72,6 @@ enum { PEBBL_ERR = -999 };
 } // namespace end
 #endif
 
-/**
- * \def OK
- *
- * Value used to indicate that an operation worked.
- */
-//#ifndef OK
-//#define OK		0
-//#endif
-
-/**
- * \def NULL
- *
- * Defines the value of empty pointers.
- */
-//#ifdef NULL
-//#undef NULL		/* Always override the definition of NULL */
-//#endif
-//#define NULL		0
 
 /**
  * \def PAUSE
@@ -108,21 +90,6 @@ enum { PEBBL_ERR = -999 };
 #else
 #define _(args) ()
 #endif
-
-
-//#ifdef DEBUG 
-/* Debug defines to see if conflicts exist */
-//#define TRUE	1
-//#define FALSE	0
-//#define OK	0
-//#define ON	1
-//#define OFF	0
-//#define YES	1
-//#define NO	0
-//#define NULL	0
-//#define EOF	(-1)
-//#define ERR	-999
-//#endif
 
 
 #if !defined(UTILIB_HAVE_STD) && !defined(__cplusplus)

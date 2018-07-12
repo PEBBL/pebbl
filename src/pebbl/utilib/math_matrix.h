@@ -38,7 +38,7 @@ for (size_type j=0; j<matrix.nrows(); j++)
   for (size_type i=0; i<matrix.ncols(); i++)
     temp[i] += matrix[j][i];
 
-if (stats_flag == TRUE)
+if (stats_flag == true)
      temp /= ((double) (matrix.nrows() - 1));
 else
      temp /= ((double) matrix.nrows());
@@ -49,7 +49,7 @@ return( temp );
 
 /// Compute the variances of the rows of a matrix.
 template <class T>
-DoubleVector var(const Basic2DArray<T>& mat, const int sampleflag=TRUE)
+DoubleVector var(const Basic2DArray<T>& mat, const int sampleflag=true)
 {
 DoubleVector array_mean;
 return( var(mat, array_mean, sampleflag) );
@@ -59,7 +59,7 @@ return( var(mat, array_mean, sampleflag) );
 /// Compute the variances of the rows of a 2D array, given the means.
 template <class T>
 DoubleVector var(const Basic2DArray<T>& mat, BasicArray<double>& array_mean, 
-							const int sampleflag=TRUE)
+							const int sampleflag=true)
 {
 DoubleVector ans(mat.ncols());
 array_mean &= mean(mat);
@@ -69,7 +69,7 @@ for (size_type i=0; i<mat.nrows(); i++)
   for (size_type j=0; j<ans.size(); j++)
     ans[j] += ((mat[i][j] - array_mean[j]) * (mat[i][j] - array_mean[j]));
 
-if ((sampleflag == FALSE) || (mat.nrows() == 1))
+if ((sampleflag == false) || (mat.nrows() == 1))
    ans /= (double) (mat.nrows());
 else
    ans /= (double)(mat.nrows()-1);
