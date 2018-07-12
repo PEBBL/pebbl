@@ -72,13 +72,22 @@ enum { PEBBL_ERR = -999 };
 } // namespace end
 #endif
 
+/**
+ * \def NULL
+ *
+ * Defines the value of empty pointers.
+ */
+#ifdef NULL
+#undef NULL		/* Always override the definition of NULL */
+#endif
+#define NULL		0
 
 /**
  * \def PAUSE
  *
  * A macro that waits for the user to hit a key.
  */
-#define PAUSE()	fflush(stdout); while(fgetc(stdin) == EOF);
+#define PAUSE()	fflush(stdout); while(fgetc(stdin) == -1);
 
 /**
  * \def _(args)
