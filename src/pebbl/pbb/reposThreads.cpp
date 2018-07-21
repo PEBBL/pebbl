@@ -56,7 +56,7 @@ int reposRecvObj::computeBufferSize(parallelBranching* global_)
     size += sizeof(int) + sizeof(double);
 
   if (enumCount > 1)
-    size = max(size,global_->reposArrayBufSize);
+    size = global_->max(size,global_->reposArrayBufSize);
 
   size += sizeof(int);
 

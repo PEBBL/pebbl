@@ -28,12 +28,15 @@
 
 #ifdef ACRO_HAVE_MPI
 
-#include <pebbl/utilib/mpiUtil.h>
+// Should not need mpiUtil any more
+// #include <pebbl/utilib/mpiUtil.h>
+
 #include <pebbl/misc/fundamentals.h>
 
 namespace pebbl {
 
-using utilib::uMPI;
+// Should not need this any more
+// using utilib::uMPI;
 
 ///
 /// treeTopology is an abstract class for handling trees of processors.
@@ -65,9 +68,10 @@ public:
 
   int operator++(int) { return advanceChild(); };  // postfix ++
 
-  treeTopology(int root_ = 0,
-	       int node_ = uMPI::rank,
-	       int size_ = uMPI::size) :
+  treeTopology(int root_,    // Formerly defaulted to 0,
+	       int node_,    // Formerly defaulted to uMPI::rank,
+	       int size_     // Formerly defaulted to uMPI::size
+               ) :
      node(node_), root(root_), size(size_) 
        { };
 
@@ -129,10 +133,11 @@ public:
   
   int whichChild(int where) { return (relPosition(where) - 1) % radix; };
 
-  nAryTree(int radix_ = 2,
-	   int root_  = 0,
-	   int node_  = uMPI::rank,
-	   int size_  = uMPI::size) :
+  nAryTree(int radix_, //  Formerly defaulted to 2,
+	   int root_,  //  Formerly  0,
+	   int node_,  //  Formerly defaulted to uMPI::rank,
+	   int size_   //  Formerly defaulted to uMPI::size
+           ) :
   treeTopology(root_,node_,size_),
   radix(radix_)
     {
@@ -154,10 +159,11 @@ public:
 
   int parent() { return myParent; };
 
-  nAryTreeRememberParent(int radix_ = 2,
-			 int root_  = 0,
-			 int node_  = uMPI::rank,
-			 int size_  = uMPI::size) :
+  nAryTreeRememberParent(int radix_, //= 2,
+			 int root_,  //= 0,
+			 int node_,  //= uMPI::rank,
+			 int size_   //= uMPI::size
+                         ) :
   nAryTree(radix_,root_,node_,size_)
     {
       myParent = nAryTree::parent();

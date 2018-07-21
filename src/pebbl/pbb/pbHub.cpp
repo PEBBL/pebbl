@@ -201,7 +201,7 @@ void parallelBranching::handleHubMessage(UnPackBuffer& inBuf,int src)
       if (!myWorker)
 	EXCEPTION_MNGR(runtime_error, "Worker " << src << 
 		       " reported load to invalid hub "
-		     << uMPI::rank);
+		     << uMPI::rank << '/' << myRank());
       inBuf >> workerLoadReport[w];
       HUBDEBUG(100,ucout << "Load report is " 
 	       << workerLoadReport[w] << ", with incumbent value "
@@ -212,7 +212,8 @@ void parallelBranching::handleHubMessage(UnPackBuffer& inBuf,int src)
   if ((howMany > 0) & !myWorker)
     EXCEPTION_MNGR(runtime_error, "Worker " << src << 
 		   " acknowledged " << howMany << 
-		    " subproblem(s) to invalid hub " << uMPI::rank);
+		   " subproblem(s) to invalid hub " << uMPI::rank <<
+                   '/' << myRank());
   for(int i=0; i<howMany; i++)
     {
       spToken* t = (spToken*) unpackPointer(inBuf);
@@ -300,7 +301,7 @@ void parallelBranching::activateHub()
       else if ((clusterLoad.count() > 0) && checkpointDue())
 	{
 	  setupCheckpoint();
-	  if (uMPI::size == 1)
+	  if (mySize() == 1)
 	    writeCheckpoint();
 	}
     }
@@ -420,7 +421,7 @@ void parallelBranching::hubSendWorkTo(int w)
 	   << (void*) t << '\n');
   if (++hubDispatchCount >= dispatchLoadInformRate*numWorkers())
     setToInformAll();
-  if (pProc == uMPI::rank)
+  if (pProc == myRank())
     deliverSP(t->id,
 	      t->whichChild,
 	      t->bound,
