@@ -788,7 +788,7 @@ namespace pebbl {
 		DEBUGPR(100,ucout << "Sending to " << owner << endl);
 	      }
 	    sol->pack(hashBuffer[owner]);
-	    myMaxBufSize = max((int) myMaxBufSize,hashBuffer[owner].curr());
+	    myMaxBufSize = std::max((int) myMaxBufSize,(int) hashBuffer[owner].curr());
 	    DEBUGPR(150,ucout << "Buffer for " << owner << " now "
 		    << hashBuffer[owner].curr() << " bytes, my max size now "
 		    << myMaxBufSize << endl);
@@ -954,7 +954,7 @@ namespace pebbl {
 	// EnumCount is off, so do some simple reductions instead.
 
 	totalReposSize = repositorySize();             // The local size
-	totalReposSize = sum(totalReposSize,0);  // On proc 0, the total
+	totalReposSize = sumReduce(totalReposSize,0);  // On proc 0, the total
 
 	double localWorst = worstReposValue();
 	MPI_Op reduceOp = MPI_MAX;
@@ -1264,9 +1264,9 @@ namespace pebbl {
   void parallelBranching::printReposStatistics(std::ostream& stream)
   {
     finalReposSync();
-    int totalOffer = sum(solsOffered);
-    int totalAdmit = sum(solsAdmitted);
-    int totalSent  = sum(solsSent);
+    int totalOffer = sumReduce(solsOffered);
+    int totalAdmit = sumReduce(solsAdmitted);
+    int totalSent  = sumReduce(solsSent);
     if (iDoIO())
       {
 	int wasTagging = tagging_active();

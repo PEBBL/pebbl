@@ -109,13 +109,13 @@ public:
     }
 
   /// Computes a parallel sum of integers to ioProc
-  int sum(int value)
+  int sumReduce(int value)
     {
-        return sum(value,ioProc);
+        return sumReduce(value,ioProc);
     }
 
  /// Computes a parallel sum of integers to 'root'.
- int sum(int value,int root)
+ int sumReduce(int value,int root)
     {
         int result = 0;
         errorCode = MPI_Reduce(&value,&result,1,MPI_INT,MPI_SUM,root,comm);
@@ -127,13 +127,13 @@ public:
 
 
   /// Computes a parallel sum of doubles to ioproc
-  double sum(double value)
+  double sumReduce(double value)
      {
-        return sum(value,ioProc);
+        return sumReduce(value,ioProc);
      }
 
   /// Computes a parallel sum of doubles to 'root'.
-  double sum(double value,int root)
+  double sumReduce(double value,int root)
     {
         double result = 0;
         errorCode = MPI_Reduce(&value,&result,1,MPI_DOUBLE,MPI_SUM,root, comm);
@@ -143,13 +143,13 @@ public:
     }
 
   /// Computes a parallel max of integers to ioProc.
-  int max(int value)
+  int maxReduce(int value)
     {
-        return max(value,ioProc);
+        return maxReduce(value,ioProc);
     }
 
   /// Computes a parallel max of integers to 'root'
-  int max(int value,int root)
+  int maxReduce(int value,int root)
     {
         int result = 0;
         errorCode = MPI_Reduce(&value,&result,1,MPI_INT,MPI_MAX,root,comm);
@@ -159,13 +159,13 @@ public:
         }
 
   /// Computes a parallel max of doubles to ioProc.
-  double max(double value)
+  double maxReduce(double value)
      {
-        return max(value,ioProc);
+        return maxReduce(value,ioProc);
      }
 
   /// Computes a parallel max of doubles to 'root'
-  double max(double value,int root)
+  double maxReduce(double value,int root)
     {
         double result = 0;
         errorCode = MPI_Reduce(&value,&result,1,MPI_DOUBLE,MPI_MAX,root, comm);
@@ -184,7 +184,7 @@ public:
 
   /// Perform a reduction followed by a broadcast of the result.
   void reduceCast(void* sendbuf,void* recvbuf,int count,
-                         MPI_Datatype datatype,MPI_Op op)
+                  MPI_Datatype datatype,MPI_Op op)
     {
       errorCode = MPI_Allreduce(sendbuf,recvbuf,count,datatype,op,comm);
       if (errorCode)
@@ -268,115 +268,8 @@ public:
         LOG_RECV(status);
     }
 
-  // /// Get the count from a data type.
-  // int getCount(MPI_Status* status,MPI_Datatype datatype)
-  //   {
-  //   int count;
-  //   errorCode = MPI_Get_count(status,datatype,&count);
-  //   if (errorCode)
-  //      EXCEPTION_MNGR(std::runtime_error, "MPI_Get_count failed, code "
-  //                               << errorCode);
-  //   return count;
-  //   }
-
-//   /// Test a request, returning the result in argument \a flag.
-//   void test(MPI_Request* request,int* flag,MPI_Status* status)
-//     {
-//     errorCode = MPI_Test(request,flag,status);
-//     if (errorCode)
-//        EXCEPTION_MNGR(std::runtime_error, "MPI_Test failed, code "
-//                                 << errorCode);
-// #ifdef UTILIB_HAVE_MPI
-//     if (*flag)
-//        LOG_RECV(status);
-// #endif
-//     }
-
-  // /// Test a send request, returning the result in argument \a flag.
-  // /// Similar to test, but does not attempt logging.
-  // void testSend(MPI_Request* request,int* flag,MPI_Status* status)
-  //   {
-  //   errorCode = MPI_Test(request,flag,status);
-  //   if (errorCode)
-  //      EXCEPTION_MNGR(std::runtime_error, "MPI_Test failed, code "
-  //                               << errorCode);
-  //   }
-
-  // /// Test a request, returning the result.
-  // int test(MPI_Request* request,MPI_Status* status)
-  //   {
-  //   int flag;
-  //   test(request,&flag,status);
-  //   return flag;
-  //   }
-
-  // /// Test a send request, returning the result.  Similar to above,
-  // /// but will not attempt logging.
-  // int testSend(MPI_Request* request,MPI_Status* status)
-  //   {
-  //   int flag;
-  //   testSend(request,&flag,status);
-  //   return flag;
-  //   }
-
-  // /// Test a request, returning the result and ignoring the status.
-  // int test(MPI_Request* request)
-  //   {
-  //   MPI_Status status;
-  //   return test(request,&status);
-  //   }
-
-  // /// Test a send request, returning the result and ignoring the
-  // /// status.  Similar to previous call, but will not attempt logging.
-  // int testSend(MPI_Request* request)
-  //   {
-  //   MPI_Status status;
-  //   return testSend(request,&status);
-  //   }
-
-//   /// Call Testsome.
-//   int testsome(int incount, MPI_Request* request_array,
-//         int& outcount, int* array_of_indeces, MPI_Status* status_array)
-//     {
-//     errorCode = MPI_Testsome(incount,request_array,&outcount,
-//                 array_of_indeces,status_array);
-//     if (errorCode != MPI_SUCCESS)
-//        EXCEPTION_MNGR(std::runtime_error, "MPI_Testsome failed, code "
-//                                 << errorCode);
-// #ifdef UTILIB_HAVE_MPI
-//     for (int i=0; i<outcount; i++)
-//       LOG_RECV(status_array+i);
-// #endif
-//     return (outcount > 0);
-//     }
-
-  // /// Cancel a request.
-  // void cancel(MPI_Request* request)
-  //   {
-  //   errorCode = MPI_Cancel(request);
-  //   if (errorCode)
-  //      EXCEPTION_MNGR(std::runtime_error, "MPI_Cancel failed, code "
-  //                               << errorCode);
-  //       }
-
-  // /// Wait on a request.
-  // void wait(MPI_Request* request,MPI_Status* status,bool killing=false)
-  //   {
-  //   errorCode = MPI_Wait(request,status);
-  //   if (errorCode)
-  //   EXCEPTION_MNGR(std::runtime_error, 
-  //              "MPI_Wait failed, code " << errorCode);
-  //   if (!killing)
-  //     {
-  //       LOG_RECV(status);
-  //     }
-  //   }
-
-  // /// Cancel send requests.
-  // void killSendRequest(MPI_Request* request);
-
-  // /// Cancel receive requests.
-  // void killRecvRequest(MPI_Request* request);
+    // The remaining functions in mpiUtil didn't require knowledge of a communicator
+    // so we can still use mpiUtil for them.
 
 #endif
 

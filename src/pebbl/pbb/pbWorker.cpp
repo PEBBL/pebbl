@@ -978,7 +978,7 @@ double parallelBranching::incumbentThreadBias()
 {
   double r = relGap();
   double bias = incThreadBiasFactor*pow(r,incThreadBiasPower);
-  bias = max(bias,incThreadMinBias);
+  bias = std::max(bias,incThreadMinBias);
   if (incumbentValue == sense*MAXDOUBLE)
     bias = max(bias,noIncumbentMinBias);
   bias = min(bias,incThreadMaxBias);

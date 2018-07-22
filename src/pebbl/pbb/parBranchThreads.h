@@ -227,7 +227,8 @@ public:
 	 treeP_,
 	 true,                       // Exit for receive operations.
          thread_->mpiCommObj()),     // Same communicator as thread
-         global(thread_->globalP())
+  thread(thread_),
+  global(thread_->globalP())
     { };
 
 };

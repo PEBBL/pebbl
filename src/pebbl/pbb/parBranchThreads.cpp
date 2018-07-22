@@ -64,7 +64,7 @@ parBranchSelfAdjThread::parBranchSelfAdjThread(parallelBranching* global_,
 
 void coTreeReadyPBThread::setToWaitFor(MessageID& tag_)
 {
-  DEBUGPR(300,ucout << "About to wait on tag " << (int) tag_ << ".\n");
+  // DEBUGPR(300,ucout << "About to wait on tag " << (int) tag_ << ".\n");
   tag = tag_;
   state_flag = ThreadWaiting;
 };

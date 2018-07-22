@@ -477,7 +477,7 @@ void parallelBranching::writeLoadLog()
     {		 // (or both)
 
       // Max size for buffers etc.
-      int maxLength = max((int) loadLogEntries.size(), myIoProc());
+      int maxLength = maxReduce((int) loadLogEntries.size(), myIoProc());
 
       MPI_Status status;
 
@@ -669,13 +669,13 @@ void parallelBranching::printSPStatistics(ostream& stream)
   int combinedTable[numStates];
   reduce(subCount,combinedTable,numStates,MPI_INT,MPI_SUM,myIoProc());
   spTotal = combinedTable[boundable];
-  int totalUnderHubControl = sum(hubHandledCount);
-  int totalDelivered       = sum(spDeliverCount);
-  int totalReleased        = sum(spReleaseCount);
-  int totalRebalanced      = sum(rebalanceSPCount);
+  int totalUnderHubControl = sumReduce(hubHandledCount);
+  int totalDelivered       = sumReduce(spDeliverCount);
+  int totalReleased        = sumReduce(spReleaseCount);
+  int totalRebalanced      = sumReduce(rebalanceSPCount);
   int totalLoadBalanced    = 0;
   if (numHubs() > 1)
-    totalLoadBalanced = sum(loadBalSPCount);
+    totalLoadBalanced = sumReduce(loadBalSPCount);
 
   if (iDoIO())
     {
@@ -701,9 +701,9 @@ void parallelBranching::printSPStatistics(ostream& stream)
 	}
 
       int fieldWidth = strlen(rebalanceString);
-      fieldWidth = max(fieldWidth,(int) strlen(rampBoundString));
-      fieldWidth = max(fieldWidth,(int) strlen(rampPoolString));
-      fieldWidth = max(fieldWidth,(int) strlen(nlScatterString));
+      fieldWidth = std::max(fieldWidth,(int) strlen(rampBoundString));
+      fieldWidth = std::max(fieldWidth,(int) strlen(rampPoolString));
+      fieldWidth = std::max(fieldWidth,(int) strlen(nlScatterString));
 
       int numWidth = digitsNeededFor(max(spTotal,rampUpPool));
 
@@ -826,7 +826,7 @@ void parallelBranching::printTimings(ostream& stream)
     {
       thread = l1->data();
       overhead += thread->overheadTime();
-      if (sum(thread->active) > 0)
+      if (sumReduce(thread->active) > 0)
 	{
 	  int l = strlen(thread->name);
 	  if (l > timingPrintNameWidth)
@@ -845,12 +845,12 @@ void parallelBranching::printTimings(ostream& stream)
   searchWCTime +=   broadcastWCTime + preprocessWCTime 
                   + rampUpWCTime + solOutputWCTime;
 
-  totalCPU = sum(searchTime);
-  maxCPU   = max(searchTime);
-  totalWC  = sum(searchWCTime);
-  maxWC    = max(searchWCTime);
+  totalCPU = sumReduce(searchTime);
+  maxCPU   = maxReduce(searchTime);
+  totalWC  = sumReduce(searchWCTime);
+  maxWC    = maxReduce(searchWCTime);
 
-  totalMessages = sum(messagesReceivedThisProcessor);
+  totalMessages = sumReduce(messagesReceivedThisProcessor);
 
   timingPrintTimeWidth    = max(7,digitsNeededFor(maxCPU) + 2);
   timingPrintWCTimeWidth  = max(7,digitsNeededFor(maxWC) + 2);
@@ -1051,16 +1051,16 @@ void parallelBranching::timingPrintData(ostream& stream,
 					double time,
 					double messageCount)
 {
-  int count = sum(present);
-  double timeSum = sum(time);
-  double timeSumSq = sum(time*time);
+  int count = sumReduce(present);
+  double timeSum = sumReduce(time);
+  double timeSumSq = sumReduce(time*time);
   double baseLine;
   if (combineTimingsMax)
     baseLine = count*maxCPU;
   else
-    baseLine = sum(present*searchTime);
+    baseLine = sumReduce(present*searchTime);
 
-  double messageSum = sum(messageCount);
+  double messageSum = sumReduce(messageCount);
 
   if (!iDoIO() || (count == 0))
     return;
@@ -1109,7 +1109,7 @@ void parallelBranching::postRampUpAbort(double aggBound)
 {
   // Figure out time and print some statistics
 
-  double maxRampTime = max(rampUpTime);
+  double maxRampTime = maxReduce(rampUpTime);
   if (iDoIO())
     {
       CommonIO::end_tagging();

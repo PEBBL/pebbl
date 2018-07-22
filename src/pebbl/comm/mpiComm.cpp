@@ -45,11 +45,12 @@ comm(comm_)
   if (errorCode) 
      ucerr << "MPI_Comm_size failed, code " << errorCode << endl;
 
-// JE -- this stuff is probably archaic.  
+// JE -- this stuff (I think done by Mike Eldred) is probably archaic.  
 // Just assume that every MPI process can write to stdout and
 // #ifdef out all the manipulations of who can the IO processor
 
 #ifdef MPI_STDOUT_RESTRICTED
+
   // MSE: modifications required for the case where the incoming comm is not
   // MPI_COMM_WORLD since MPI_IO is not guaranteed to be an attribute of comm.
   // If comm==MPI_COMM_WORLD or if MPI_IO==rank of the calling process, then
