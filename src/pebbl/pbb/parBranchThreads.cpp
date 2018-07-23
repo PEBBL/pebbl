@@ -39,7 +39,8 @@ parBranchingThreadObj::parBranchingThreadObj(parallelBranching* global_,
   messagesReceived(0),
   logLevel(logLevel_),
   dbgLevel(dbgLevel_),
-  active(false)
+  active(false),
+  mpiComm(global_->mpiCommObj())
   {
     name    = name_;
     request = MPI_REQUEST_NULL;
@@ -63,7 +64,7 @@ parBranchSelfAdjThread::parBranchSelfAdjThread(parallelBranching* global_,
 
 void coTreeReadyPBThread::setToWaitFor(MessageID& tag_)
 {
-  DEBUGPR(300,ucout << "About to wait on tag " << (int) tag_ << ".\n");
+  // DEBUGPR(300,ucout << "About to wait on tag " << (int) tag_ << ".\n");
   tag = tag_;
   state_flag = ThreadWaiting;
 };
@@ -121,12 +122,12 @@ sender(sender_)
 
 void messageTriggeredPBThread::postRequest()
 {
-  uMPI::irecv((void *) inBuf.buf(),
-	      bufferSize,
-	      MPI_PACKED,
-	      sender,
-	      tag,
-	      &request);
+  irecv((void *) inBuf.buf(),
+	bufferSize,
+	MPI_PACKED,
+	sender,
+	tag,
+	&request);
   DEBUGPR(100,ucout << name << " thread posted request for tag "
 	  << tag << endl);
   request_posted=true;
@@ -189,7 +190,8 @@ broadcastPBThread::broadcastPBThread(parallelBranching* global_,
 			   dbgLevel_,
 			   bufferSize_,
 			   tag_),
-  radix(radix_)
+  radix(radix_),
+  outQueue(global_->mpiCommObj())
 {
   outQueue.reset(2*radix,bufferSize);
   DEBUGPRX(50,global,"Broadcast thread created for "

@@ -1054,6 +1054,10 @@ double branching::searchFramework(spHandler* handler_)
 
   // Clean up, record time, and close log files.
 
+  ucout << "Out of main loop";  //TMP
+
+  applicCommFinish();
+
   searchTime = CPUSeconds() - startTime;
 
   finishLoadLogIfNeeded();
@@ -2018,7 +2022,7 @@ solutionIdentifier::solutionIdentifier(branching* bGlobal)
   serial = -1;
   sense  = bGlobal->sense;
 #ifdef ACRO_HAVE_MPI
-  owningProcessor = uMPI::rank;
+  owningProcessor = bGlobal->pebblRank();
 #endif
 }
 
@@ -2055,7 +2059,7 @@ void solution::creationStamp(branching* bGlobal,int typeId_)
 {
   serial = ++(bGlobal->solSerialCounter);
 #ifdef ACRO_HAVE_MPI
-  owningProcessor = uMPI::rank;
+  owningProcessor = bGlobal->pebblRank();
 #endif
   typeId       = typeId_;
   hashValue    = 0;

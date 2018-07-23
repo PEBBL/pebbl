@@ -79,7 +79,7 @@ try {
      /// Create the optimizer, initialize it with command line parameters
      /// and run it.
      ///
-     parallelLipshitzian<FunctionClass> optimizer;
+     parallelLipshitzian<FunctionClass> optimizer(MPI_COMM_WORLD);
      if (optimizer.setup(argc,argv,problem)) {
 	optimizer.Lipshitz_constant = Lipshitz_constant;
         optimizer.reset();

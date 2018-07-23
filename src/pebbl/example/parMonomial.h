@@ -46,7 +46,9 @@ namespace pebblMonom {
  
     public:
 
-    parMaxMonomialData() : maxMonomialData() 
+    parMaxMonomialData(MPI_Comm comm_) : 
+      maxMonomialData(),
+      mpiComm(comm_)
 	{
 	  // Default is not to spend time on a dumb ramp up
 	  rampUpPoolLimitFac = 1.0;

@@ -45,7 +45,7 @@ messageTriggeredPBThread(global_,
 int earlyOutputObj::computeBufferSize(parallelBranching* global_)
 {
   int s = sizeof(int) + sizeof(double);
-  if (uMPI::iDoIO)
+  if (iDoIO())
     s += global_->solBufSize;
   return s;
 }
@@ -98,9 +98,9 @@ ThreadObj::RunStatus earlyOutputObj::handleMessage(double* controlParam)
     {
       DEBUGPR(100,ucout << "output confirmation.");
 #ifdef ACRO_VALIDATING
-      if (uMPI::rank != global->firstHub())
+      if (myRank() != global->firstHub())
 	EXCEPTION_MNGR(runtime_error,"Received output confirm signal "
-		       " on processor " << uMPI::rank);
+		             " on processor " << uMPI::rank << '/' << myRank());
 #endif
       double receivedValue;
       inBuf >> receivedValue;
@@ -126,7 +126,7 @@ void earlyOutputObj::activateEarlyOutput()
 {
   DEBUGPR(1,ucout << "Early output activation\n");
   int incumbentProcessor = global->incumbentSource;
-  if (uMPI::rank == incumbentProcessor)
+  if (myRank() == incumbentProcessor)
     writeEarlyOutput();
   else
     {
@@ -146,7 +146,7 @@ void earlyOutputObj::activateEarlyOutput()
 void earlyOutputObj::writeEarlyOutput()
 {
   DEBUGPR(100,ucout << "Early output write.\n");
-  if (uMPI::iDoIO || !global->printSolutionSynch) // Can just print ourselves.
+  if (iDoIO() || !global->printSolutionSynch) // Can just print ourselves.
     {
       DEBUGPR(100,ucout << "Writing locally.\n");
       global->directSolutionToFile();
@@ -155,11 +155,11 @@ void earlyOutputObj::writeEarlyOutput()
   else                                      // Have to send it.
     {
       DEBUGPR(100,ucout << "Sending solution to processor "
-	      << uMPI::ioProc << endl);
+	      << myIoProc() << endl);
       outBuf.reset();
       outBuf << (int) outputDeliverSignal;  // Indicate this is a solution
       global->incumbent->pack(outBuf);      // Pack in the solution
-      sendMessage(uMPI::ioProc);            // Send!
+      sendMessage(myIoProc());            // Send!
     }
 }
 
@@ -196,11 +196,11 @@ void earlyOutputObj::confirmEarlyOutput(double outputVal)
 
 void earlyOutputObj::sendMessage(int dest)
 {
-  uMPI::isend((void *) outBuf.buf(),
-	      outBuf.size(),
-	      MPI_PACKED,
-	      dest,
-	      global->earlyOutputTag);
+  isend((void *) outBuf.buf(),
+	outBuf.size(),
+	MPI_PACKED,
+	dest,
+	global->earlyOutputTag);
   global->recordMessageSent(this);
 }
 

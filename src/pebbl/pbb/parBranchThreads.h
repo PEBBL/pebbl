@@ -48,7 +48,9 @@ class parallelBranching;    // Forward declaration.
 // Base class for simple thread objects with a pointer to a parallel
 // branching class.  
 
-class parBranchingThreadObj : virtual public ThreadObj, public fullPebblBase
+class parBranchingThreadObj : virtual public ThreadObj, 
+                              public mpiComm,
+                              public fullPebblBase
 {
 friend class parallelBranching;
 friend class parBranchCoTree;
@@ -178,7 +180,6 @@ public:
 		      const char* logColor,
 		      int   logLevel_,
 		      int   dbgLevel_) :
-
   parBranchingThreadObj(global_,(char*)name_,(char*)shortName,
 			logColor,logLevel_,dbgLevel_)
     { };
@@ -210,7 +211,7 @@ public:
       thread->setToWaitFor(tag_);
     };
 
-  bool requestMet()    // This is always true because we exit for receives
+  bool requestMet()   // This is always true because we exit for receives
     {                 // and tell the scheduler the thread is waiting.
       return(true);   // The scheduler will restart the thread only if
     };                // the message has arrived.
@@ -221,10 +222,11 @@ public:
 		     coTreeReadyPBThread* thread_,
 		     treeTopology*        treeP_) :
   coTree(datatype_,
-	 thread_->requestP(),    // MPI request is same as calling thread's.
-	 thread_->statusP(),     // MPI status is same as calling thread's.
+	 thread_->requestP(),        // MPI request is same as calling thread's.
+	 thread_->statusP(),         // MPI status is same as calling thread's.
 	 treeP_,
-	 true),                  // exit for receive operations.
+	 true,                       // Exit for receive operations.
+         thread_->mpiCommObj()),     // Same communicator as thread
   thread(thread_),
   global(thread_->globalP())
     { };
@@ -344,7 +346,7 @@ public:
 
   virtual nAryTree* makeTreeObject()
     {
-      return new nAryTree(radix,originator);
+      return new nAryTree(radix,originator,myRank(),mySize());
     };
 
   // The originating processor specifies how it wants to
@@ -353,7 +355,7 @@ public:
 
   virtual int myOriginatorID()
     {
-      return(uMPI::rank);
+      return(myRank());
     };
   
 protected:

@@ -28,6 +28,8 @@
 
 #ifdef ACRO_HAVE_MPI
 
+#include <mpi.h>
+
 namespace pebbl {
 
 
@@ -61,7 +63,7 @@ public:
 	{id = mID.id; return *this;}
 
 	///
-  static int check_id();
+  static int check_id(MPI_Comm comm);
 	///
   static void reset_ids();
 

@@ -1016,8 +1016,13 @@ public:
 
   parallelBranchSub* blankParallelSub();
 
-  parallelDocking() : serialDocking(), _spPackSize(0) {}
-  ~parallelDocking() { }
+  parallelDocking(MPI_Comm comm_ = MPI_COMM_WORLD) : 
+  serialDocking(), 
+  _spPackSize(0),
+  mpiComm(comm_)
+    { };
+
+  ~parallelDocking() { };
 
   bool setup(int& argc,char**& argv);
 

@@ -45,7 +45,7 @@ void parallelBranching::signalIncumbent()
   LOG_EVENT(1,start,foundIncLogState);
 
   branching::signalIncumbent();
-  incumbentSource = uMPI::rank;
+  incumbentSource = myRank();
 
   WORKERDEBUG(1,ucout << "New incumbent found: value=" << incumbentValue 
 	      << ", source=" << incumbentSource 
@@ -304,7 +304,7 @@ void parallelBranching::deliverSP(branchSubId& id,
     EXCEPTION_MNGR(runtime_error,"Token mismatch error.");
   if (whichChild == self)
     {
-      if (destProcessor == uMPI::rank)
+      if (destProcessor == myRank())
 	{                               // Token returns to creating processor.
 	  serverPool.remove(p);
 	  p->tokenCount = 0;            // The token is no longer on the loose.
@@ -323,7 +323,7 @@ void parallelBranching::deliverSP(branchSubId& id,
     }
   else
     {
-      if (destProcessor == uMPI::rank)
+      if (destProcessor == myRank())
 	{
 	  parallelBranchSub* sp = p->parallelChild(whichChild);
 	  WORKERDEBUG(100,ucout << "Child token " << whichChild 
@@ -574,7 +574,7 @@ void parallelBranching::workerCommunicateWithHub(bool rebalanceFlag)
 #ifdef ACRO_VALIDATING
   hubMessageSeqNum++;
   *workerOutBuffer << hubMessageSeqNum;
-  WORKERDEBUG(100,ucout << "Sent sequence " << uMPI::rank
+  WORKERDEBUG(100,ucout << "Sent sequence " << myRank()
 	      << '#' << hubMessageSeqNum << endl);
 #endif
 
@@ -978,7 +978,7 @@ double parallelBranching::incumbentThreadBias()
 {
   double r = relGap();
   double bias = incThreadBiasFactor*pow(r,incThreadBiasPower);
-  bias = max(bias,incThreadMinBias);
+  bias = std::max(bias,incThreadMinBias);
   if (incumbentValue == sense*MAXDOUBLE)
     bias = max(bias,noIncumbentMinBias);
   bias = min(bias,incThreadMaxBias);

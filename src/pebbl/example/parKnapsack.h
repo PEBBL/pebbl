@@ -91,13 +91,14 @@ public:
 
   parallelBranchSub* blankParallelSub();
 
-  parallelBinaryKnapsack() : 
+  parallelBinaryKnapsack(MPI_Comm comm_ = MPI_COMM_WORLD) : 
     binaryKnapsack(),
     incumbQueueTargetSize(100),
     incumbQueueMaxSize(1000),
     firstInIncQueue(0), 
     lastInIncQueue(0),
-    incQueueSize(0)
+    incQueueSize(0),
+    mpiComm(comm_)
     {
       ParameterSet::create_categorized_parameter("incumbQueueTargetSize",
 				     incumbQueueTargetSize,
