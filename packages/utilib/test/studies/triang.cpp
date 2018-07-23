@@ -85,5 +85,5 @@ ucout << "Test Expectation-Balanced Triangular" << std::endl;
 trv.truncation(EXPECTATION_BALANCED_TRIANGULAR);
 test_triang(&trv,-0.5,1.0,vec,10000);
 ucout << vec << std::endl;
-return 0;
+return OK;
 }
