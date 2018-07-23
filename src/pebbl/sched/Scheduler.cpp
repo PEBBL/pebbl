@@ -30,7 +30,7 @@ namespace pebbl {
 // Scheduler static data
 //
 //
-int Scheduler::termination_flag=FALSE;
+int Scheduler::termination_flag=false;
 
 
 //
@@ -205,7 +205,7 @@ void Scheduler::dump()
 int Scheduler::execute()
 {
 size_type group_ndx=0;
-termination_flag = FALSE;
+termination_flag = false;
 double ttime=getTime();
 
 
@@ -219,7 +219,7 @@ DEBUGPR(1,dump());
 // Main loop
 //
 while (!termination_flag) {
-  state_changed=FALSE;
+  state_changed=false;
   //
   // Time this iteration began
   //
@@ -239,7 +239,7 @@ while (!termination_flag) {
        if (thread->ready())
           threadGroup[thread->group()]->unblock(thread,getTime());
        insert(ThreadObj::RunOK,thread);		// Move to an interrupt queue
-       state_changed=TRUE;
+       state_changed=true;
        }
     else
        ndx = algBlockedList.next(ndx);
@@ -297,7 +297,7 @@ while (!termination_flag) {
   }
 
 total_time = getTime() - ttime;
-return OK;
+return 0;
 }
 
 
@@ -439,7 +439,7 @@ void Scheduler::check_waiting_threads()
           if (thread->ready())
 	    threadGroup[thread->group()]->unblock(thread,getTime());
 	  insert(ThreadObj::RunOK,thread);
-          state_changed=TRUE;
+          state_changed=true;
       }
     }
   }
@@ -469,7 +469,7 @@ void Scheduler::check_waiting_threads()
           if (thread->ready())
 	    threadGroup[thread->group()]->unblock(thread,getTime());
 	  insert(ThreadObj::RunOK,thread);
-          state_changed=TRUE;
+          state_changed=true;
       }
     }
   }

@@ -58,9 +58,9 @@ comm(comm_)
   // fall back on ioProc=0 default.
   int flag, result;
   int* mpiIOP;
-  errorCode = MPI_Attr_get(MPI_COMM_WORLD,MPI_IO,&mpiIOP,&flag);
+  errorCode = MPI_Comm_get_attr(MPI_COMM_WORLD,MPI_IO,&mpiIOP,&flag);
   if (errorCode || !flag)
-     ucerr << "MPI_Attr_get(MPI_IO) failed, code " << errorCode << endl;
+     ucerr << "MPI_Comm_get_attr(MPI_IO) failed, code " << errorCode << endl;
   MPI_Comm_compare(comm, MPI_COMM_WORLD, &result);
   if (result==MPI_IDENT || result==MPI_CONGRUENT) // no mapping of MPI_IO reqd.
     ioProc = *mpiIOP;

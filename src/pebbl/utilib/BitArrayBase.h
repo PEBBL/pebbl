@@ -465,7 +465,7 @@ int BitArrayBase<k,T,P>::read(std::istream& s)
       put(i,(T) translate_from_char(c));
     }
 
-  return OK ;
+  return 0;
 }
 
 
@@ -509,7 +509,7 @@ int BitArrayBase<k,T,P>::write(std::ostream& output) const
 	  output << translate_to_char(temp & data_mask);
 	}
     }
-  return OK ;
+  return 0;
 }
 
 
@@ -533,7 +533,7 @@ int BitArrayBase<k,T,P>::write(PackBuffer& output) const
     }
   else
     output << (size_t) 0;
-  return OK ;
+  return 0;
 }
 
 
@@ -544,7 +544,7 @@ int BitArrayBase<k,T,P>::read(UnPackBuffer& input)
   input >> read_len;
   base_t::resize(read_len, 0);    /* The zero means don't set new contents */
   input.unpack(Data, alloc_size(read_len));
-  return OK ;
+  return 0;
 }
 
 

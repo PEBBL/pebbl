@@ -182,7 +182,7 @@ void parallelBranching::solutionToFile()
       if (iAmFirstHub() &&
 	  (earlyOutputMinutes > 0) && 
 	  (lastSolValOutput == incumbentValue))
-	flag = TRUE;
+      flag = true;
       broadcast((void*) &flag,1,MPI_INT,firstHub());
       solOutputMessages += (myRank() > 0);
 

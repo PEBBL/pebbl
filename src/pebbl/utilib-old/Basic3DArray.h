@@ -404,7 +404,7 @@ int Basic3DArray<T>::resize(const size_type nrows, const size_type ncols, const 
 // Maybe we get lucky.
 //
 if ((ncols == a->Ncols) && (nrows == a->Nrows) && (ndeep == a->Ndeep))
-   return OK;
+   return 0;
 
 //
 // Need to completely replace old data.
@@ -446,7 +446,7 @@ if ((ncols != a->Ncols) && (nrows != a->Nrows) && (ndeep != a->Ndeep)) {
    a->Nrows = nrows;
    a->Ncols = ncols;
    a->Ndeep = ndeep;
-   return OK;
+   return 0;
    }
 
 //
@@ -506,7 +506,7 @@ if (ncols != a->Ncols) {
    a->Ncols = ncols;
    }
 
-return OK;
+return 0;
 }
 
 

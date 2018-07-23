@@ -53,8 +53,8 @@ if (rcond != NULL) {
 else
    dpofa_(&(G[0][0]), &n, &n, &info);
 
-if (info != 0) return ERR;
-return OK;
+if (info != 0) return PEBBL_ERR;
+return 0;
 }
 
 

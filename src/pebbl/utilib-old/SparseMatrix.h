@@ -189,7 +189,7 @@ private:
    static int convert_cast(const Any& from, Any& to)
    {
       to.set<TO>().convert(from.template expose<FROM>());
-      return OK;
+      return 0;
    }
 
    //static int cast_to_rm_from_dense(const Any& from, Any& to);
@@ -635,7 +635,7 @@ for (int i=0; i<nrows; i++) {
     ostr << operator()(i,j) << " ";
   ostr << std::endl;
   }
-return OK;
+return 0;
 }
 
 
@@ -1184,7 +1184,7 @@ int cast_to_rm_from_dense(const Any& from_, Any& to_)
       = to_.set<utilib::RMSparseMatrix<T> > ();
 
    if (from.size() == 0)
-      return OK;
+      return 0;
 
    T zero = T();
    size_t nr = from.size();
@@ -1221,7 +1221,7 @@ int cast_to_rm_from_dense(const Any& from_, Any& to_)
             matval[ctr++] = from[i][j];
          }
    }
-   return OK;
+   return 0;
 }
 
 
@@ -1258,7 +1258,7 @@ int cast_from_rm_to_dense(const Any& from_, Any& to_)
       }
    }
 
-   return OK;
+   return 0;
 }
 
 } // namespace utilib::(local)
@@ -1308,7 +1308,7 @@ int SparseMatrix<T>::cast_to_cm_from_BasicArrayArray(const Any& _from, Any& to)
       //std::cerr << "matval " << matval << std::endl;
    }
 
-   return OK;
+   return 0;
 }
 
 template<typename T>
@@ -1346,7 +1346,7 @@ int SparseMatrix<T>::cast_from_cm_to_BasicArrayArray(const Any& _from, Any& to)
       }
    }
 
-   return OK;
+   return 0;
 }
 
 

@@ -69,7 +69,7 @@ int printTreeDepth=5;
 //  Globals (ugh).  I never said it was elegant.
 
 int errorCount = 0;
-int fathomRead = FALSE;
+int fathomRead = false;
 double sol     = 0;
 double sense   = 1;
 double relTol  = 1e-7;
@@ -254,10 +254,10 @@ int canFathom(double bound)
 {
   double absGap = (sol - bound)*sense;
   if (absGap < absTol)
-    return TRUE;
+    return true;
   double denom = max(fabs(bound),fabs(sol));
   if (denom == 0)
-    return TRUE;
+    return true;
   else return absGap/denom <= relTol;
 }
 
@@ -344,7 +344,7 @@ void readLog::execute(int argc,char** argv)
 	  if (!strcmp(verb,"fathoming"))
 	    {
 	      lineStream >> sol >> sense >> relTol >> absTol;
-	      fathomRead = TRUE;
+	      fathomRead = true;
 	    }
 	  else
 	    {

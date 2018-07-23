@@ -37,7 +37,7 @@ int MessageID::check_id(MPI_Comm comm)
 {
 int tmp;
 int flag;
-MPI_Attr_get(comm, MPI_TAG_UB, (void*)&tmp, &flag);
+MPI_Comm_get_attr(comm, MPI_TAG_UB, (void*)&tmp, &flag);
 assert(flag == 1);
 
 return (next_id < tmp);

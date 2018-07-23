@@ -160,7 +160,7 @@ namespace pebblMonom {
 				   int*          blocklen,
 				   int           j)
   {
-    MPI_Address(address,&(disp[j]));
+    MPI_Get_address(address,&(disp[j]));
     disp[j] -= base;
     type[j] = MPI_DOUBLE;
     blocklen[j] = 1;
@@ -177,7 +177,7 @@ namespace pebblMonom {
     MPI_Aint     base;
     branchChoice example;
 
-    MPI_Address(&example,&base);
+    MPI_Get_address(&example,&base);
 
     int j = 0;
     for (int i=0; i<3; i++)
@@ -193,7 +193,7 @@ namespace pebblMonom {
       }
     setupMPIDatum(&(example.branchVar),MPI_INT,
 		  type,base,disp,blocklen,j++);
-    MPI_Type_struct(j,blocklen,disp,type,&mpiType);
+    MPI_Type_create_struct(j,blocklen,disp,type,&mpiType);
     MPI_Type_commit(&mpiType);
     MPI_Op_create(branchChoiceCombiner,true,&mpiCombiner);
   }

@@ -185,7 +185,7 @@ inline void MNormal::operator()(DoubleVector& new_result)
 if (!pGenerator)
    EXCEPTION_MNGR(runtime_error, "MNormal::operator() : Attempting to use a NULL generator.");
 
-if (pd_flag == ERR)
+if (pd_flag == PEBBL_ERR)
    EXCEPTION_MNGR(runtime_error, "MNormal::operator() : Attempting to use a bad correlation matrix.");
 
 if (results.size() == 0)

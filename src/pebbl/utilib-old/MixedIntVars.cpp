@@ -30,7 +30,7 @@ int cast_real_to_miv(const Any& from, Any& to)
    ans.Real() << from.expose<NumArray<double> >();
    ans.Integer().resize(0);
    ans.Binary().resize(0);
-   return OK;
+   return 0;
 }
 
 int cast_int_to_miv(const Any& from, Any& to)
@@ -39,7 +39,7 @@ int cast_int_to_miv(const Any& from, Any& to)
    ans.Real().resize(0);
    ans.Integer() << from.expose<NumArray<int> >();
    ans.Binary().resize(0);
-   return OK;
+   return 0;
 }
 
 } // namespace utilib::(local)

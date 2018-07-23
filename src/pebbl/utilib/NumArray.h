@@ -187,7 +187,7 @@ private:
    static int stream_cast(const Any& from, Any& to)
    {
       to.set<TO>() << from.template expose<FROM>();
-      return OK;
+      return 0;
    }
 
    static bool register_aux_functions()
