@@ -28,6 +28,11 @@ if(knapsack_test_dir)
   endif()
 endif()
 
+if(enable_mpi)
+  add_executable(commTest commTest.cpp parKnapsack.cpp serialKnapsack.cpp)
+  target_link_libraries(commTest pebbl)
+endif()
+
 add_executable(lipshitzian lipshitzian.cpp)
 target_link_libraries(lipshitzian pebbl)
 add_test(NAME lipshitzian_serial COMMAND lipshitzian)
