@@ -231,7 +231,8 @@ surveyRestartFlag(false),
 roundNumber(0),
 surveyRestarts(0),
 quiescencePolls(0),
-termChecks(0)
+termChecks(0),
+outBufQ(global_->mpiCommObj())
 {
   myState   = start;
   myCluster = global->clusterNumber();
@@ -365,12 +366,12 @@ void loadBalObj::waitToReceive(MessageID& tag_)
 {
   DEBUGPR(300,ucout << "Load balancer about to wait on tag " 
 	  << (int) tag_ << ".\n");
-  uMPI::irecv((void*) inBuf.buf(),
-	      bufferSize,
-	      MPI_PACKED,
-	      MPI_ANY_SOURCE,
-	      tag_,
-	      &request);
+  irecv((void*) inBuf.buf(),
+	bufferSize,
+	MPI_PACKED,
+	MPI_ANY_SOURCE,
+	tag_,
+	&request);
   tag = tag_;
   state_flag = ThreadWaiting;
 }
@@ -531,18 +532,18 @@ ThreadObj::RunStatus loadBalObj::runWithinLogging(double* controlParam)
 
 	  if (myID.donors == myCluster)
 	    {
-	      donorProc = uMPI::rank;
+	      donorProc = myRank();
 	      DEBUGPR(150,ucout << "Donor is rendezvous point.\n");
 	    }
 	  else
 	    {
 	      DEBUGPR(150,ucout << "Sending null message to ["
 		      << global->hubProc(myID.donors) << "].\n");
-	      uMPI::isend((void*) &myID,      // This address does not matter
-			  0,                  // Envelope-only message!
-			  MPI_PACKED,
-			  global->hubProc(myID.donors),
-			  donorRVTag);
+	      isend((void*) &myID,      // This address does not matter
+		    0,                  // Envelope-only message!
+		    MPI_PACKED,
+		    global->hubProc(myID.donors),
+		    donorRVTag);
 	    }
 	  myState = receiverInfo;
 
@@ -558,7 +559,7 @@ ThreadObj::RunStatus loadBalObj::runWithinLogging(double* controlParam)
 
 	  if (myID.receivers == myCluster)
 	    {
-	      receiverProc = uMPI::rank;
+	      receiverProc = myRank();
 	      receiverLoad = global->clusterLoad;
 	      DEBUGPR(150,ucout << "Receiver is rendezvous point.\n");
 	    }
@@ -629,7 +630,7 @@ ThreadObj::RunStatus loadBalObj::runWithinLogging(double* controlParam)
 
 	  DEBUGPR(150,stateEntryDebugPrint("knowReceiver"));
 
-	  if (donorProc == uMPI::rank)
+	  if (donorProc == myRank())
 	    {
 	      myReceiver = receiverProc;
 	      DEBUGPR(150,ucout << "Rendezvous point is also donor.\n");
@@ -808,12 +809,12 @@ ThreadObj::RunStatus loadBalObj::runWithinLogging(double* controlParam)
 	    jumpState(termCheckTree);
 
 	  tag = global->termCheckTag;
-	  uMPI::irecv((void *) &workerCount,
-		      1,
-		      MPI_INT,
-		      MPI_ANY_SOURCE,
-		      tag,
-		      &request);
+	  irecv((void *) &workerCount,
+		1,
+		MPI_INT,
+		MPI_ANY_SOURCE,
+		tag,
+		&request);
 	  state_flag = ThreadWaiting;
 	  myState = termCheckClusterWait;
 	  break;

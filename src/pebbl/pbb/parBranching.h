@@ -25,6 +25,7 @@
 
 #ifdef ACRO_HAVE_MPI
 
+#include <pebbl/comm/mpiComm.h>
 #include <pebbl/utilib/IntVector.h>
 #include <pebbl/utilib/PackBuf.h>
 #include <pebbl/utilib/seconds.h>
@@ -128,7 +129,8 @@ virtual public branching,
   virtual public logEvent,
 #endif
 virtual public parallelPebblBase,
-virtual public parallelPebblParams
+virtual public parallelPebblParams,
+virtual public mpiComm
 {
 
   friend class parLoadObject;
@@ -341,11 +343,11 @@ public:
   // itself for a class that will initialize branching (e.g. this
   // class has pure virtual functions).
 
-  parallelBranching();
+  parallelBranching(MPI_Comm comm_ = MPI_COMM_WORLD);
+
+  ~parallelBranching();
 
   virtual parallelBranchSub* blankParallelSub() = 0;
-
-  virtual ~parallelBranching();
 
   void reset(bool VBflag=true);
 
@@ -388,8 +390,8 @@ public:
   virtual bool continueRampUp() 
     { 
       if (spCount() <= rampUpPoolLimit)
-	return true;
-      return spCount() <= rampUpPoolLimitFac*uMPI::size;
+	       return true;
+      return spCount() <= rampUpPoolLimitFac*mySize();
     };
 
   // Force a longer ramp up.  This is useful when we need more careful
@@ -410,6 +412,11 @@ public:
   virtual void postRampUpAbort(double aggBound);
 
   // Miscelleaneous stuff
+
+  int pebblRank()
+  {
+    return myRank();
+  }
 
   int veryFirstWorker()
     {
@@ -866,7 +873,7 @@ protected:
   int owningProcessor(solution* sol)
     {
       size_type hash = sol->computeHashValue();
-      return (hash % (uMPI::size*enumHashSize)) / enumHashSize;
+      return (hash % (mySize()*enumHashSize)) / enumHashSize;
     };
 
   void assignId(solution* sol);
@@ -1042,7 +1049,7 @@ protected:
 
   bool valLogOutput()
     {
-      return validateLog && !(rampingUp() && (uMPI::rank > 0));
+      return validateLog && !(rampingUp() && (myRank() > 0));
     };
 
   // Load logging stuff; overrides serial versions (but may call on them)
@@ -1133,7 +1140,7 @@ protected:
 
   void finishEventLog()
   {
-    if (uMPI::iDoIO)
+    if (iDoIO())
      ucout << "(Writing event log.)\n";
     logEvent::finish();
   }
@@ -1580,7 +1587,7 @@ template <class B,class PB> int driver(int argc, char** argv)
 	  CommonIO::begin();
 	  CommonIO::setIOFlush(1);
 
-	  PB instance;
+	  PB instance(MPI_COMM_WORLD);
           utilib::exception_mngr::set_stack_trace(false);
 	  flag = instance.setup(argc,argv);
           utilib::exception_mngr::set_stack_trace(true);

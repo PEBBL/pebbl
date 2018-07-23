@@ -19,8 +19,8 @@ using namespace std;
 namespace utilib {
 
   void ParameterList::add_posix_parameters(const std::string& label, 
-				    const std::string& value,
-				    bool process_param)
+				           const std::string& value,
+				           bool process_param)
   {
   std::string::const_iterator curr = label.begin();
   std::string::const_iterator end  = label.end();
@@ -85,8 +85,10 @@ while (is) {
 
 
 #ifdef UTILIB_HAVE_MPI
-  void ParameterList::synchronize(int root, MPI_Comm )
+  void ParameterList::synchronize(int root, MPI_Comm comm)
   {
+    cout << "Use of ParameterList::synchronize -- might not work with "
+         << "a communicator other than MPI_COMM_WORLD";
     int size = -1;
     if (uMPI::rank == root)
       {

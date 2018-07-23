@@ -825,6 +825,11 @@ public:
   virtual branchSub* blankSub() = 0;
   virtual branchSub* makeRoot();
 
+  // This should be called on exit to clean up any communication subsidiary
+  // to bounding subproblems.
+
+  void applicCommFinish() { };
+
   // Incumbent-related methods
 
   void foundSolution(solution* sol,syncType sync=notSynchronous);
@@ -944,6 +949,9 @@ public:
 
   ///
   static std::string version_info;
+
+  /// Stands in for processor rank when in serial; overridden in parallel
+  virtual int pebblRank() { return 0; };
 
  protected:
 

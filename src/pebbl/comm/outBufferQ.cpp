@@ -45,12 +45,12 @@ void outBufferQueue::send(PackBuffer* buffer,int dest,int tag)
 {
   outBufferQElt* sendObj = new outBufferQElt(buffer,tag,this);
 
-  uMPI::isend((void *) buffer->buf(),
-	      buffer->size(),
-	      MPI_PACKED,
-	      dest,
-	      tag,
-	      &(sendObj->request));
+  isend((void *) buffer->buf(),
+	buffer->size(),
+	MPI_PACKED,
+	dest,
+	tag,
+	&(sendObj->request));
   DEBUGPR(170,ucout << "Sent " << buffer->size() << " bytes to "
 	  << dest << ", tag " << tag << ", request handle " 
 	  << sendObj->request << '\n');
@@ -136,7 +136,7 @@ void multiOutBufferQueue::reset(int maxSegments_,
   maxSegments=maxSegments_;
   tag=tag_;
 
-  int n = uMPI::size;
+  int n = bufferQ.mySize();
   buffer = new PackBuffer*[n];
   segmentsUsed.resize(n);
   nextProc.resize(n);

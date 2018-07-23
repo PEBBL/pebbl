@@ -118,14 +118,10 @@ ThreadObj::RunStatus workerAuxObj::handleMessage(double* controlParam)
     case terminateCheckSignal:
 
       terminateCheckValue = global->messages.nonLocalScatter.sent +
-	global->messages.general.sent;
+	                      global->messages.general.sent;
       DEBUGPR(150,ucout << "termination check query.\n");
       DEBUGPR(150,ucout << terminateCheckValue << " messages.\n");
-      uMPI::isend(&terminateCheckValue,
-		  1,
-		  MPI_INT,
-		  global->myHub(),
-		  global->termCheckTag);
+      isend(&terminateCheckValue,1,MPI_INT,global->myHub(),global->termCheckTag);
       break;
       
     case startCheckpointSignal:
