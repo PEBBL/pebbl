@@ -198,6 +198,7 @@ void parallelBinaryKnapsack::insertInIncQueue(incumbQueueItem* s)
   if (lastInIncQueue != 0)
     lastInIncQueue->next = s;
   lastInIncQueue = s;
+  s->next = 0;                  // No longer in the queue
   if (firstInIncQueue == 0)
     firstInIncQueue = s;
   incQueueSize++;
@@ -210,6 +211,7 @@ incumbQueueItem* parallelBinaryKnapsack::removeTopOfIncQueue()
     EXCEPTION_MNGR(runtime_error, "Tried to choose knapsack solution from empty queue");
   incumbQueueItem* s = firstInIncQueue;
   firstInIncQueue = s->next;
+  s->next = 0;                  // Not in the queue any more
   return s;
 }
 

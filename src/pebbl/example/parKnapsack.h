@@ -41,7 +41,7 @@ friend class parallelBinaryKnapsack;
 public:
 
   incumbQueueItem(binKnapSolution* feeder) :
-  binKnapSolution(*feeder),
+  binKnapSolution(feeder),
   next(0)
     { };
 
