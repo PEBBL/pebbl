@@ -62,84 +62,14 @@ enum OrderSense
 #endif
 
 /**
- * \def BUF_SIZE
- *
- * A default size for buffers
- */
-enum {BUF_SIZE=256 };
-
-/**
  * \def ERR
  *
  * The default value of error values.
  */
-enum { ERR = -999 };
+enum { PEBBL_ERR = -999 };
 
 #if defined(__cplusplus)
 } // namespace end
-#endif
-
-/**
- * \def OK
- *
- * Value used to indicate that an operation worked.
- */
-#ifndef OK
-#define OK		0
-#endif
-
-/**
- * \def TRUE
- *
- * The boolean value for true.
- */
-#ifndef TRUE
-#define TRUE		1
-#endif
-
-/**
- * \def FALSE
- *
- * The boolean value for false.
- */
-#ifndef FALSE
-#define FALSE		0
-#endif
-
-/**
- * \def ON
- *
- * Used to incidate the on state.
- */
-#ifndef ON
-#define ON		1
-#endif
-
-/**
- * \def OFF
- *
- * Used to incidate the off state.
- */
-#ifndef OFF
-#define OFF		0
-#endif
-
-/**
- * \def YES
- *
- * Used to incidate a yes response.
- */
-#ifndef YES
-#define YES		1
-#endif
-
-/**
- * \def NO
- *
- * Used to incidate a no response.
- */
-#ifndef NO
-#define NO		0
 #endif
 
 /**
@@ -153,20 +83,11 @@ enum { ERR = -999 };
 #define NULL		0
 
 /**
- * \def EOF
- *
- * The end-of-file value.
- */
-#ifndef EOF
-#define EOF		(-1)
-#endif
-
-/**
  * \def PAUSE
  *
  * A macro that waits for the user to hit a key.
  */
-#define PAUSE()	fflush(stdout); while(fgetc(stdin) == EOF);
+#define PAUSE()	fflush(stdout); while(fgetc(stdin) == -1);
 
 /**
  * \def _(args)
@@ -177,20 +98,6 @@ enum { ERR = -999 };
 #define _(args) args
 #else
 #define _(args) ()
-#endif
-
-
-#ifdef DEBUG			/* Debug defines to see if conflicts exist */
-#define TRUE	1
-#define FALSE	0
-#define OK	0
-#define ON	1
-#define OFF	0
-#define YES	1
-#define NO	0
-#define NULL	0
-#define EOF	(-1)
-#define ERR	-999
 #endif
 
 

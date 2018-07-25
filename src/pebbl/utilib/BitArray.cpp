@@ -33,7 +33,7 @@ int cast_bitArray_to_vector(const Any& from, Any& to)
    size_t i = src.size();
    ans.resize(i);
    for( ; i > 0; --i, ans[i] = src(i) );
-   return OK;
+   return 0;
 }
 
 int cast_vector_to_bitArray(const Any& from, Any& to)
@@ -44,7 +44,7 @@ int cast_vector_to_bitArray(const Any& from, Any& to)
    size_t i = src.size();
    ans.resize(i);
    for( ; i > 0; --i, src[i] ? ans.set(i) : ans.reset(i) );
-   return OK;
+   return 0;
 }
 
 } // namespace utilib::(local)

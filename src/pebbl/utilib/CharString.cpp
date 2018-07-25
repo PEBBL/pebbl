@@ -200,7 +200,7 @@ long int aslong(const CharString& str, int& status)
 {
   // This doesn't recognize ints beginning with '-'
   long int ans=0;
-  status = ERR;
+  status = PEBBL_ERR;
   size_type i=0;
   int j=0;
   while ((i < str.size()) && str[i] && isspace(str[i])) i++;
@@ -214,7 +214,7 @@ long int aslong(const CharString& str, int& status)
     i++;
     }
   if ((i == str.size()) || !str[i]) {
-     if (!j) status = OK;
+     if (!j) status = 0;
      return ans;
      }
   if (str[i] != 'e') return ans;	// AN ERROR
@@ -226,7 +226,7 @@ long int aslong(const CharString& str, int& status)
   if (expn < 0) return ans;		// AN ERROR
   for (int k=0; k<expn; k++)
     ans = ans*10;
-  status = OK;
+  status = 0;
   return ans;
 }
 
@@ -237,9 +237,9 @@ double asdouble(const CharString& str, int& status)
   char* ptr = NULL;
   ans = strtod(str.data(),&ptr);
   if ((ptr == NULL) || (ptr[0] == '\000'))
-    status = OK;
+    status = 0;
   else
-    status = ERR;
+    status = PEBBL_ERR;
   return ans;
 }
 

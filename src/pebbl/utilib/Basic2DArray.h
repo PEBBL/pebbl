@@ -365,7 +365,7 @@ int Basic2DArray<T>::resize(const size_type nrows, const size_type ncols)
 // Maybe we get lucky.
 //
 if ((ncols == a->Ncols) && (nrows == a->Nrows))
-   return OK;
+   return 0;
 
 //
 // Need to completely replace old data.
@@ -399,7 +399,7 @@ if ((ncols != a->Ncols) && (nrows != a->Nrows)) {
    a->own_data = DataOwned;
    a->Nrows = nrows;
    a->Ncols = ncols;
-   return OK;
+   return 0;
    }
 
 //
@@ -459,7 +459,7 @@ if (ncols != a->Ncols) {
    a->Ncols = ncols;
    }
 
-return OK;
+return 0;
 }
 
 

@@ -34,6 +34,7 @@
 #include <pebbl/utilib/mpiUtil.h>
 #include <pebbl/utilib/BasicArray.h>
 #include <pebbl/comm/MessageID.h>
+#include <pebbl/comm/mpiComm.h>
 #include <pebbl/misc/treeTopology.h>
 #include <pebbl/misc/fundamentals.h>
 
@@ -49,7 +50,7 @@ using utilib::CommonIO;
 /// and down an arbitrary tree.  The tree topology is specified using
 /// the treeTopology class.
 ///
-class coTree : public CommonIO
+class coTree : public CommonIO, public mpiComm
 {
 
 protected:
@@ -137,7 +138,8 @@ public:
 	 MPI_Request*  request_,
 	 MPI_Status*   status_,
 	 treeTopology* t_,
-	 int           exitForReceives_);
+	 int           exitForReceives_,
+         mpiComm*      comm_);
 
   // Destructor.
 

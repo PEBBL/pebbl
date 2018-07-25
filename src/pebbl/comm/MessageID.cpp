@@ -20,7 +20,6 @@
 
 #ifdef ACRO_HAVE_MPI
 
-#include <mpi.h>
 #include <pebbl/utilib/mpiUtil.h>
 
 
@@ -34,11 +33,11 @@ MessageID NullMsg;
 MessageID AnyMsg(MPI_ANY_TAG);
 
 
-int MessageID::check_id()
+int MessageID::check_id(MPI_Comm comm)
 {
 int tmp;
 int flag;
-MPI_Attr_get(uMPI::comm, MPI_TAG_UB, (void*)&tmp, &flag);
+MPI_Comm_get_attr(comm, MPI_TAG_UB, (void*)&tmp, &flag);
 assert(flag == 1);
 
 return (next_id < tmp);

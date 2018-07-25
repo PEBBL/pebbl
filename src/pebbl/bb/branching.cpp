@@ -1054,6 +1054,10 @@ double branching::searchFramework(spHandler* handler_)
 
   // Clean up, record time, and close log files.
 
+  ucout << "Out of main loop";  //TMP
+
+  applicCommFinish();
+
   searchTime = CPUSeconds() - startTime;
 
   finishLoadLogIfNeeded();
@@ -1447,16 +1451,16 @@ void branching::statusPrint(int&        lastPrint,
 	  << ", last=" << lastPrint << (l.mismatch() ? ", mismatch" : "")
 	  << ".\n");
 
-  int needPrint = FALSE;
+  int needPrint = false;
 
   if ((statusPrintCount > 0) &&
       (l.boundedSPs >= lastPrint + statusPrintCount))
-    needPrint = TRUE;
+    needPrint = true;
 
   double now = WallClockSeconds();
   if ((statusPrintSeconds > 0) &&
       (now >= lastPrintTime + statusPrintSeconds))
-    needPrint = TRUE;
+    needPrint = true;
 
   if (needPrint)
     {
@@ -1555,7 +1559,7 @@ void branching::statusLine(loadObject& l, const char* tag)
 int branching::serialNeedEarlyOutput()
 {
   if (WallClockSeconds() < nextOutputTime)
-    return FALSE;
+    return false;
   return sense*(incumbentValue - lastSolValOutput) < 0;
 }
 
@@ -2014,7 +2018,7 @@ solutionIdentifier::solutionIdentifier(branching* bGlobal)
   serial = -1;
   sense  = bGlobal->sense;
 #ifdef ACRO_HAVE_MPI
-  owningProcessor = uMPI::rank;
+  owningProcessor = bGlobal->pebblRank();
 #endif
 }
 
@@ -2051,7 +2055,7 @@ void solution::creationStamp(branching* bGlobal,int typeId_)
 {
   serial = ++(bGlobal->solSerialCounter);
 #ifdef ACRO_HAVE_MPI
-  owningProcessor = uMPI::rank;
+  owningProcessor = bGlobal->pebblRank();
 #endif
   typeId       = typeId_;
   hashValue    = 0;

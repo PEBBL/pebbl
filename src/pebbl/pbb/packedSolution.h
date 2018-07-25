@@ -67,9 +67,9 @@ namespace pebbl {
       // Send the solution to a designated processor (with no request
       // object left over)
 
-      void isend(int dest,int tag)
+      void isend(int dest, int tag, mpiComm* commPtr)
 	{
-	  uMPI::isend((void *) buf.buf(),buf.curr(),MPI_PACKED,dest,tag);
+	  commPtr->isend((void *) buf.buf(),buf.curr(),MPI_PACKED,dest,tag);
 	};
 
     };

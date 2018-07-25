@@ -39,7 +39,7 @@ messageTriggeredPBThread(global_,
 			 4,100,                    // log/debug levels
 			 4,                        // Buffer size
 			 global_->llTokenTag,
-			 uMPI::rank == 0 ? uMPI::size - 1 : uMPI::rank - 1)
+			 myRank() == 0 ? mySize() - 1 : myRank() - 1)
 { }
 
 

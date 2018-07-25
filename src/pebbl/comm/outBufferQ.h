@@ -29,6 +29,7 @@
 #ifdef ACRO_HAVE_MPI
 #include <mpi.h>
 #include <pebbl/utilib/mpiUtil.h>
+#include <pebbl/comm/mpiComm.h>
 
 #include <pebbl/utilib/CommonIO.h>
 #include <pebbl/utilib/PackBuf.h>
@@ -49,11 +50,13 @@ class outBufferQElt;     // Forward ref to auxiliary class.
 
 
 /// Manages buffer space for threads that send multiple messages.
-class outBufferQueue : public CommonIO
+class outBufferQueue : public CommonIO, public mpiComm
 {
 public:
   
-  outBufferQueue() {}
+  outBufferQueue(mpiComm* comm_) :
+     mpiComm(comm_)                 // Must copy an existing mpiComm object
+  { };
   
   virtual ~outBufferQueue();
 
@@ -135,7 +138,11 @@ class multiOutBufferQueue : public CommonIO
 {
  public:
 
-  multiOutBufferQueue() : buffer(0), firstProc(noProcessor) {}
+  multiOutBufferQueue(mpiComm* comm_) : 
+    buffer(0), 
+    firstProc(noProcessor),
+    bufferQ(comm_) 
+  { };
 
   void clear();
 

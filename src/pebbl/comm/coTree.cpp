@@ -34,14 +34,16 @@ coTree::coTree(MPI_Datatype  datatype_,
 	       MPI_Request*  request_,
 	       MPI_Status*   status_,
 	       treeTopology* t_,
-	       int           exitForReceives_) :
+	       int           exitForReceives_,
+	       mpiComm*      comm_) :
 
 	       t(t_),
 	       datatype(datatype_),
 	       request(request_),
 	       status(status_),
 	       exitForReceives(exitForReceives_),
-	       messagesReceived(0)
+	       messagesReceived(0),
+	       mpiComm(comm_)
 {
   reset();
 };
@@ -51,14 +53,14 @@ void coTree::receiveOperation(void* buffer,int size,MessageID& tag,int src)
 {
   DEBUGPR(300,ucout << "coTree receive: size=" << size << " src=" << src 
 	  << " tag=" << tag << endl);
-  uMPI::irecv(buffer,size,datatype,src,tag,request);
+  irecv(buffer,size,datatype,src,tag,request);
 };
 
 void coTree::sendOperation(void* buffer,int size,MessageID& tag,int dst)
 {
   DEBUGPR(300,ucout << "coTree send: size=" << size << " dst=" << dst
 	  << " tag=" << tag << endl);
-  uMPI::isend(buffer,size,datatype,dst,tag);
+  isend(buffer,size,datatype,dst,tag);
 };
 
 
@@ -66,13 +68,13 @@ int coTree::run()
 {
   int canContinue;
 
-#define jumpState(newState) { state = newState; canContinue = TRUE; break; }
+#define jumpState(newState) { state = newState; canContinue = true; break; }
 
   do 
 
     {
 
-      canContinue = FALSE;
+      canContinue = false;
 
       switch(state) {
 

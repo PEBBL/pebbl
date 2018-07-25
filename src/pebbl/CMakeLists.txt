@@ -15,10 +15,10 @@ add_library(pebbl ${bb_srcs} ${bb_headers} ${comm_srcs} ${comm_headers} ${misc_s
             ${pebbl_srcs} ${pebbl_headers} ${sched_srcs} ${sched_headers} ${utilib_srcs} ${utilib_headers})
 if(enable_mpi)
   if(MPI_CXX_COMPILE_FLAGS)
-    target_compile_options(pebbl ${MPI_CXX_COMPILE_FLAGS})
+    target_compile_options(pebbl PUBLIC ${MPI_CXX_COMPILE_FLAGS})
   endif()
   set_target_properties(pebbl PROPERTIES LINK_FLAGS ${MPI_CXX_LINK_FLAGS})
-  target_link_libraries(pebbl ${MPI_CXX_LIBRARIES})
+  target_link_libraries(pebbl PUBLIC ${MPI_CXX_LIBRARIES})
 endif()
 
 install(TARGETS pebbl EXPORT PEBBL DESTINATION ${lib_install_dir})

@@ -45,8 +45,9 @@ public:
   #endif
 
   /// An empty constructor for a branching object
-  parallelLipshitzian()
-	: buffer_size(0)
+  parallelLipshitzian(MPI_Comm comm_)
+	: buffer_size(0),
+	  mpiComm(comm_)
 	{ }
                 
   /// A destructor

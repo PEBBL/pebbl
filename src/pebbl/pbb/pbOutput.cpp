@@ -34,7 +34,7 @@ namespace pebbl {
 
 void parallelBranching::printSolValue(std::ostream& stream)
 {
-  if (uMPI::iDoIO)
+  if (iDoIO())
     {
       int taggingWasActive = CommonIO::tagging_active();
       if (taggingWasActive)
@@ -54,9 +54,9 @@ solution* parallelBranching::getSolution(int whichProcessor)
   if (incumbentSource == MPI_ANY_SOURCE)
     return NULL;
 
-  if (uMPI::rank == incumbentSource)
+  if (myRank() == incumbentSource)
     {
-      if (whichProcessor == uMPI::rank)
+      if (whichProcessor == myRank())
          return incumbent->incrementRefs();
 
       PackBuffer solBuf;
@@ -65,20 +65,20 @@ solution* parallelBranching::getSolution(int whichProcessor)
       if (whichProcessor == allProcessors)
 	{
 	  int bytes = solBuf.size();
-	  uMPI::broadcast(&bytes,1,MPI_INT,uMPI::rank);
-	  uMPI::broadcast((void *) solBuf.buf(),
-			  bytes,
-			  MPI_PACKED,
-			  uMPI::rank);
+	  broadcast(&bytes,1,MPI_INT,myRank());
+	  broadcast((void *) solBuf.buf(),
+		    bytes,
+		    MPI_PACKED,
+		myRank());
           return incumbent->incrementRefs();
 	}
       else
         {
-	  uMPI::send((void *) solBuf.buf(),
-		     solBuf.size(),
-		     MPI_PACKED,
-		     whichProcessor,
-		     printSolutionTag);
+	  send((void *) solBuf.buf(),
+	       solBuf.size(),
+	       MPI_PACKED,
+	       whichProcessor,
+	       printSolutionTag);
           return NULL;
         }
     }
@@ -88,24 +88,24 @@ solution* parallelBranching::getSolution(int whichProcessor)
       if (whichProcessor == allProcessors)
 	{
 	  int bytes;
-	  uMPI::broadcast(&bytes,1,MPI_INT,incumbentSource);
-	  uMPI::broadcast((void *) solBuf.buf(),
+	  broadcast(&bytes,1,MPI_INT,incumbentSource);
+	  broadcast((void *) solBuf.buf(),
 			  solBuf.size(),
 			  MPI_PACKED,
 			  incumbentSource);
 	  solBuf.reset(bytes);
 	}
-      else if (whichProcessor != uMPI::rank)
+      else if (whichProcessor != myRank())
 	return NULL;
       else
 	{
 	  MPI_Status status;
-	  uMPI::recv((void *) solBuf.buf(),
-		     solBuf.size(),
-		     MPI_PACKED,
-		     incumbentSource,
-		     printSolutionTag,
-		     &status);
+	  recv((void *) solBuf.buf(),
+	       solBuf.size(),
+	       MPI_PACKED,
+	       incumbentSource,
+	       printSolutionTag,
+	       &status);
 	  solBuf.reset(&status);
 	}
       solOutputMessages++;
@@ -119,13 +119,13 @@ void parallelBranching::printSolution(const char* header,
 				      ostream& outStream)
 {
   DEBUGPR(120,ucout << "parallelBranching::printSolution(): "
-	  << "rank = " << uMPI::rank 
+	  << "rank = " << myRank() 
 	  << ", incumbentValue=" << incumbentValue 
 	  << ", incumbentSource = " << incumbentSource << "\n");
 
   // If there's nothing to print, bail out...
 
-  int whichProc = uMPI::ioProc;
+  int whichProc = myIoProc();
 
   if (!printSolutionSynch && (incumbentSource != MPI_ANY_SOURCE))
     whichProc = incumbentSource;
@@ -134,7 +134,7 @@ void parallelBranching::printSolution(const char* header,
 
   // Now print the solution 
 
-  if (uMPI::rank == whichProc)
+  if (myRank() == whichProc)
     {
       int taggingWasActive = CommonIO::tagging_active();
       if (taggingWasActive)
@@ -170,7 +170,7 @@ void parallelBranching::solutionToFile()
 
   if (enumerating)
     {
-      if (uMPI::iDoIO)
+      if (iDoIO())
 	outStreamP = openSolutionFile();
       printRepository(outStreamP);         // Special routine for enumeration
     }
@@ -182,16 +182,16 @@ void parallelBranching::solutionToFile()
       if (iAmFirstHub() &&
 	  (earlyOutputMinutes > 0) && 
 	  (lastSolValOutput == incumbentValue))
-	flag = TRUE;
-      uMPI::broadcast((void*) &flag,1,MPI_INT,firstHub());
-      solOutputMessages += (uMPI::rank > 0);
+      flag = true;
+      broadcast((void*) &flag,1,MPI_INT,firstHub());
+      solOutputMessages += (myRank() > 0);
 
       if (!flag)
 	{
 	  // Otherwise, set up a stream and print to it.
 
-	  if ((printSolutionSynch && uMPI::iDoIO) ||
-	      (!printSolutionSynch && uMPI::rank == incumbentSource))
+	  if ((printSolutionSynch && iDoIO()) ||
+	      (!printSolutionSynch && myRank() == incumbentSource))
 	    outStreamP = openSolutionFile();
 	  printSolution("","",*outStreamP);
 	}
@@ -221,7 +221,7 @@ ostream* parallelBranching::valLogFile()
   if (validateLog)
     {
       char name[32];
-      sprintf(name,"val%05d.log",uMPI::rank);
+      sprintf(name,"val%05d.log",myRank());
       return new ofstream(name,restarted ? ios::app : ios::out);
     }
   else
@@ -231,7 +231,7 @@ ostream* parallelBranching::valLogFile()
 
 void parallelBranchSub::valLogPackChildPrint()
 {
-  *vout << "packchild " << uMPI::rank << ' ' << bGlobal()->probCounter
+  *vout << "packchild " << pGlobal()->myRank() << ' ' << bGlobal()->probCounter
     << ' ' << bound << ' ';
   valLogWriteID();
   valLogPackChildExtra();
@@ -331,7 +331,7 @@ void parallelBranching::startLoadLogIfNeeded()
   pLastLog = new parLoadLogRecord(sense);
   lastLog  = pLastLog;
   haveLLToken = true;
-  needLLAppend = (uMPI::rank > 0);
+  needLLAppend = (myRank() > 0);
   beginLoadLog();
 }
 
@@ -398,7 +398,7 @@ void parallelBranching::recordLoadLogData(double time)
   // log, write, and then start passing the token around the ring so
   // everybody else writes in sequence.
 
-  if ((uMPI::rank == 0) && needToWriteLoadLog(time) && haveLLToken)
+  if ((myRank() == 0) && needToWriteLoadLog(time) && haveLLToken)
     {
       lastLLWriteTime = time;
       writeLoadLogPassToken();
@@ -417,7 +417,7 @@ void parallelBranching::loadLogSMPWrite()
   if (loadLogFile.bad())
     ucout << "*** Warning *** could not open load log file.\n";
   else
-    branching::writeLoadLog(loadLogFile,uMPI::rank);
+    branching::writeLoadLog(loadLogFile,myRank());
 }
 
 
@@ -427,14 +427,14 @@ void parallelBranching::loadLogSMPWrite()
 void parallelBranching::writeLoadLogPassToken()
 {
   loadLogSMPWrite();
-  if (uMPI::size == 1)
+  if (mySize() == 1)
     return;
-  uMPI::isend((void*) &haveLLToken,           // Dummy buffer
-	      0,                              // No data except tag
-	      MPI_BYTE,                       // Datatype really doesn't matter
-	      (uMPI::rank + 1) % uMPI::size,  // Next processor in ring
-	      llTokenTag,
-	      &llSendRequest);
+  isend((void*) &haveLLToken,           // Dummy buffer
+	0,                              // No data except tag
+        MPI_BYTE,                       // Datatype really doesn't matter
+        (myRank() + 1) % mySize(),  // Next processor in ring
+        llTokenTag,
+        &llSendRequest);
   haveLLToken = false;          // Don't write again until the token comes back
   messages.general.sent++;
 }
@@ -453,7 +453,7 @@ void parallelBranching::receiveLLToken()
 	ucout << "*** Warning *** incomplete LL Token send.\n";
     }
   haveLLToken = true;
-  if (uMPI::rank > 0)               // Pass around rings stops at processor 0
+  if (myRank() > 0)               // Pass around rings stops at processor 0
     writeLoadLogPassToken();        // Otherwise, write log and pass token
   recordMessageReceived(llChainer);
 }
@@ -467,23 +467,23 @@ void parallelBranching::writeLoadLog()
   // or writing the file in chunks, which implies each processor has
   // direct file system access.
   if (loadLogSMP || (loadLogWriteSeconds > 0))
-    for (int p=0; p<uMPI::size; p++)          // Simple serial output to
+    for (int p=0; p<mySize(); p++)          // Simple serial output to
       {				              // same file
-	uMPI::barrier();
-	if (uMPI::rank == p)
+	barrier();
+	if (myRank() == p)
 	  loadLogSMPWrite();
       }
   else           // Either no common file system or no common clock
     {		 // (or both)
 
       // Max size for buffers etc.
-      int maxLength = uMPI::max((int) loadLogEntries.size(), uMPI::ioProc);
+      int maxLength = maxReduce((int) loadLogEntries.size(), myIoProc());
 
       MPI_Status status;
 
       //  This is what the main processor does
 
-      if (uMPI::iDoIO)
+      if (iDoIO())
 	{
 	  // Write own stuff, but don't let file get closed.
 	  // This cannot be called if load log is written in chunks,
@@ -492,14 +492,14 @@ void parallelBranching::writeLoadLog()
 	  if (loadLogFile.bad())
 	    ucout << "*** Warning *** could not open load log file.\n";
 	  else
-	    branching::writeLoadLog(loadLogFile,uMPI::rank);
+	    branching::writeLoadLog(loadLogFile,myRank());
 
 	  UnPackBuffer llBuf(maxLength*parLoadLogRecord::packSize());
 
 	  // Loop over all other processors
 
-	  for (int p=0; p<uMPI::size; p++)
-	    if (p != uMPI::rank)
+	  for (int p=0; p<mySize(); p++)
+	    if (p != myRank())
 	      {
 		// Determine clock offset
 
@@ -510,9 +510,8 @@ void parallelBranching::writeLoadLog()
 		  {
 		    double theirTime = 0;
 		    double startTime = WallClockSeconds();
-		    uMPI::send(&theirTime,0,MPI_DOUBLE,p,llSyncOutTag);
-		    uMPI::recv(&theirTime,1,MPI_DOUBLE,p,llSyncBackTag,
-			       &status);
+		    send(&theirTime,0,MPI_DOUBLE,p,llSyncOutTag);
+		    recv(&theirTime,1,MPI_DOUBLE,p,llSyncBackTag,&status);
 		    double roundTrip = WallClockSeconds() - startTime;
 		    if (roundTrip < shortestTurn)
 		      {
@@ -526,12 +525,12 @@ void parallelBranching::writeLoadLog()
 
 		// Suck in the data from the other processor; 
 
-		uMPI::recv((void *) llBuf.buf(),
-			   llBuf.size(),
-			   MPI_PACKED,
-			   p,
-			   llDataTag,
-			   &status);
+		recv((void *) llBuf.buf(),
+		     llBuf.size(),
+		     MPI_PACKED,
+		     p,
+		     llDataTag,
+		     &status);
 		llBuf.reset(&status);
 
 		parLoadLogRecord record(sense);
@@ -553,10 +552,9 @@ void parallelBranching::writeLoadLog()
 
 	  for (int i=0; i<loadLogClockSyncs; i++)
 	    {
-	      uMPI::recv(&localTime,0,MPI_DOUBLE,uMPI::ioProc,llSyncOutTag,
-			 &status);
+	      recv(&localTime,0,MPI_DOUBLE,myIoProc(),llSyncOutTag,&status);
 	      localTime = WallClockSeconds();
-	      uMPI::send(&localTime,1,MPI_DOUBLE,uMPI::ioProc,llSyncBackTag);
+	      send(&localTime,1,MPI_DOUBLE,myIoProc(),llSyncBackTag);
 	    }
 
 	  // Send data
@@ -570,11 +568,11 @@ void parallelBranching::writeLoadLog()
 	      delete record;
 	    }
 
-	  uMPI::send((void *) llBuf.buf(),
-		     llBuf.size(),
-		     MPI_PACKED,
-		     uMPI::ioProc,
-		     llDataTag);
+	  send((void *) llBuf.buf(),
+	       llBuf.size(),
+	       MPI_PACKED,
+	       myIoProc(),
+	       llDataTag);
 	}
     }
 }
@@ -616,15 +614,15 @@ void parLoadLogRecord::writeToStream(ostream& os,
 
 void parallelBranching::printConfiguration(ostream& stream)
 {
-  if (!uMPI::iDoIO)
+  if (!iDoIO())
     return;
   CommonIO::end_tagging();
   stream << "\nPEBBL Configuration:\n";
   hyphens(stream,19) << '\n';
-  int pWidth = digitsNeededFor(uMPI::size);
+  int pWidth = digitsNeededFor(mySize());
   stream.width(pWidth);
   stream << numHubs() << " cluster" << plural(numHubs());
-  int mod  = uMPI::size % cluster.typicalSize;
+  int mod  = mySize() % cluster.typicalSize;
   if (mod)
     stream << ": " << numHubs() - 1;
   stream << " of size " << cluster.typicalSize;
@@ -632,8 +630,8 @@ void parallelBranching::printConfiguration(ostream& stream)
     stream << ", 1 of size " << mod;
   stream << '\n';
   stream.width(pWidth);
-  stream << uMPI::size << " processor" << plural(uMPI::size) << '\n';
-  int pureHubs    = uMPI::size - totalWorkers();
+  stream << mySize() << " processor" << plural(mySize()) << '\n';
+  int pureHubs    = mySize() - totalWorkers();
   int workerHubs  = numHubs() - pureHubs;
   int pureWorkers = totalWorkers() - workerHubs;
   configLine(stream,pWidth,pureWorkers,"pure worker");
@@ -661,7 +659,7 @@ void parallelBranching::configLine(ostream& stream,
   stream << plural(number);
   stream.width(padding);
   stream << "(";
-  printPercent(stream,number,uMPI::size) << ")\n";
+  printPercent(stream,number,mySize()) << ")\n";
 }
 
 
@@ -669,17 +667,17 @@ void parallelBranching::printSPStatistics(ostream& stream)
 {
   CommonIO::end_tagging();
   int combinedTable[numStates];
-  uMPI::reduce(subCount,combinedTable,numStates,MPI_INT,MPI_SUM,uMPI::ioProc);
+  reduce(subCount,combinedTable,numStates,MPI_INT,MPI_SUM,myIoProc());
   spTotal = combinedTable[boundable];
-  int totalUnderHubControl = uMPI::sum(hubHandledCount);
-  int totalDelivered       = uMPI::sum(spDeliverCount);
-  int totalReleased        = uMPI::sum(spReleaseCount);
-  int totalRebalanced      = uMPI::sum(rebalanceSPCount);
+  int totalUnderHubControl = sumReduce(hubHandledCount);
+  int totalDelivered       = sumReduce(spDeliverCount);
+  int totalReleased        = sumReduce(spReleaseCount);
+  int totalRebalanced      = sumReduce(rebalanceSPCount);
   int totalLoadBalanced    = 0;
   if (numHubs() > 1)
-    totalLoadBalanced = uMPI::sum(loadBalSPCount);
+    totalLoadBalanced = sumReduce(loadBalSPCount);
 
-  if (uMPI::iDoIO)
+  if (iDoIO())
     {
       const char* hubControlString   = "Tokens at Hubs";
       const char* scatterString      = "Scattered to Hubs";
@@ -703,9 +701,9 @@ void parallelBranching::printSPStatistics(ostream& stream)
 	}
 
       int fieldWidth = strlen(rebalanceString);
-      fieldWidth = max(fieldWidth,(int) strlen(rampBoundString));
-      fieldWidth = max(fieldWidth,(int) strlen(rampPoolString));
-      fieldWidth = max(fieldWidth,(int) strlen(nlScatterString));
+      fieldWidth = std::max(fieldWidth,(int) strlen(rampBoundString));
+      fieldWidth = std::max(fieldWidth,(int) strlen(rampPoolString));
+      fieldWidth = std::max(fieldWidth,(int) strlen(nlScatterString));
 
       int numWidth = digitsNeededFor(max(spTotal,rampUpPool));
 
@@ -781,16 +779,16 @@ void parallelBranching::printTimings(ostream& stream)
 {
   if (printSpTimes)
     { 
-      for (int i=0; i<uMPI::size; i++)
+      for (int i=0; i<mySize(); i++)
 	{
-	  if (i == uMPI::rank)
+	  if (i == myRank())
 	    {
 	      printSpTimeStats(stream);
-	      if (i == uMPI::size - 1)
+	      if (i == mySize() - 1)
 		stream << endl;
 	      stream << Flush;
 	    }
-	  uMPI::barrier();
+	  barrier();
 	}
     }
 
@@ -800,7 +798,7 @@ void parallelBranching::printTimings(ostream& stream)
   stream.setf(ios::fixed,ios::floatfield);
 
   timingPrintNameWidth = strlen("Thread/Function");
-  if (uMPI::size > 1) 
+  if (mySize() > 1) 
     {
       int tmp = strlen("Problem Broadcast");
       timingPrintNameWidth = max(timingPrintNameWidth,tmp);
@@ -828,7 +826,7 @@ void parallelBranching::printTimings(ostream& stream)
     {
       thread = l1->data();
       overhead += thread->overheadTime();
-      if (uMPI::sum(thread->active) > 0)
+      if (sumReduce(thread->active) > 0)
 	{
 	  int l = strlen(thread->name);
 	  if (l > timingPrintNameWidth)
@@ -847,31 +845,31 @@ void parallelBranching::printTimings(ostream& stream)
   searchWCTime +=   broadcastWCTime + preprocessWCTime 
                   + rampUpWCTime + solOutputWCTime;
 
-  totalCPU = uMPI::sum(searchTime);
-  maxCPU   = uMPI::max(searchTime);
-  totalWC = uMPI::sum(searchWCTime);
-  maxWC   = uMPI::max(searchWCTime);
+  totalCPU = sumReduce(searchTime);
+  maxCPU   = maxReduce(searchTime);
+  totalWC  = sumReduce(searchWCTime);
+  maxWC    = maxReduce(searchWCTime);
 
-  totalMessages = uMPI::sum(messagesReceivedThisProcessor);
+  totalMessages = sumReduce(messagesReceivedThisProcessor);
 
   timingPrintTimeWidth    = max(7,digitsNeededFor(maxCPU) + 2);
   timingPrintWCTimeWidth  = max(7,digitsNeededFor(maxWC) + 2);
-  timingPrintPNWidth      = max(6,digitsNeededFor(uMPI::size));
+  timingPrintPNWidth      = max(6,digitsNeededFor(mySize()));
   timingPrintMessageWidth = max(8,digitsNeededFor(totalMessages));
 
-  if (uMPI::iDoIO)
+  if (iDoIO())
     {
       // CAP: Some of these streamwidth settings appear to be redundant, but I'm
       // just following the model from before to be safe.
       stream << "Average search time (CPU)        ";
       stream.width(timingPrintTimeWidth);
-      stream << totalCPU/uMPI::size << " seconds.\n";
+      stream << totalCPU/mySize() << " seconds.\n";
       stream << "Maximum search time (CPU)        ";
       stream.width(timingPrintTimeWidth);
       stream << maxCPU << " seconds.\n";
       stream << "Average search time (Wall clock) ";
       stream.width(timingPrintWCTimeWidth);
-      stream << totalWC/uMPI::size << " seconds.\n";
+      stream << totalWC/mySize() << " seconds.\n";
       stream << "Maximum search time (Wall clock) ";
       stream.width(timingPrintWCTimeWidth);
       stream << maxWC << " seconds.\n";
@@ -905,11 +903,11 @@ void parallelBranching::printTimings(ostream& stream)
     }
 
   if (combineTimingsMax)
-    totalCPU = uMPI::size*maxCPU;
+    totalCPU = mySize()*maxCPU;
 
   timingPrintData(stream,
 		  "Problem Broadcast",
-		  uMPI::size > 1,
+		  mySize() > 1,
 		  broadcastTime,
 		  broadcastMessageCount);
 
@@ -959,7 +957,7 @@ void parallelBranching::printTimings(ostream& stream)
 		  idleProcTime,
 		  0);
   
-  if (uMPI::iDoIO)
+  if (iDoIO())
     timingPrintText(stream,'-',' ');
 
   timingPrintData(stream,
@@ -968,7 +966,7 @@ void parallelBranching::printTimings(ostream& stream)
 		  searchTime,
 		  messagesReceivedThisProcessor);
 
-  if (uMPI::iDoIO) 
+  if (iDoIO()) 
     {
       if (checkpointsEnabled)
 	{
@@ -1053,18 +1051,18 @@ void parallelBranching::timingPrintData(ostream& stream,
 					double time,
 					double messageCount)
 {
-  int count = uMPI::sum(present);
-  double timeSum = uMPI::sum(time);
-  double timeSumSq = uMPI::sum(time*time);
+  int count = sumReduce(present);
+  double timeSum = sumReduce(time);
+  double timeSumSq = sumReduce(time*time);
   double baseLine;
   if (combineTimingsMax)
     baseLine = count*maxCPU;
   else
-    baseLine = uMPI::sum(present*searchTime);
+    baseLine = sumReduce(present*searchTime);
 
-  double messageSum = uMPI::sum(messageCount);
+  double messageSum = sumReduce(messageCount);
 
-  if (!uMPI::iDoIO || (count == 0))
+  if (!iDoIO() || (count == 0))
     return;
 
   double mean     = timeSum/count;
@@ -1111,8 +1109,8 @@ void parallelBranching::postRampUpAbort(double aggBound)
 {
   // Figure out time and print some statistics
 
-  double maxRampTime = uMPI::max(rampUpTime);
-  if (uMPI::rank == uMPI::ioProc)
+  double maxRampTime = maxReduce(rampUpTime);
+  if (iDoIO())
     {
       CommonIO::end_tagging();
       ucout << "Aborting after ramp-up phase:\n\n";
@@ -1200,7 +1198,7 @@ void parallelBranching::initEventLog()
 //       outputCacheBuf[outputCacheSize - 1] = '\0';
 //     }
 //   char name[32];
-//   sprintf(name,"debug%05d.txt",uMPI::rank);
+//   sprintf(name,"debug%05d.txt",myRank());
 //   ofstream dump(name,ios::out);
 //   dump << outputCacheBuf;
 // }
