@@ -1,6 +1,6 @@
 #!/bin/csh
 echo "Creating MPS file."
-../../src/pebbl/example/knapMPS $1 > knapsack.mps
+../../src/example/knapMPS $1 > knapsack.mps
 echo "Preparing to call CPLEX"
 echo "read knapsack.mps" > cplex.commands
 echo "set mip tolerances mipgap 1e-7" >> cplex.commands
