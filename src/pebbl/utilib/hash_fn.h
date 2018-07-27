@@ -19,7 +19,6 @@
 #define utilib_hash_fn_h
 
 #include <pebbl/utilib/std_headers.h>
-#include <pebbl/utilib/ValuedContainer.h>
 #include <pebbl/utilib/BasicArray.h>
 #include <pebbl/utilib/CharString.h>
 
@@ -88,12 +87,6 @@ size_type hash_fn(const T& key, size_type table_size)
 template<class T>
 inline size_type hash_fn(const BasicArray<T>& key, size_type table_size)
 	{return hash_fn1(*((const BasicArray<T>*)&key),table_size);}
-
-/// A default hash function for ValuedContainer objects
-template <class V, class T>
-size_type hash_fn(const ValuedContainer<V,T>& key, size_type table_size)
-{return hash_fn(key.info,table_size);}
-
 
 
 /// Hash a CharString
