@@ -9,6 +9,8 @@
 #  For more information, see the README.txt file in the top Acro directory.
 #  _________________________________________________________________________
 
+# Sample usage: python gendata.py 3 simple.dat
+
 import sys
 from random import *
 
@@ -113,7 +115,7 @@ for i in range(0,numPeptides):
     for ii in range(0,numPeptides):
       for jj in range(0,total):
         if i < ii:
-	   val = energy()
+           val = energy()
            ofile.write(`i+1` + " " + `j+1` + " " + `ii+1` + " " + `jj+1` + " " + `val` + "\n")
 ofile.write(";\n")
 ofile.write("\n")
