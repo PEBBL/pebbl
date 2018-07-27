@@ -45,11 +45,6 @@ using utilib::LinkedList;
 using utilib::QueueList;
 using utilib::BasicArray;
 
-typedef LinkedList<ThreadObj*> ListThreadObj;
-typedef QueueList<ThreadObj*> QueueThreadObj;
-
-#define MIN_TAG_VALUE -1
-
 class Scheduler : public CommonIO
 {
 public:
@@ -63,28 +58,9 @@ public:
   int execute();
   void dump();
 
-  void insert(ThreadObj* thread, int group=-1) 
-    {
-      if (group != -1)
-	thread->Group=group;
-      insert(ThreadObj::RunOK,thread);
-    };
+  void insert(ThreadObj* thread, int group=-1);
 
-  void insert(ThreadObj* thread, int group, int debug_, const char* name=NULL)
-    {
-#ifdef ACRO_HAVE_MPI
-      int tmp = thread->tag;
-      if (tmp < MIN_TAG_VALUE)
-         EXCEPTION_MNGR(std::runtime_error, 
-			"Scheduler::insert -- the tag " << tmp 
-			<< " is smaller than the min tag value: " 
-			<< MIN_TAG_VALUE);
-#endif
-      thread->debug = debug_;
-      insert(thread,group);
-      if (name != NULL)
-	thread->name = name;
-    };
+  void insert(ThreadObj* thread, int group, int debug_, const char* name=NULL);
 
   void check_waiting_threads();
 

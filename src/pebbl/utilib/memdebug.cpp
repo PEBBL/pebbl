@@ -40,20 +40,20 @@ IntVector memdebug::last_total(10);
 
 void memdebug::print_summary(ostream& os)
 {
-stdcout << "Fail: " << os.fail() << endl;
+std::cout << "Fail: " << os.fail() << endl;
 os << "MEMDEBUG SUMMARY";
-stdcout << "Fail: " << os.fail() << endl;
+std::cout << "Fail: " << os.fail() << endl;
 os << endl;
-stdcout << "Fail: " << os.fail() << endl;
+std::cout << "Fail: " << os.fail() << endl;
 
 os << "  Calls to 'new'            : " << memdebug::n_news << endl;
-stdcout << "Fail: " << os.fail() << endl;
+std::cout << "Fail: " << os.fail() << endl;
 os << "  Calls to 'delete'         : " << memdebug::n_dels << endl;
-stdcout << "Fail: " << os.fail() << endl;
+std::cout << "Fail: " << os.fail() << endl;
 os << "  Total # of bytes allocated: " << memdebug::nbytes << endl;
-stdcout << "Fail: " << os.fail() << endl;
+std::cout << "Fail: " << os.fail() << endl;
 os << endl;
-stdcout << "Fail: " << os.fail() << endl;
+std::cout << "Fail: " << os.fail() << endl;
 for (int i=0; i<num; i++) {
   os << "CLASS: " << memdebug::name[i] << endl;
   os << "  Number of objects constructed: " << num_new[i] << endl;

@@ -25,6 +25,7 @@ using namespace utilib;
 
 namespace pebbl {
 
+#define MIN_TAG_VALUE -1
 
 //
 // Scheduler static data
@@ -301,6 +302,28 @@ return 0;
 }
 
 
+void Scheduler::insert(ThreadObj* thread, int group) 
+  {
+    if (group != -1)
+      thread->Group=group;
+    insert(ThreadObj::RunOK,thread);
+  }
+
+void Scheduler::insert(ThreadObj* thread, int group, int debug_, const char* name)
+  {
+#ifdef ACRO_HAVE_MPI
+    int tmp = thread->tag;
+    if (tmp < MIN_TAG_VALUE)
+       EXCEPTION_MNGR(std::runtime_error, 
+	 	      "Scheduler::insert -- the tag " << tmp 
+		      << " is smaller than the min tag value: " 
+		      << MIN_TAG_VALUE);
+#endif
+    thread->debug = debug_;
+    insert(thread,group);
+    if (name != NULL)
+      thread->name = name;
+  }
 
 
 void Scheduler::insert(ThreadObj::RunStatus result, ThreadObj* thread)

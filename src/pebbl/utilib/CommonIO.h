@@ -179,18 +179,6 @@ utilib::CommonIO& global_CommonIO();
  * redirecting I/O through the CommonIO method \c ins.
  */
 #define ucin	(*((utilib::CommonIO::io_mapping && (utilib::CommonIO::begin_end_counter > 0)) ? utilib::CommonIO::MapCin : &std::cin))
-/**
- * A macro that is always maps to the standard cout stream.
- */
-#define stdcout (std::cout)
-/**
- * A macro that is always maps to the standard cerr stream.
- */
-#define stdcerr (std::cerr)
-/**
- * A macro that is always maps to the standard cin stream.
- */
-#define stdcin  (std::cin)
 
 #endif // SWIG
 
@@ -200,9 +188,6 @@ utilib::CommonIO& global_CommonIO();
 #define ucout (std::cout)
 #define ucerr (std::cerr)
 #define ucin  (std::cin)
-#define stdcout (std::cout)
-#define stdcerr (std::cerr)
-#define stdcin  (std::cin)
 
 #endif // defined(DOXYGEN) || ! defined(UTILIB_DISABLE_COMMONIO)
 //----------------------------------------------------------------------------
