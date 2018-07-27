@@ -15,7 +15,7 @@
 
 #include <pebbl_config.h>
 #include <pebbl/utilib/Ereal.h>
-#include <pebbl/utilib/_math.h>
+#include <pebbl/utilib/math_basic.h>
 
 namespace utilib {
 

@@ -29,9 +29,11 @@
 #include <pebbl/utilib/CharString.h>
 #include <pebbl/utilib/sort.h>
 #include <pebbl/utilib/BitArray.h>
-#include <pebbl/utilib/_math.h>
+#include <pebbl/utilib/math_basic.h>
 #include <pebbl/utilib/PackObject.h>
-
+#include <pebbl/utilib/Uniform.h> 
+// RR Uniform used to be imported through _math and math_array. Making this
+// dependence explicit now that math_array has been removed.
 
 
 using namespace utilib;

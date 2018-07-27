@@ -24,7 +24,7 @@
 #include <pebbl/utilib/mpiUtil.h>
 #include <pebbl/utilib/logEvent.h>
 #include <pebbl/utilib/PackBuf.h>
-#include <pebbl/utilib/_math.h>
+#include <pebbl/utilib/math_basic.h>
 #include <pebbl/pbb/parPebblBase.h>
 #include <pebbl/sched/ThreadObj.h>
 #include <pebbl/sched/SelfAdjustThread.h>

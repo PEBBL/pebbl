@@ -27,7 +27,7 @@
 #include <pebbl/utilib/BitArray.h>
 #include <pebbl/utilib/IntVector.h>
 #include <pebbl/utilib/DoubleVector.h>
-#include <pebbl/utilib/_math.h>
+#include <pebbl/utilib/math_basic.h>
 #include <pebbl/utilib/ParameterSet.h>
 #ifdef ACRO_HAVE_MPI
 #include <pebbl/utilib/PackBuf.h>

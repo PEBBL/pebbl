@@ -18,7 +18,7 @@
  */
 
 #include <pebbl/utilib/std_headers.h>
-#include <pebbl/utilib/_math.h>
+#include <pebbl/utilib/math_basic.h>
 #include <pebbl/utilib/nicePrint.h>
 
 using namespace std;

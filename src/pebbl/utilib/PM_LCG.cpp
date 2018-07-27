@@ -19,7 +19,7 @@
 #include <pebbl/utilib/PM_LCG.h>
 #include <pebbl/utilib/seconds.h>
 #include <pebbl/utilib/_generic.h>
-#include <pebbl/utilib/_math.h>
+#include <pebbl/utilib/math_basic.h>
  
 int PMrand(int*);
 

@@ -19,7 +19,7 @@
 
 #include <pebbl_config.h>
 #include <pebbl/misc/scatterObj.h>
-#include <pebbl/utilib/_math.h>
+#include <pebbl/utilib/math_basic.h>
 
 
 namespace pebbl {

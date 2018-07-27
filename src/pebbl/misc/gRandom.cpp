@@ -27,7 +27,7 @@
 #ifdef ACRO_HAVE_MPI
 #include <pebbl/utilib/mpiUtil.h>
 #endif
-#include <pebbl/utilib/_math.h>
+#include <pebbl/utilib/math_basic.h>
 #include <pebbl/utilib/_generic.h>
 #include <pebbl/utilib/Uniform.h>
 #include <pebbl/utilib/PM_LCG.h>

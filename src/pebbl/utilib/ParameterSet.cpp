@@ -13,7 +13,7 @@
 // ParameterSet.cpp
 //
 
-#include <pebbl/utilib/_math.h>
+#include <pebbl/utilib/math_basic.h>
 #include <pebbl/utilib/comments.h>
 #include <pebbl/utilib/ParameterSet.h>
 #include <pebbl/utilib/ParameterList.h>
