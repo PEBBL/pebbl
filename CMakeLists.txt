@@ -45,16 +45,16 @@ if(enable_serializer)
   set(HAVE_SERIALIZER 1)
 endif()
 
-if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/packages/pebbl/etc/monomial)
-  set(monomial_test_dir ${CMAKE_CURRENT_SOURCE_DIR}/packages/pebbl/etc/monomial)
+if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data/monomial)
+  set(monomial_test_dir ${CMAKE_CURRENT_SOURCE_DIR}/data/monomial)
 endif()
-if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/packages/pebbl/etc/knapsack/problems)
-  set(knapsack_test_dir ${CMAKE_CURRENT_SOURCE_DIR}/packages/pebbl/etc/knapsack/problems)
+if(IS_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/data/knapsack)
+  set(knapsack_test_dir ${CMAKE_CURRENT_SOURCE_DIR}/data/knapsack)
 endif()
 
 add_subdirectory(src)
 
-configure_package_config_file(cmake/pebbl-config.cmake.in pebbl-config.cmake
+configure_package_config_file(pebbl-config.cmake.in pebbl-config.cmake
                               INSTALL_DESTINATION ${package_install_dir}
                               PATH_VARS include_install_dir)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/pebbl-config.cmake DESTINATION ${package_install_dir})
