@@ -27,9 +27,6 @@
 #ifdef  UTILIB_YES_MEMDEBUG
 #include <utilib/std_headers.h>
 
-#ifdef UTILIB_HAVE_NAMESPACES
-using namespace std;
-#endif
 
 #include <pebbl/utilib/BasicArray.h>
 #include <pebbl/utilib/CharString.h>
