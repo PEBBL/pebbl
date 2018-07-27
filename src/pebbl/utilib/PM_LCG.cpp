@@ -21,7 +21,6 @@
 #include <pebbl/utilib/_generic.h>
 #include <pebbl/utilib/_math.h>
  
-//extern "C" int PMrand(int*);
 int PMrand(int*);
 
 #ifdef UTILIB_HAVE_NAMESPACES

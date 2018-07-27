@@ -21,9 +21,6 @@
 #define utilib_seconds_h
 
 #include <pebbl_config.h>
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /// The `absolute' number of user CPU seconds.
 double UserSeconds();
@@ -53,9 +50,5 @@ double CurrentTime();
 /// The smallest amount of time (in seconds) that the timer on this
 /// system can distinguish from zero (experimental)
 double timerGranularitySeconds();
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

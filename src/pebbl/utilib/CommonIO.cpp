@@ -63,12 +63,6 @@ namespace utilib {
 #define IOS_OUT ios_base::out
 #endif
 
-extern "C" void cout_print(const char* str)
-{ cout << str << Flush; }
-
-extern "C" void cerr_print(const char* str)
-{ cerr << str << Flush; }
-
 
 CommonIO* global_CommonIOptr=0;
 

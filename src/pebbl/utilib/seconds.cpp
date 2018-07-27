@@ -17,10 +17,6 @@
 
 #include <pebbl/utilib/seconds.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #if UTILIB_TIME_WITH_SYS_TIME
 #include <sys/time.h>
 #include <time.h>
@@ -284,6 +280,3 @@ while (secondHolder != floor(secondHolder))
 return(granularity);
 }
 
-#ifdef __cplusplus
-} // extern "C"
-#endif

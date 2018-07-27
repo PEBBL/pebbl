@@ -209,21 +209,6 @@ utilib::CommonIO& global_CommonIO();
 
 
 
-extern "C" {
-/**
- * Generic function for printing a stream to cout.  Useful for writing
- * C code that uses C++ streams without tieing stdio and C++ streams
- * directly.
- */
-void cout_print(const char* str);
-/**
- * Generic function for printing a stream to cerr.  Useful for writing
- * C code that uses C++ streams without tieing stdio and C++ streams
- * directly.
- */
-void cerr_print(const char* str);
-}
-
 namespace utilib {
 
 ///
