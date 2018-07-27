@@ -271,9 +271,10 @@ public:
     // The remaining functions in mpiUtil didn't require knowledge of a communicator
     // so we can still use mpiUtil for them.
 
-#endif
 
 };
+
+#endif
 
 }
 
