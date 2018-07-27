@@ -26,6 +26,7 @@ class FunctionClass
 {
 public:
 
+ // RR This used to be Ereal<double>.
  double operator()(BasicArray<double>& vec)
 	{
 	double ans=0.0;

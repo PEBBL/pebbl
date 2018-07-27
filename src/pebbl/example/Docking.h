@@ -21,7 +21,6 @@
 #include <pebbl/utilib/exception_mngr.h>
 #include <pebbl/utilib/BitArray.h>
 #include <pebbl/utilib/BasicArray.h>
-#include <pebbl/utilib/Ereal.h>
 #include <pebbl/utilib/ValuedContainer.h>
 #include <pebbl/utilib/stl_auxiliary.h>
 #include <pebbl/bb/branching.h>
@@ -32,7 +31,6 @@ namespace pebbl {
 
 using utilib::BasicArray;
 using utilib::BitArray;
-using utilib::Ereal;
 using utilib::ValuedContainer;
 
 
@@ -254,7 +252,7 @@ public:
   ///
   void dee_calculation(size_type i, size_type minndx, size_type variable, 
                 bool& i_flag, bool& min_flag, 
-                Ereal<double>& i_diff, Ereal<double>& min_diff, 
+                double& i_diff, double& min_diff, 
                 BasicArray<BitArray>& );
 
   ///
@@ -366,8 +364,8 @@ public:
              upper[i] = -1;
           }
           }
-        bound = Ereal<double>::negative_infinity;
-        parent_bound = Ereal<double>::negative_infinity;
+        bound = -std::numeric_limits<double>::infinity();
+        parent_bound = -std::numeric_limits<double>::infinity();
         dee_branch.set();
         parent_branch = -1;
         }
@@ -805,10 +803,10 @@ protected:
   BitArray dee_branch;
 
   ///
-  Ereal<double> parent_bound;
+  double parent_bound;
 
   ///
-  Ereal<double> point_value;
+  double point_value;
 
   ///
   int parent_branch;
@@ -832,7 +830,7 @@ for (size_type i=free_rotamers[variable].size()-1; i>minndx; i--) {
   //
   if ( !free_rotamers[variable]( info.inter_order[variable][i] ) ) continue;
 
-  Ereal<double> i_diff, min_diff;
+  double i_diff, min_diff;
   dee_calculation(i,minndx,variable,i_flag,min_flag,i_diff,min_diff,free_rotamers);
 
   //cerr << "DEE " << i << " " << i_diff << " " << i_flag << std::endl;
@@ -864,7 +862,7 @@ return -1;
 
 
 
-inline void serialDocking::dee_calculation(size_type i, size_type minndx, size_type variable, bool& i_flag, bool& min_flag, Ereal<double>& i_diff, Ereal<double>& min_diff, BasicArray<BitArray>& free_rotamers)
+inline void serialDocking::dee_calculation(size_type i, size_type minndx, size_type variable, bool& i_flag, bool& min_flag, double& i_diff, double& min_diff, BasicArray<BitArray>& free_rotamers)
 {
   min_diff = 0.0;
   i_diff = 0.0;
@@ -878,7 +876,7 @@ inline void serialDocking::dee_calculation(size_type i, size_type minndx, size_t
   ////
   //// Difference of INTER energies
   ////
-  Ereal<double> dee_val = 
+  double dee_val = 
                 info.E_inter[variable][ info.inter_order[variable][i] ]  -
                 info.E_inter[variable][ info.inter_order[variable][minndx] ];
   ////
@@ -894,7 +892,7 @@ inline void serialDocking::dee_calculation(size_type i, size_type minndx, size_t
     else
        intra_info = &info.E_intra[variable][varj];
 
-    Ereal<double> minval = Ereal<double>::positive_infinity;
+    double minval = std::numeric_limits<double>::infinity();
     for (size_type j=0; j<free_rotamers[varj].size(); j++) {
       if ( !free_rotamers[varj]( info.inter_order[varj][j] ) ) continue;
       //
@@ -925,7 +923,7 @@ inline void serialDocking::dee_calculation(size_type i, size_type minndx, size_t
     // interaction in this comparison, so we should ignore this DEE
     // comparison.
     //
-    if (minval == Ereal<double>::positive_infinity)
+    if (minval == std::numeric_limits<double>::infinity())
        EXCEPTION_MNGR(runtime_error, "No feasible DEE calculation.");             
     //
     // Otherwise, update 'dee_val'

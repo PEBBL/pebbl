@@ -215,11 +215,6 @@ class CharString : public BasicArray<char> {
     /// Appends the string with a string representation of \a val
     CharString& operator+=(const double val);
 
-    /// Appends the string with a string representation of \a val
-    template <class Type>
-    CharString& operator+=(const Ereal<Type>& val)
-        {return this->operator+=( static_cast<double>(val) );}
-
     /**
      * Copy a substring from \a datavec.
      * The substring beginning at \a offset in \a datavec and 

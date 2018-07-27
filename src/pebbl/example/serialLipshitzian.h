@@ -26,13 +26,11 @@
 #define pebbl_serialLipshitzian_h
 
 #include <pebbl_config.h>
-#include <pebbl/utilib/Ereal.h>
 #include <pebbl/utilib/BasicArray.h>
 #include <pebbl/bb/branching.h>
 
 namespace pebbl {
 
-using utilib::Ereal;
 using utilib::BasicArray;
 
 
@@ -51,7 +49,7 @@ public:
   virtual ~serialLipshitzianProblemExample() {}
 
   /// An operator that takes a point and returns the value of it
-  virtual Ereal<double> operator()(BasicArray<double>& x) = 0;
+  virtual double operator()(BasicArray<double>& x) = 0;
 
   /// Lower bounds on the search domain
   BasicArray<double> lower;
@@ -142,7 +140,7 @@ public:
 
   /// An empty constructor for a subproblem
   serialLipshitzianNode()
-	: midpoint_value(Ereal<double>::negative_infinity),
+	: midpoint_value(-std::numeric_limits<double>::infinity()),
 	  corner_dist(0.0),
 	  branch_status(branching_t::no_branch),
 	  branchVariable(-2)
@@ -345,7 +343,7 @@ protected:
   BasicArray<double> upper;
 
   /// Value of the midpoint of the current node
-  Ereal<double> midpoint_value;
+  double midpoint_value;
 
   /// Distance from the midpoint to a corner of the box
   double corner_dist;

@@ -21,8 +21,7 @@
 #include <pebbl_config.h>
 #include <pebbl/utilib/std_headers.h>
 #include <pebbl/utilib/ArrayBase.h>
-#include <pebbl/utilib/Ereal.h>
-
+#include <pebbl/utilib/Any.h>
 
 namespace utilib {
 
@@ -853,20 +852,6 @@ utilib::BasicArray<T>& operator<<(utilib::BasicArray<T>& x, const utilib::BasicA
 ///
 template <class T>
 utilib::BasicArray<T>& operator<<(utilib::BasicArray<T>& x, const T& y)
-{
-for (size_type i=0; i<x.size(); i++)
-  x[i] = y;
-
-return x;
-}
-
-
-//============================================================================
-///
-/// Operator to fill an array of Ereal objects with a numerical value
-///
-template <class T>
-utilib::BasicArray<utilib::Ereal<T> >& operator<<(utilib::BasicArray<utilib::Ereal<T> >& x, const T& y)
 {
 for (size_type i=0; i<x.size(); i++)
   x[i] = y;

@@ -22,6 +22,7 @@
 #include <pebbl/utilib/BitArray.h>
 #include <pebbl/utilib/NumArray.h>
 #include <pebbl/utilib/Any.h>
+#include <pebbl/utilib/PackObject.h>
 
 namespace utilib {
 

@@ -181,7 +181,7 @@ public:
   double eval_move(BasicArray<int>& x, unsigned int i, int r, double ans);
 
   /// Used in a type of reweighted docking application
-  Ereal<double> compute_min_rotamer(unsigned int i, unsigned int k,
+  double compute_min_rotamer(unsigned int i, unsigned int k,
 					BasicArray<BitArray>& free_rotamers);
 
   /// Write this object to a buffer
@@ -215,7 +215,7 @@ public:
 
   // Common exit cleanup from both regular and random greedy heuristics
 
-  double greedy_cleanup(BasicArray<int>& x, Ereal<double> ans);
+  double greedy_cleanup(BasicArray<int>& x, double ans);
 
   /// Working arrays used by nested sparse bound computation
   /// Here to avoid overhead of repeated construction and destruction
@@ -683,7 +683,7 @@ double DockingProblem::find_greedy(BasicArray<int>& x,
       }
   }
 
-  Ereal<double> ans = energy(init);
+  double ans = energy(init);
   DEBUGPR(20, ucout << "Initial Value: " << ans << std::endl);
 
   ans = improve_solution(x,maxiters,free_rotamers,ans);
@@ -695,7 +695,7 @@ double DockingProblem::find_greedy(BasicArray<int>& x,
 
 //  Added by JE -- common exit from both greedy algorithms.
 
-double DockingProblem::greedy_cleanup(BasicArray<int>& x, Ereal<double> ans)
+double DockingProblem::greedy_cleanup(BasicArray<int>& x, double ans)
 {
   DEBUGPR(4, ucout << "Greedy heuristic final Value: " << ans << std::endl);
 
@@ -775,7 +775,7 @@ double DockingProblem::find_random_greedy(BasicArray<int>& x,
       }
   }
 
- Ereal<double> ans = energy(init);
+ double ans = energy(init);
  DEBUGPR(20, ucout << "Initial Value: " << ans << std::endl);
 
 #ifdef ACRO_VALIDATING
@@ -1103,7 +1103,7 @@ void DockingProblem::setupSparseBoundStructures()
 // TODO: document this later
 // This isn't being used right now.
 //
-Ereal<double> DockingProblem::compute_min_rotamer(unsigned int i, 
+double DockingProblem::compute_min_rotamer(unsigned int i, 
 						  unsigned int k,
 					   BasicArray<BitArray>& free_rotamers)
 {
@@ -1119,7 +1119,7 @@ for (unsigned int j=0; j<n; j++) {
   else     info = &E_intra[j][i];
 
   bool first=true;
-  Ereal<double> minval=Ereal<double>::positive_infinity;
+  double minval=std::numeric_limits<double>::infinity();
   for (unsigned int kk=0; kk<info->order.size(); kk++) {
     if ((i < j) && free_rotamers[j](info->s[kk]) && (info->r[kk]==k))
        if (first || (info->e[kk]/2.0 + E_inter[j][info->s[kk]]/tmpn < minval)) {
@@ -1138,7 +1138,7 @@ for (unsigned int j=0; j<n; j++) {
 	  first=false;
           }
     }
-  if (first) return Ereal<double>::positive_infinity;
+  if (first) return std::numeric_limits<double>::infinity();
   bound_val += minval;
   }
 
