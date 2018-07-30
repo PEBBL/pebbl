@@ -52,7 +52,7 @@ void parallelBranching::packGeneric(PackBuffer& outBuffer)
 
 void parallelBranching::unpackGeneric(UnPackBuffer& inBuffer)
 {
-  unpackAs(inBuffer,sense,optimType,int);
+  PEBBL_unpackAs(inBuffer,sense,optimType,int);
   inBuffer >> incumbentValue;
   inBuffer >> problemName;
   // CAP: see comment in pack routine above
@@ -108,7 +108,7 @@ void parallelBranchSub::unpackGeneric(UnPackBuffer& inBuffer)
   inBuffer >> bound;
   inBuffer >> integralityMeasure;
   inBuffer >> id;
-  unpackAs(inBuffer,state,subState,int);
+  PEBBL_unpackAs(inBuffer,state,subState,int);
   inBuffer >> depth;
   inBuffer >> totalChildren;
   inBuffer >> childrenLeft;
@@ -135,7 +135,7 @@ void spToken::unpack(UnPackBuffer& inBuffer)
 {
   inBuffer >> bound;
   inBuffer >> integralityMeasure;
-  unpackAs(inBuffer,state,subState,int);
+  PEBBL_unpackAs(inBuffer,state,subState,int);
   inBuffer >> id;
   inBuffer >> depth;
   inBuffer >> childrenRepresented;

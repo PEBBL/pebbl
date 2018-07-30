@@ -25,7 +25,7 @@
 namespace pebbl {
 
 
-#define unpackAs(buf,what,kind,castType) \
+#define PEBBL_unpackAs(buf,what,kind,castType) \
    { \
        castType unpackTemp_; \
        buf >> unpackTemp_; \
@@ -51,11 +51,11 @@ inline void* unpackPointer(UnPackBuffer& inBuffer)
 {
   void* temp = 0;
   if (sizeof(void*) == sizeof(int))
-    unpackAs(inBuffer,temp,void*,int)
+    PEBBL_unpackAs(inBuffer,temp,void*,int)
   else if (sizeof(void*) == sizeof(long))
-    unpackAs(inBuffer,temp,void*,long)
+    PEBBL_unpackAs(inBuffer,temp,void*,long)
   else if (sizeof(void*) == sizeof(double))
-    unpackAs(inBuffer,temp,void*,double)
+    PEBBL_unpackAs(inBuffer,temp,void*,double)
   else
     EXCEPTION_MNGR(std::runtime_error, "Can't figure out how to unpack " << sizeof(void*) << "-byte pointers");
   return (void*) temp;

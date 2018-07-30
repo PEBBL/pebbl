@@ -83,13 +83,6 @@ enum { PEBBL_ERR = -999 };
 #define NULL		0
 
 /**
- * \def PAUSE
- *
- * A macro that waits for the user to hit a key.
- */
-#define PAUSE()	fflush(stdout); while(fgetc(stdin) == -1);
-
-/**
  * \def _(args)
  *
  * Used to provide a consistent definition for non-ansi C and ansi C.
