@@ -103,25 +103,8 @@ std::string pscientific(const double t, int mantissa, int expwidth,
 
 // JE this code used to be in utilib/math.c
 
-#ifndef UTILIB_HAVE_LROUND
-extern long int lround(double x);
-#endif
 void setup_bufexp(int tabsz, double xmin, double xmax);
 double bufexp(double x);
-
-
-#ifndef UTILIB_HAVE_LROUND
-long int lround(double x)
-{
-double temp;
-
-temp = floor(x);
-if ((x - temp) < 0.5)
-   return( (long int) temp );
-else
-   return( (long int) ceil(x) );
-}
-#endif
 
 /* We hope this is a portable method for rounding a double to num_digits
    number of decimal digits after the decimal point. We may want to add

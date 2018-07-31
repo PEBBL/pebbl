@@ -115,22 +115,6 @@ std::string pscientific(const double t, int mantissa=6, int expwidth=3,
 int calc_filesize(char* filename);
 
 /**
- * Return the integer value of the rounded value of x.  
- * If the fractional part of x is less than 0.5, then x is
- * rounded down.  Otherwise, x is rounded up.
- */
-#ifndef UTILIB_HAVE_LROUND
-#ifndef DOXYGEN
-long int lround _((double x));
-#else
-long int lround(double x);
-#endif
-#endif
-#if defined(UTILIB_SGI_CC) || defined(UTILIB_OSF_CC) || defined(__PGI) || defined(_MSC_VER)
-long int lround(double x);
-#endif
-
-/**
  * A method for rounding a double to num_digits
  * number of decimal digits after the decimal point.
  */
