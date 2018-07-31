@@ -21,7 +21,6 @@
 #include <utilib/PackBuf.h>
 #include <utilib/std_headers.h>
 #include <utilib/exception_mngr.h>
-#include <utilib/bimap.h>
 #include <string>
 #include <algorithm>
 
@@ -192,41 +191,6 @@ os << obj.size();
 if (obj.size() > 0) {
    typename std::map<KEY,VALUE>::const_iterator curr = obj.begin();
    typename std::map<KEY,VALUE>::const_iterator last = obj.end();
-   while (curr != last) {
-     os << curr->first << curr->second;
-     ++curr;
-     }
-   }
-return os;
-}
-
-
-/// Write a bimap to an output stream
-template <class KEY, class VALUE>
-std::ostream& operator<<(std::ostream& os, const utilib::bimap<KEY,VALUE>& obj)
-{
-os << obj.size();
-if (obj.size() > 0) {
-   os << " :";
-   typename utilib::bimap<KEY,VALUE>::const_iterator curr = obj.begin();
-   typename utilib::bimap<KEY,VALUE>::const_iterator last = obj.end();
-   while (curr != last) {
-     os << " " << curr->first << " " << curr->second;
-     ++curr;
-     }
-   }
-return os;
-}
-
-
-/// Write a bimap to an output stream
-template <class KEY, class VALUE>
-utilib::PackBuffer& operator<<(utilib::PackBuffer& os, const utilib::bimap<KEY,VALUE>& obj)
-{
-os << obj.size();
-if (obj.size() > 0) {
-   typename utilib::bimap<KEY,VALUE>::const_iterator curr = obj.begin();
-   typename utilib::bimap<KEY,VALUE>::const_iterator last = obj.end();
    while (curr != last) {
      os << curr->first << curr->second;
      ++curr;
@@ -506,52 +470,6 @@ utilib::UnPackBuffer& operator>>(utilib::UnPackBuffer& is, std::map<KEY,VALUE>& 
       KEY item;
       is >> item;
       is >> data[item];
-      }
-   return is;
-}
-
-
-/// Read a bimap from an input stream
-template <class KEY, class VALUE>
-std::istream& operator>>(std::istream& is, utilib::bimap<KEY,VALUE>& data)
-{
-   size_t tmp;
-   is >> tmp;
-   EXCEPTION_TEST( !is, std::runtime_error, "operator>> - istream problem.");
-
-   data.clear();
-   char c;
-   is >> c;
-   for (size_t i=0; i<tmp; i++) {
-     EXCEPTION_TEST( !is, std::runtime_error, 
-                         "operator>> - istream problem.");
-     KEY item;
-     is >> item;
-     VALUE val;
-     is >> val;
-     data[item] = val;
-     }
-   return is;
-}
-
-
-/// Read a bimap from an UnPackBuffer
-template <class KEY, class VALUE>
-utilib::UnPackBuffer& operator>>(utilib::UnPackBuffer& is, utilib::bimap<KEY,VALUE>& data)
-{
-   size_t tmp;
-   is >> tmp;
-   EXCEPTION_TEST( !is, std::runtime_error, "operator>> - unpack problem.");
-
-   data.clear();
-   for (size_t i=0; i<tmp; i++) {
-      EXCEPTION_TEST( !is, std::runtime_error, 
-                         "operator>> - unpack problem.");
-      KEY item;
-      is >> item;
-      VALUE val;
-      is >> val;
-      data[item] = val;
       }
    return is;
 }
