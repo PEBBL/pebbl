@@ -27,14 +27,10 @@
 #include <utilib/BasicArray.h>
 #include <utilib/exception_mngr.h>
 #include <utilib/CharString.h>
-#include <utilib/sort.h>
 #include <utilib/BitArray.h>
 #include <utilib/math_basic.h>
 #include <utilib/PackObject.h>
 #include <utilib/Uniform.h> 
-// RR Uniform used to be imported through _math and math_array. Making this
-// dependence explicit now that math_array has been removed.
-
 
 using namespace utilib;
 
@@ -94,6 +90,42 @@ public:
     { os >> n >> N >> r >> s >> order >> e >> index >> R >> S >> E; }
 
 };
+
+
+/// Class used by the order function to compute the order of 
+/// data in an array.
+template <class T>
+class OrderCompare
+{
+public:
+
+  /// Constructor.
+  OrderCompare(const BasicArray<T>& array_)
+	: array(array_)
+	{}
+
+  /// Copy Constructor.
+  OrderCompare(const OrderCompare<T>& comp)
+	: array(comp.array)
+	{}
+	
+  /// Comparison operator.
+  bool operator()(int a, int b)
+	{ return std::less<T>()(array[a],array[b]); }
+ 
+  /// Reference array for comparison.
+  const BasicArray<T>& array;
+};
+
+/// Order an array.
+template <class T>
+void order(BasicArray<int>& ndx, const BasicArray<T>& v)
+{
+  ndx.resize(v.size());
+  for (unsigned i=0; i<v.size(); i++)
+    ndx[i] = i;
+  std::sort(ndx.begin().ptr(), ndx.end().ptr(), OrderCompare<T>(v));
+}
 
 
 /// Class that defines a peptide docking problem
