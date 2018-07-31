@@ -25,19 +25,20 @@ namespace utilib {
 
 
 /**
- * \def TwoDArraySanityChecking
+ * \def UTILIB_TwoDArraySanityChecking
  *
- * If the macro TwoDArraySanityChecking=1 then some routine sanity checks will 
- * be performed when accessing vectors.  Sanity checking generally degrades 
- * performance.  The default is is to perform sanity checking.
+ * If the macro UTILIB_TwoDArraySanityChecking=1 then some routine sanity 
+ * checks will be performed when accessing vectors.  Sanity checking
+ * generally degrades performance.  The default is is to perform sanity
+ * checking.
  *
  * Note: Because inlines are typically put "in place" when the optimization flag
- * -O is used, you can define some files with TwoDArraySanityChecking=0 to 
- * acheive better performance, while using the default debugging mode in the
+ * -O is used, you can define some files with UTILIB_TwoDArraySanityChecking=0
+ * to acheive better performance, while using the default debugging mode in the
  * rest of the code.
  */
-#if !defined(TwoDArraySanityChecking)
-#define TwoDArraySanityChecking    1
+#if !defined(UTILIB_TwoDArraySanityChecking)
+#define UTILIB_TwoDArraySanityChecking    1
 #endif
 
 template <class T>
@@ -195,7 +196,7 @@ protected:
 template <class T>
 T* Basic2DArray<T>::operator[](size_type idx) const
 {
-#if (TwoDArraySanityChecking==1)
+#if (UTILIB_TwoDArraySanityChecking==1)
 if (this->is_negative(idx) || ((size_type)idx >= a->Nrows))
    EXCEPTION_MNGR(runtime_error, "Basic2DArray<T>::operator[] : iterator out of range. idx=" << idx << " len=" << a->Nrows);
 #endif
@@ -207,7 +208,7 @@ return a->Data[idx];
 template <class T>
 inline T& Basic2DArray<T>::operator()(const size_type row, const size_type col)
 {
-#if (TwoDArraySanityChecking==1)
+#if (UTILIB_TwoDArraySanityChecking==1)
 if ((row >= a->Nrows) || (col >= a->Ncols))
    EXCEPTION_MNGR(runtime_error, "Basic2DArray<T>::operator() : iterator out of range. row=" << row << " nrows=" << a->Nrows << " col=" << col << " ncols=" << a->Ncols);
 #endif
@@ -219,7 +220,7 @@ return a->Data[row][col];
 template <class T>
 inline const T& Basic2DArray<T>::operator()(const size_type row, const size_type col) const
 {
-#if (TwoDArraySanityChecking==1)
+#if (UTILIB_TwoDArraySanityChecking==1)
 if ((row >= a->Nrows) || (col >= a->Ncols))
    EXCEPTION_MNGR(runtime_error, "Basic2DArray<T>::operator() : iterator out of range. row=" << row << " nrows=" << a->Nrows << " col=" << col << " ncols=" << a->Ncols);
 #endif
@@ -491,7 +492,7 @@ return *this;
 template <class T>
 Basic2DArray<T>& Basic2DArray<T>::set_data(const size_type len, T * data, const EnumDataOwned o)
 {
-#if TwoDArraySanityChecking==1
+#if UTILIB_TwoDArraySanityChecking==1
 if ( (nrows()*ncols()) != len)
    EXCEPTION_MNGR(runtime_error, "Basic2DArray<T>::set_data : bad vector size "
                   << (nrows()*ncols()) << " != " << len);

@@ -19,7 +19,6 @@
 
 #define USING_STL
 #include <utilib/PackBuf.h>
-#include <utilib/CharString.h>
 #include <utilib/comments.h>
 
 #ifdef UTILIB_HAVE_NAMESPACES

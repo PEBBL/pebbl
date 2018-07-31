@@ -19,6 +19,7 @@
 
 
 #include <pebbl_config.h>
+#include <utilib/memdebug.h>
 #include <utilib/mpiUtil.h>
 #include <utilib/seconds.h>
 #include <pbb/parBranching.h>

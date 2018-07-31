@@ -18,7 +18,6 @@
  */
 
 #include <utilib/std_headers.h>
-#include <utilib/math_basic.h>
 #include <utilib/nicePrint.h>
 
 using namespace std;

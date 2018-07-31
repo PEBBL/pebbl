@@ -156,7 +156,7 @@ private:
       if (*request == MPI_REQUEST_NULL)
 	return true;
       int flag;
-      uMPI::test(request,&flag,status);
+      utilib::uMPI::test(request,&flag,status);
       return flag;
     };
 

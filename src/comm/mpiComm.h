@@ -40,8 +40,6 @@
 // To compile code for logging of all messages.
 //
 
-using namespace utilib;
-
 namespace pebbl {
 
 #if defined(UTILIB_HAVE_MPI)
@@ -209,7 +207,7 @@ public:
     {
         MPI_Request request;
         isend(buffer,count,datatype,dest,tag,&request);
-        uMPI::requestFree(&request);
+	utilib::uMPI::requestFree(&request);
     }
 
   /// Perform a Send.

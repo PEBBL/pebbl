@@ -22,7 +22,6 @@
 #include <sys/types.h>
 #include <dirent.h>
 
-#include <utilib/CharString.h>
 #include <utilib/mpiUtil.h>
 #include <utilib/nicePrint.h>
 #include <pbb/parBranching.h>

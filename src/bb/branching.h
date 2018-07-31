@@ -32,7 +32,6 @@
 #include <utilib/LinkedList.h> 
 #include <utilib/GenericHeap.h>
 #include <utilib/exception_mngr.h>
-#include <utilib/memdebug.h>
 #include <utilib/ParameterList.h>
 #ifdef   ACRO_HAVE_MPI
 #include <utilib/PackBuf.h>
