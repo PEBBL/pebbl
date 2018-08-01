@@ -17,11 +17,11 @@
 #ifndef Docking_h
 #define Docking_h
 
+#include <utility> // for std::pair 
 #include <pebbl_config.h>
 #include <utilib/exception_mngr.h>
 #include <utilib/BitArray.h>
 #include <utilib/BasicArray.h>
-#include <utilib/ValuedContainer.h>
 #include <utilib/stl_auxiliary.h>
 #include <bb/branching.h>
 #include <example/DockingProblem.h>
@@ -31,7 +31,6 @@ namespace pebbl {
 
 using utilib::BasicArray;
 using utilib::BitArray;
-using utilib::ValuedContainer;
 
 
 // JE added this very simple class so the solution prints as 
@@ -246,7 +245,7 @@ public:
    * dimension.  Otherwise, it returns -1
    */
   int apply_dee(size_type variable, 
-                std::list<ValuedContainer<double,int> >& dee_status, 
+                std::list<std::pair<double,int> >& dee_status, 
                 BasicArray<BitArray>& free_rotamers);
 
   ///
@@ -421,25 +420,25 @@ public:
                    }
                    );
            if (parent->branch_status == serialDocking::branch_down) {
-              std::list<ValuedContainer<double,int> >::iterator curr 
+              std::list<std::pair<double,int> >::iterator curr 
 		= parent->dee_status.begin();
-              std::list<ValuedContainer<double,int> >::iterator end
+              std::list<std::pair<double,int> >::iterator end
 		= parent->dee_status.end ();
               while (curr != end) {
                 free_rotamers[parent->branchVariable].reset( 
-                        globalPtr->info.inter_order[parent->branchVariable][curr->info]);
+                        globalPtr->info.inter_order[parent->branchVariable][curr->second]);
                 curr++;
                 }
               }
            else {
               free_rotamers[parent->branchVariable].reset();
-              std::list<ValuedContainer<double,int> >::iterator curr 
+              std::list<std::pair<double,int> >::iterator curr 
 		= parent->dee_status.begin();
-              std::list<ValuedContainer<double,int> >::iterator end  
+              std::list<std::pair<double,int> >::iterator end  
 		= parent->dee_status.end ();
               while (curr != end) {
                 free_rotamers[parent->branchVariable].set( 
-                        globalPtr->info.inter_order[parent->branchVariable][curr->info]);
+                        globalPtr->info.inter_order[parent->branchVariable][curr->second]);
                 curr++;
                 }
               }
@@ -798,7 +797,7 @@ protected:
    * Status of DEE information for the branchVariable dimension.
    * A 'true' value indicates that this variable has been eliminated.
    */
-  std::list<ValuedContainer<double,int> > dee_status;
+  std::list<std::pair<double,int> > dee_status;
 
   BitArray dee_branch;
 
@@ -817,7 +816,7 @@ protected:
 };
 
 
-inline int serialDocking::apply_dee(size_type variable, std::list<ValuedContainer<double,int> >& dee_status, BasicArray<BitArray>& free_rotamers)
+inline int serialDocking::apply_dee(size_type variable, std::list<std::pair<double,int> >& dee_status, BasicArray<BitArray>& free_rotamers)
 {
 size_type minndx=0;
 while ( !free_rotamers[variable]( info.inter_order[variable][minndx] ) )
@@ -837,7 +836,7 @@ for (size_type i=free_rotamers[variable].size()-1; i>minndx; i--) {
   if (i_flag) {
      double dtmp = i_diff;
      int itmp = i;
-     ValuedContainer<double,int> tmp(dtmp,itmp);
+     std::pair<double,int> tmp(dtmp,itmp);
      dee_status.push_back(tmp);
      }
   }

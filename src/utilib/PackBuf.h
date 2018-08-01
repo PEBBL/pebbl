@@ -764,7 +764,11 @@ inline utilib::PackBuffer& operator<< (utilib::PackBuffer& buff, const signed ch
 /// Stream operator to pack a char*
 inline utilib::PackBuffer& operator<< (utilib::PackBuffer& buff, const char* data)
 	{buff.pack(data); return buff;}
-
+/// Stream operator to pack a std::pair
+template<class First, class Second>
+inline utilib::PackBuffer& operator<< (utilib::PackBuffer& buff,
+                                       const std::pair<First, Second>& pair)
+	{buff.pack(pair.first); buff.pack(pair.second); return buff;}
 /// Stream operator to pack from an istream
 utilib::PackBuffer& operator<< (utilib::PackBuffer& buff, std::istream& istr);
 
@@ -824,7 +828,11 @@ inline utilib::UnPackBuffer& operator>> (utilib::UnPackBuffer& buff, signed char
 /// Stream opreator to unpack a char*
 inline utilib::UnPackBuffer& operator>> (utilib::UnPackBuffer& buff, char* data)
 	{buff.unpack(data); return buff;}
-
+/// Stream operator to pack a std::pair
+template<class First, class Second>
+inline utilib::UnPackBuffer& operator>> (utilib::UnPackBuffer& buff,
+                                         std::pair<First, Second>& pair)
+	{buff.unpack(pair.first); buff.unpack(pair.second); return buff;}
 /// Stream opreator to unpack into an output stream
 utilib::UnPackBuffer& operator>> (utilib::UnPackBuffer& buff, std::ostream& str);
 
