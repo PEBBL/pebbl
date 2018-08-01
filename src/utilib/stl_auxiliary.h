@@ -27,17 +27,6 @@
 namespace utilib {
 
 ///
-inline void toUpper(std::string& str)
-{
-std::string::iterator curr = str.begin();
-std::string::iterator end  = str.end();
-while (curr != end) {
-  *curr = toupper(*curr);
-  curr++;
-  }
-}
-
-///
 inline void toLower(std::string& str)
 {
 std::string::iterator curr = str.begin();
@@ -46,23 +35,6 @@ while (curr != end) {
   *curr = tolower(*curr);
   curr++;
   }
-}
-
-/// Compute the max of a vector
-template <typename TYPE>
-TYPE max(const std::vector<TYPE>& vec)
-{
-if (vec.size() == 0)
-   EXCEPTION_MNGR(std::runtime_error, "max - applied to null vector");
-typename std::vector<TYPE>::const_iterator start = vec.begin();
-typename std::vector<TYPE>::const_iterator end = vec.end();
-TYPE max_val = *start;
-start++;
-while (start < end) {
-  if (max_val < (*start)) max_val = *start;
-  start++;
-  }
-return max_val;
 }
 
 ///

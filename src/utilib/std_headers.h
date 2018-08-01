@@ -24,30 +24,22 @@
 #define utilib_std_headers_h
 
 #include <pebbl_config.h>
-#ifdef UTILIB_HAVE_UNISTD_H
-#include <unistd.h>
-#endif
 
 #if defined(UTILIB_HAVE_STD)
-/* C++ compiler using new C headers */
-#include <cstdlib>
-#include <cstdio>
+///* C++ compiler using new C headers */
 #include <cstring>
-#include <cctype>
 #include <cfloat>
 #include <climits>
 #include <cmath>
 #include <cassert>
 #include <csignal>
-#include <cerrno>
-#include <ctime>
 #include <cstddef>
-
+#include <cstdlib>
 #include <limits>
 
 #else
-/* C compiler (old style headers are used to avoid std namespace)
-   or a C++ compiler which uses old C headers */
+///* C compiler (old style headers are used to avoid std namespace)
+//   or a C++ compiler which uses old C headers */
 #ifdef UTILIB_HAVE_VALUES_H
 #include <values.h> /* Obsolete: It defines MAXINT, MAXFLOAT, etc. */
 #endif
@@ -60,50 +52,35 @@
 #ifdef UTILIB_HAVE_STRINGS_H
 #include <strings.h>
 #endif
-#include <stdlib.h>
-#include <stdio.h>
 #include <string.h>
-#include <ctype.h>
 #include <math.h>
 #include <assert.h>
 #include <signal.h>
-#include <errno.h>
-#include <time.h>
 #include <stddef.h>
+#include <stdlib.h>
 #endif
 
-#include <utility>
-#include <deque>
-#include <functional>
 #include <typeinfo>
 #include <iterator>
-#include <exception>
-#include <numeric>
 
 #if defined(UTILIB_HAVE_STD)
 #include <iostream>
-#include <string>
-#include <algorithm>
 #include <vector>
 #include <list>
 #include <iomanip>
 #include <fstream>
 #include <set>
 #include <map>
-#include <new>
 #include <queue>
 #include <stack>
 #else
 #include <iostream.h>
-#include <string.h>
-#include <algo.h>
 #include <vector.h>
 #include <list.h>
 #include <iomanip.h>
 #include <fstream.h>
 #include <set.h>
 #include <map.h>
-#include <new.h>
 #include <queue.h>
 #include <stack.h>
 #endif
