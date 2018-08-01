@@ -23,9 +23,7 @@
 #include <utilib/std_headers.h>
 #include <sys/types.h>
 
-#if defined(__cplusplus)
 namespace utilib {
-#endif
 
 /**
  * \enum EnumDataOwned
@@ -52,9 +50,7 @@ enum EnumDataOwned
  */
 enum { PEBBL_ERR = -999 };
 
-#if defined(__cplusplus)
 } // namespace end
-#endif
 
 /**
  * \def NULL
@@ -65,18 +61,6 @@ enum { PEBBL_ERR = -999 };
 #undef NULL		/* Always override the definition of NULL */
 #endif
 #define NULL		0
-
-#if !defined(UTILIB_HAVE_STD) && !defined(__cplusplus)
-/**
- * \typedef size_t
- *
- * The typedef for \a size_t arguments.
- */
-#ifndef UTILIB_SIZE_T
-#define UTILIB_SIZE_T
-typedef unsigned size_t;
-#endif
-#endif
 
 /**
  * \typedef VOID

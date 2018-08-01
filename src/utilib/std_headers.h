@@ -28,7 +28,7 @@
 #include <unistd.h>
 #endif
 
-#if defined(UTILIB_HAVE_STD) && defined(__cplusplus)
+#if defined(UTILIB_HAVE_STD)
 /* C++ compiler using new C headers */
 #include <cstdlib>
 #include <cstdio>
@@ -44,12 +44,6 @@
 #include <cstddef>
 
 #include <limits>
-
-#if defined(UTILIB_SOLARIS_CC)
-// Special case: Solaris (10)'s cmath does not have all the math.h
-// functions defined (in particular, lround [needed by Ereal]).
-#include <math.h>
-#endif
 
 #else
 /* C compiler (old style headers are used to avoid std namespace)
@@ -78,7 +72,6 @@
 #include <stddef.h>
 #endif
 
-#ifdef __cplusplus
 #include <utility>
 #include <deque>
 #include <functional>
@@ -132,7 +125,5 @@
 #else   // UTILIB_HAVE_SSTREAM
 #include <sstream>
 #endif  // UTILIB_HAVE_SSTREAM
-
-#endif
 
 #endif

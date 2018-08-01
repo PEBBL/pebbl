@@ -59,7 +59,6 @@ const long double M_E  = 2.7182818284590452354L;
 #endif
 
 
-#if defined(__cplusplus)
 namespace utilib {
 
 /*
@@ -103,7 +102,6 @@ std::string pscientific(const double t, int mantissa=6, int expwidth=3,
 
 }
 
-#endif
 
 /*
  *
