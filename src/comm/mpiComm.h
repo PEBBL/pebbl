@@ -193,7 +193,7 @@ public:
   void isend(void* buffer,int count,MPI_Datatype datatype,int dest,int tag,
              MPI_Request* request)
     {
-        LOG_SEND(dest,tag,count,datatype);
+        UTILIB_LOG_SEND(dest,tag,count,datatype);
         errorCode = MPI_Isend(buffer,count,datatype,dest,tag,comm,request);
         if (errorCode)
             EXCEPTION_MNGR(std::runtime_error, "MPI_Isend failed, code " << errorCode);
@@ -213,7 +213,7 @@ public:
   /// Perform a Send.
   void send(void* buffer,int count,MPI_Datatype datatype,int dest,int tag)
     {
-        LOG_SEND(dest,tag,count,datatype);
+        UTILIB_LOG_SEND(dest,tag,count,datatype);
         errorCode = MPI_Send(buffer,count,datatype,dest,tag,comm);
         if (errorCode)
             EXCEPTION_MNGR(std::runtime_error, "MPI_Send failed, code " << errorCode);
@@ -222,7 +222,7 @@ public:
   /// Perform a Ssend.
   void ssend(void* buffer,int count,MPI_Datatype datatype,int dest,int tag)
     {
-        LOG_SEND(dest,tag,count,datatype);
+        UTILIB_LOG_SEND(dest,tag,count,datatype);
         errorCode = MPI_Ssend(buffer,count,datatype,dest,tag,comm);
         if (errorCode)
             EXCEPTION_MNGR(std::runtime_error, "MPI_Ssend failed, code " << errorCode);
@@ -241,7 +241,7 @@ public:
   void issend(void* buffer,int count,MPI_Datatype datatype,int dest,int tag,
               MPI_Request* request)
     {
-        LOG_SEND(dest,tag,count,datatype);
+        UTILIB_LOG_SEND(dest,tag,count,datatype);
         errorCode = MPI_Issend(buffer,count,datatype,dest,tag,comm,request);
         if (errorCode)
             EXCEPTION_MNGR(std::runtime_error, "MPI_Issend failed, code " << errorCode);
@@ -263,7 +263,7 @@ public:
         errorCode = MPI_Recv(buffer,count,datatype,source,tag,comm,status);
         if (errorCode)
             EXCEPTION_MNGR(std::runtime_error, "MPI_Recv failed, code " << errorCode);
-        LOG_RECV(status);
+        UTILIB_LOG_RECV(status);
     }
 
     // The remaining functions in mpiUtil didn't require knowledge of a communicator

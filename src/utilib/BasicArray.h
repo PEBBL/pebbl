@@ -591,7 +591,7 @@ const volatile bool BasicArray<T>::registrations_complete =
 template <class T>
 T & BasicArray<T>::operator[](size_type idx)
 {
-#if (ArraySanityChecking==1)
+#if (UTILIB_ArraySanityChecking==1)
 if (is_negative(idx) || (static_cast<size_type>(idx) >= Len))
    EXCEPTION_MNGR(runtime_error, "BasicArray<T>::operator[] : iterator out of range. idx=" << idx << " len=" << Len);
 #endif
@@ -606,7 +606,7 @@ return Data[idx];
 template <class T>
 const T & BasicArray<T>::operator[](size_type idx) const
 {
-#if (ArraySanityChecking==1)
+#if (UTILIB_ArraySanityChecking==1)
 if (is_negative(idx) || (static_cast<size_type>(idx) >= Len))
    EXCEPTION_MNGR(runtime_error, "BasicArray<T>::operator[] : iterator out of range. idx=" << idx << " len=" << Len);
 #endif

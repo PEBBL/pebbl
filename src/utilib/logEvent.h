@@ -110,41 +110,41 @@ protected:
 
 
 /// Code that is executed if MPE logging is in use.
-#define IF_LOGGING_COMPILED(arbitraryCode) arbitraryCode
+#define UTILIB_IF_LOGGING_COMPILED(arbitraryCode) arbitraryCode
 
 /// Executes \p action if the event log is greater or equal to \p level.
-#define IF_LOGGING_EVENTS(level,action) \
+#define UTILIB_IF_LOGGING_EVENTS(level,action) \
    if (eventLog >= level) action
 
 /// Executes \p action if the event log is greater or equal to \p
 /// level.  Finds event log level through pointer p
-#define IF_LOGGING_EVENTSX(p,level,action)	\
+#define UTILIB_IF_LOGGING_EVENTSX(p,level,action)	\
    if (p->eventLog >= level) action
 
 /**
  * Wraps a call to \c log_<how> using \p state if the logging level is 
  * greater or equal to \p level. */
-#define LOG_EVENT(level,startOrEnd,state) \
-   IF_LOGGING_EVENTS(level,logEvent::event(state.startOrEnd);)
+#define UTILIB_LOG_EVENT(level,startOrEnd,state) \
+   UTILIB_IF_LOGGING_EVENTS(level,logEvent::event(state.startOrEnd);)
 
-#define LOG_POINT_EVENT(level,state) \
-   IF_LOGGING_EVENTS(level,logEvent::event(state);)
+#define UTILIB_LOG_POINT_EVENT(level,state) \
+   UTILIB_IF_LOGGING_EVENTS(level,logEvent::event(state);)
 
 /**
  * Similar, finds the event log level through the pointer p
  */
-#define LOG_EVENTX(p,level,startOrEnd,state)			\
-  IF_LOGGING_EVENTSX(p,level,p->event(state.startOrEnd);)
+#define UTILIB_LOG_EVENTX(p,level,startOrEnd,state)			\
+  UTILIB_IF_LOGGING_EVENTSX(p,level,p->event(state.startOrEnd);)
 
-#define LOG_POINT_EVENTX(p,level,state)			\
-  IF_LOGGING_EVENTSX(p,level,p->event(state);)
+#define UTILIB_LOG_POINT_EVENTX(p,level,state)			\
+  UTILIB_IF_LOGGING_EVENTSX(p,level,p->event(state);)
 
 /// Wraps log of <startOrEnd> of \p state if \p cond is satisfied.
-#define LOG_EVENT_CONDITIONAL(level,cond,startOrEnd,state) \
-   IF_LOGGING_EVENTS(level,if (cond) logEvent::event(state.startOrEnd);)
+#define UTILIB_LOG_EVENT_CONDITIONAL(level,cond,startOrEnd,state) \
+   UTILIB_IF_LOGGING_EVENTS(level,if (cond) logEvent::event(state.startOrEnd);)
 
-#define LOG_EVENT_CONDITIONALX(p,level,cond,startOrEnd,state) \
-   IF_LOGGING_EVENTSX(p,level,if (cond) p->event(state.startOrEnd);)
+#define UTILIB_LOG_EVENT_CONDITIONALX(p,level,cond,startOrEnd,state) \
+   UTILIB_IF_LOGGING_EVENTSX(p,level,if (cond) p->event(state.startOrEnd);)
 
 
   // Create "point" versions of the last two above later if needed.
@@ -157,15 +157,15 @@ protected:
 #else
 
 
-#define IF_LOGGING_COMPILED(arbitraryCode)                    /* Nothing */
-#define IF_LOGGING_EVENTS(level,action)                       /* Nothing */
-#define IF_LOGGING_EVENTSX(p,level,action)                    /* Nothing */
-#define LOG_EVENT(level,startOrEnd,state)                     /* Nothing */
-#define LOG_POINT_EVENT(level,state)                          /* Nothing */
-#define LOG_EVENTX(p,level,startOrEnd,state)                  /* Nothing */
-#define LOG_POINT_EVENTX(p,level,state)                       /* Nothing */
-#define LOG_EVENT_CONDITIONAL(level,cond,startOrEnd,state)    /* Nothing */
-#define LOG_EVENT_CONDITIONALX(p,level,cond,startOrEnd,state) /* Nothing */
+#define UTILIB_IF_LOGGING_COMPILED(arbitraryCode)                    /* Nothing */
+#define UTILIB_IF_LOGGING_EVENTS(level,action)                       /* Nothing */
+#define UTILIB_IF_LOGGING_EVENTSX(p,level,action)                    /* Nothing */
+#define UTILIB_LOG_EVENT(level,startOrEnd,state)                     /* Nothing */
+#define UTILIB_LOG_POINT_EVENT(level,state)                          /* Nothing */
+#define UTILIB_LOG_EVENTX(p,level,startOrEnd,state)                  /* Nothing */
+#define UTILIB_LOG_POINT_EVENTX(p,level,state)                       /* Nothing */
+#define UTILIB_LOG_EVENT_CONDITIONAL(level,cond,startOrEnd,state)    /* Nothing */
+#define UTILIB_LOG_EVENT_CONDITIONALX(p,level,cond,startOrEnd,state) /* Nothing */
 #undef  EVENT_LOGGING_PRESENT
 
 

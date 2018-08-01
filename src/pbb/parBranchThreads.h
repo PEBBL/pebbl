@@ -62,7 +62,7 @@ protected:
 
   int    messagesReceived;
 
-  IF_LOGGING_COMPILED(logStateObject myLogState;)
+  UTILIB_IF_LOGGING_COMPILED(logStateObject myLogState;)
 
 public:
 

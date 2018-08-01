@@ -29,19 +29,19 @@
 namespace utilib {
 
 /**
- * \def ArraySanityChecking
+ * \def UTILIB_ArraySanityChecking
  *
- * If the macro ArraySanityChecking=1 then some routine sanity checks will 
+ * If the macro UTILIB_ArraySanityChecking=1 then some routine sanity checks will 
  * be performed when accessing vectors.  Sanity checking generally degrades 
  * performance.  The default is is to perform sanity checking.
  *
  * Note: Because inlines are typically put "in place" when the optimization flag
- * -O is used, you can define some files with ArraySanityChecking=0 to 
+ * -O is used, you can define some files with UTILIB_ArraySanityChecking=0 to 
  * acheive better performance, while using the default debugging mode in the
  * rest of the code.
  */
-#if !defined(ArraySanityChecking)
-#define ArraySanityChecking    1
+#if !defined(UTILIB_ArraySanityChecking)
+#define UTILIB_ArraySanityChecking    1
 #endif
 
 template <class A, class P>

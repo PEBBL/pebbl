@@ -111,7 +111,7 @@ try {
 /// Use a standard block of catch routines, which catches all 
 /// STL exception types explicitly
 ///
-STD_CATCH(;)
+UTILIB_STD_CATCH(;)
 
 return 0;
 }

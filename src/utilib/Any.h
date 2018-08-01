@@ -1561,7 +1561,7 @@ public:
 /** \brief Declare that a TYPE implements operator<() & operator==() 
  *  (must be called within utilib namespace)
  */
-#define DEFINE_DEFAULT_ANY_COMPARATOR(TYPE)       \
+#define UTILIB_DEFINE_DEFAULT_ANY_COMPARATOR(TYPE)       \
    template<>                                     \
    class Any::Comparator<TYPE >                   \
       : public Any::DefaultComparable<TYPE > {}
@@ -1569,7 +1569,7 @@ public:
 /** \brief Declare that a TYPE implements operator<<(ostream&, TYPE)
  *  (must be called within utilib namespace)
  */
-#define DEFINE_DEFAULT_ANY_PRINTER(TYPE)          \
+#define UTILIB_DEFINE_DEFAULT_ANY_PRINTER(TYPE)          \
    template<>                                     \
    class Any::Printer<TYPE >                      \
       : public Any::DefaultPrinter<TYPE > {}
@@ -1578,7 +1578,7 @@ public:
  *  requires setting the stream precision (must be called within utilib
  *  namespace)
  */
-#define DEFINE_FLOATING_ANY_PRINTER(TYPE, PRECISION)                    \
+#define UTILIB_DEFINE_FLOATING_ANY_PRINTER(TYPE, PRECISION)                    \
    template<>                                                           \
    class Any::Printer<TYPE > {                                          \
    public:                                                              \
@@ -1595,7 +1595,7 @@ public:
 /** \brief Declare that a TYPE implements operator>>(istream&, TYPE)
  *  (must be called within utilib namespace)
  */
-#define DEFINE_DEFAULT_ANY_READER(TYPE)           \
+#define UTILIB_DEFINE_DEFAULT_ANY_READER(TYPE)           \
    template<>                                     \
    class Any::Reader<TYPE >                       \
       : public Any::DefaultReader<TYPE > {}
@@ -1603,7 +1603,7 @@ public:
 /** \brief Declare that a TYPE implements operator<<(utilib::PackBuf&, TYPE)
  *  (must be called within utilib namespace)
  */
-#define DEFINE_DEFAULT_ANY_PACKER(TYPE)           \
+#define UTILIB_DEFINE_DEFAULT_ANY_PACKER(TYPE)           \
    template<>                                     \
    class Any::Packer<TYPE >                       \
       : public Any::DefaultPacker<TYPE > {}
@@ -1611,48 +1611,48 @@ public:
 /** \brief Declare that a TYPE implements operator<() & operator==() 
  *  (must be called within utilib namespace)
  */
-#define DEFINE_FULL_ANY_EXTENSIONS(TYPE) \
-   DEFINE_DEFAULT_ANY_COMPARATOR(TYPE);  \
-   DEFINE_DEFAULT_ANY_PRINTER(TYPE);     \
-   DEFINE_DEFAULT_ANY_READER(TYPE);      \
-   DEFINE_DEFAULT_ANY_PACKER(TYPE)
+#define UTILIB_DEFINE_FULL_ANY_EXTENSIONS(TYPE) \
+   UTILIB_DEFINE_DEFAULT_ANY_COMPARATOR(TYPE);  \
+   UTILIB_DEFINE_DEFAULT_ANY_PRINTER(TYPE);     \
+   UTILIB_DEFINE_DEFAULT_ANY_READER(TYPE);      \
+   UTILIB_DEFINE_DEFAULT_ANY_PACKER(TYPE)
 
-DEFINE_FULL_ANY_EXTENSIONS(char);
-DEFINE_FULL_ANY_EXTENSIONS(signed char);
-DEFINE_FULL_ANY_EXTENSIONS(unsigned char);
+UTILIB_DEFINE_FULL_ANY_EXTENSIONS(char);
+UTILIB_DEFINE_FULL_ANY_EXTENSIONS(signed char);
+UTILIB_DEFINE_FULL_ANY_EXTENSIONS(unsigned char);
 
-DEFINE_FULL_ANY_EXTENSIONS(short int);
-DEFINE_FULL_ANY_EXTENSIONS(unsigned short int);
-DEFINE_FULL_ANY_EXTENSIONS(int);
-DEFINE_FULL_ANY_EXTENSIONS(unsigned int);
-DEFINE_FULL_ANY_EXTENSIONS(long);
-DEFINE_FULL_ANY_EXTENSIONS(unsigned long);
+UTILIB_DEFINE_FULL_ANY_EXTENSIONS(short int);
+UTILIB_DEFINE_FULL_ANY_EXTENSIONS(unsigned short int);
+UTILIB_DEFINE_FULL_ANY_EXTENSIONS(int);
+UTILIB_DEFINE_FULL_ANY_EXTENSIONS(unsigned int);
+UTILIB_DEFINE_FULL_ANY_EXTENSIONS(long);
+UTILIB_DEFINE_FULL_ANY_EXTENSIONS(unsigned long);
 
-DEFINE_FULL_ANY_EXTENSIONS(bool);
-DEFINE_FULL_ANY_EXTENSIONS(std::string);
+UTILIB_DEFINE_FULL_ANY_EXTENSIONS(bool);
+UTILIB_DEFINE_FULL_ANY_EXTENSIONS(std::string);
 
 // wchar_t is not readable...
-DEFINE_DEFAULT_ANY_COMPARATOR(wchar_t);
-DEFINE_DEFAULT_ANY_PRINTER(wchar_t);
+UTILIB_DEFINE_DEFAULT_ANY_COMPARATOR(wchar_t);
+UTILIB_DEFINE_DEFAULT_ANY_PRINTER(wchar_t);
 
 // floating-point requires a special printer
-DEFINE_DEFAULT_ANY_COMPARATOR(float);
-DEFINE_DEFAULT_ANY_READER(float);
-DEFINE_DEFAULT_ANY_PACKER(float);
-DEFINE_FLOATING_ANY_PRINTER(float, FLT_DIG);
-DEFINE_DEFAULT_ANY_COMPARATOR(double);
-DEFINE_DEFAULT_ANY_READER(double);
-DEFINE_DEFAULT_ANY_PACKER(double);
-DEFINE_FLOATING_ANY_PRINTER(double, DBL_DIG);
-DEFINE_DEFAULT_ANY_COMPARATOR(long double);
-DEFINE_DEFAULT_ANY_READER(long double);
-DEFINE_DEFAULT_ANY_PACKER(long double);
-DEFINE_FLOATING_ANY_PRINTER(long double, LDBL_DIG);
+UTILIB_DEFINE_DEFAULT_ANY_COMPARATOR(float);
+UTILIB_DEFINE_DEFAULT_ANY_READER(float);
+UTILIB_DEFINE_DEFAULT_ANY_PACKER(float);
+UTILIB_DEFINE_FLOATING_ANY_PRINTER(float, FLT_DIG);
+UTILIB_DEFINE_DEFAULT_ANY_COMPARATOR(double);
+UTILIB_DEFINE_DEFAULT_ANY_READER(double);
+UTILIB_DEFINE_DEFAULT_ANY_PACKER(double);
+UTILIB_DEFINE_FLOATING_ANY_PRINTER(double, DBL_DIG);
+UTILIB_DEFINE_DEFAULT_ANY_COMPARATOR(long double);
+UTILIB_DEFINE_DEFAULT_ANY_READER(long double);
+UTILIB_DEFINE_DEFAULT_ANY_PACKER(long double);
+UTILIB_DEFINE_FLOATING_ANY_PRINTER(long double, LDBL_DIG);
 
 // Believe it or not, Any's are actually default comparable & printable
-DEFINE_FULL_ANY_EXTENSIONS(utilib::Any);
-DEFINE_FULL_ANY_EXTENSIONS(utilib::AnyRef);
-DEFINE_FULL_ANY_EXTENSIONS(utilib::AnyFixedRef);
+UTILIB_DEFINE_FULL_ANY_EXTENSIONS(utilib::Any);
+UTILIB_DEFINE_FULL_ANY_EXTENSIONS(utilib::AnyRef);
+UTILIB_DEFINE_FULL_ANY_EXTENSIONS(utilib::AnyFixedRef);
 
 
 //---------------------------------------------------------------------

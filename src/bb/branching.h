@@ -1680,7 +1680,7 @@ template <class B> int driver(int argc, char** argv)
       flag = runSerial<B>(argc,argv);
     }
 
-  STD_CATCH(;);
+  UTILIB_STD_CATCH(;);
 
   return !flag;
 }

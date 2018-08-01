@@ -206,10 +206,10 @@ void parallelBranching::solutionToFile()
 
 void parallelBranching::statusLine(loadObject& l, const char* tag) 
 {
-  LOG_EVENT(3,start,statusPrintLogState);
+  UTILIB_LOG_EVENT(3,start,statusPrintLogState);
   branching::statusLine(l,tag);
   ucout << Flush;
-  LOG_EVENT(3,end,statusPrintLogState);
+  UTILIB_LOG_EVENT(3,end,statusPrintLogState);
 }
 
 

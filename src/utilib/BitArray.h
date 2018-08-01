@@ -144,7 +144,7 @@ private:
  
 inline void BitArray::set(const size_type ndx)
 {
-#if (ArraySanityChecking==1)
+#if (UTILIB_ArraySanityChecking==1)
 if (ndx >= Len)
    EXCEPTION_MNGR(runtime_error, "BitArray::set(ndx) : iterator out of range. ndx=" << ndx << " len=" << Len);
 #endif
@@ -153,7 +153,7 @@ if (ndx >= Len)
 
 inline void BitArray::reset(const size_type ndx)
 {
-#if (ArraySanityChecking==1)
+#if (UTILIB_ArraySanityChecking==1)
 if (ndx >= Len)
    EXCEPTION_MNGR(runtime_error, "BitArray::reset(ndx) : iterator out of range. ndx=" << ndx << " len=" << Len);
 #endif
@@ -164,7 +164,7 @@ if (ndx >= Len)
 
 inline void BitArray::flip(const size_type ndx)
 {
-#if (ArraySanityChecking==1)
+#if (UTILIB_ArraySanityChecking==1)
 if (ndx >= Len)
    EXCEPTION_MNGR(runtime_error, "BitArray::flip(ndx) : iterator out of range. ndx=" << ndx << " len=" << Len);
 #endif
@@ -172,7 +172,7 @@ if (ndx >= Len)
 }
 
 // WEH
-//DEFINE_DEFAULT_ANY_PRINTER(BitArray);
+//UTILIB_DEFINE_DEFAULT_ANY_PRINTER(BitArray);
 
 } // namespace utilib
 

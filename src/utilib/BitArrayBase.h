@@ -37,13 +37,13 @@ namespace utilib {
 // to store in 16-bit short unsigned ints or 64-bit long long ints 
 // (if available)
 
-#if !defined(BIT_ARRAYS_BY_BYTE) && !defined(BIT_ARRAYS_BY_WORD)
-#define BIT_ARRAYS_BY_WORD 1
+#if !defined(BIT_ARRAYS_BY_BYTE) && !defined(UTILIB_BIT_ARRAYS_BY_WORD)
+#define UTILIB_BIT_ARRAYS_BY_WORD 1
 #endif
 
 // A "bitword" is the datatype used to store the array.
 
-#ifdef BIT_ARRAYS_BY_WORD
+#ifdef UTILIB_BIT_ARRAYS_BY_WORD
 typedef unsigned int bitword;
 #elif defined(BIT_ARRAYS_BY_BYTE)
 typedef unsigned char bitword;
@@ -51,10 +51,10 @@ typedef unsigned char bitword;
 
 // This symbol should be log_2 of the number of bits in "bitword"
 
-#ifdef BIT_ARRAYS_BY_WORD
-#define LOG2BITWORDSIZE 5
+#ifdef UTILIB_BIT_ARRAYS_BY_WORD
+#define UTILIB_LOG2BITWORDSIZE 5
 #elif defined(BIT_ARRAYS_BY_BYTE)
-#define LOG2BITWORDSIZE 3
+#define UTILIB_LOG2BITWORDSIZE 3
 #endif
 
 #endif
@@ -179,7 +179,7 @@ public:
   size_type alloc_size(size_type l) const
     {
 #ifdef UTILIB_AIX_CC
-      return (l + index_mask) >> (LOG2BITWORDSIZE - k); 
+      return (l + index_mask) >> (UTILIB_LOG2BITWORDSIZE - k); 
 #else
       return (l + index_mask) >> index_shift; 
 #endif
@@ -274,8 +274,8 @@ public:
   // These define the basic bit-oriented constants.
 
   enum { bits          = 1 << k                 };
-  enum { index_shift   = LOG2BITWORDSIZE - k    };
-  enum { bits_per_word = 1 << LOG2BITWORDSIZE   };
+  enum { index_shift   = UTILIB_LOG2BITWORDSIZE - k    };
+  enum { bits_per_word = 1 << UTILIB_LOG2BITWORDSIZE   };
   enum { index_mask    = (1 << index_shift) - 1 };
   enum { data_mask     = (1 << bits) - 1        };
   enum { elts_per_word = bits_per_word/bits     };
@@ -312,13 +312,13 @@ protected:
 template <int k, class T, class P>
 inline T BitArrayBase<k,T,P>::get(const size_type ndx) const
 {
-#if (ArraySanityChecking==1)
+#if (UTILIB_ArraySanityChecking==1)
   if (ndx >= Len)
      EXCEPTION_MNGR(std::runtime_error, "BitArrayBase::operator[] : iterator out of range. ndx=" << ndx << " len=" << Len);
 #endif
   size_type shift = (ndx & index_mask) << k;
 #ifdef UTILIB_AIX_CC
-  return (T) ((Data[ndx >> (LOG2BITWORDSIZE - k)] >> shift) & data_mask);
+  return (T) ((Data[ndx >> (UTILIB_LOG2BITWORDSIZE - k)] >> shift) & data_mask);
 #else
   return (T) ((Data[ndx >> index_shift] >> shift) & data_mask);
 #endif
@@ -328,14 +328,14 @@ inline T BitArrayBase<k,T,P>::get(const size_type ndx) const
 template <int k, class T, class P>
 inline void BitArrayBase<k,T,P>::put(const size_type ndx, const T val)
 {
-#if (ArraySanityChecking==1)
+#if (UTILIB_ArraySanityChecking==1)
   if ((size_type)ndx >= Len)
      EXCEPTION_MNGR(std::runtime_error, "BitArrayBase::put : iterator out of range. ndx=" << ndx << " len=" << Len);
   if ((val < 0) || (val > static_cast<int>(data_mask)))
      EXCEPTION_MNGR(std::runtime_error, "BitArrayBase::put : value out of range. val=" << val << " ndx=" << ndx );
 #endif
 #ifdef UTILIB_AIX_CC
-  size_type i = ndx >> (LOG2BITWORDSIZE - k);
+  size_type i = ndx >> (UTILIB_LOG2BITWORDSIZE - k);
 #else
   size_type i = ndx >> index_shift;
 #endif
@@ -689,7 +689,7 @@ template<int k, class T, class P>
 utilib::BitArrayBase<k,T,P>& 
 operator<<(utilib::BitArrayBase<k,T,P>& x, const T& value)
 {
-#if (ArraySanityChecking==1)
+#if (UTILIB_ArraySanityChecking==1)
 if ((value < 0) || ((static_cast<int>(value)) > (static_cast<int>(x.data_mask))))
    EXCEPTION_MNGR(std::runtime_error, "operator<<(const T value) : value " << value << " out of range for " << static_cast<int>(x.bits) << "-bit array");
 #endif

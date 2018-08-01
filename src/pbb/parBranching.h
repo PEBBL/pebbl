@@ -1261,9 +1261,9 @@ public:
 #ifdef EVENT_LOGGING_PRESENT
   virtual int splitProblem()
     {
-      LOG_EVENTX(pGlobal(),4,start,pGlobal()->pSplitLogState);
+      UTILIB_LOG_EVENTX(pGlobal(),4,start,pGlobal()->pSplitLogState);
       int returnValue = branchSub::splitProblem();
-      LOG_EVENTX(pGlobal(),4,end,  pGlobal()->pSplitLogState);
+      UTILIB_LOG_EVENTX(pGlobal(),4,end,  pGlobal()->pSplitLogState);
       return returnValue;
     };
 #endif
@@ -1606,7 +1606,7 @@ template <class B,class PB> int driver(int argc, char** argv)
       uMPI::done();
     }
 
-  STD_CATCH(CommonIO::end(); uMPI::done();)
+  UTILIB_STD_CATCH(CommonIO::end(); uMPI::done();)
 
   return !flag;
 }

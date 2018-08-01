@@ -25,8 +25,8 @@ namespace utilib {
 template <class InfoType>
 class SmartPtrInfo;
 
-#ifndef _ENUMDATAOWNED_
-#define _ENUMDATAOWNED_
+#ifndef UTILIB_ENUMDATAOWNED
+#define UTILIB_ENUMDATAOWNED
 /**
  * Ownership categories for objects with reference counts.
  */

@@ -356,7 +356,7 @@ public:
 #endif
 
 /// A macro that performs a catch for all standard exception types
-#define STD_CATCH(cmd)\
+#define UTILIB_STD_CATCH(cmd)\
   catch (const char* str) { std::cerr << "ERROR! Caught exception string: " << str << std::endl << std::flush; cmd ; }\
 \
   catch (const std::bad_alloc& err) { std::cerr << "ERROR! Caught 'bad_alloc' exception: " << err.what() << std::endl << std::flush; cmd ; }\

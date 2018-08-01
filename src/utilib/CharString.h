@@ -404,7 +404,7 @@ inline utilib::UnPackBuffer& operator>>(utilib::UnPackBuffer& is,
 { obj.read(is); return(is); }
 
 namespace utilib {
-DEFINE_FULL_ANY_EXTENSIONS(utilib::CharString);
+UTILIB_DEFINE_FULL_ANY_EXTENSIONS(utilib::CharString);
 } // namespace utilib
 
 #endif

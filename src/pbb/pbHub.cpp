@@ -118,7 +118,7 @@ void parallelBranching::repositionWorker(int w)
 void parallelBranching::hubPrune()
 {
   HUBDEBUG(3,ucout << "Hub pruning invoked.\n");
-  LOG_EVENT(2,start,hubPruneLogState);
+  UTILIB_LOG_EVENT(2,start,hubPruneLogState);
   hubPool->prune(); 
   hubPool->load().update(); 
   HUBDEBUG(3,ucout << "Hub pool pruning complete.\n");
@@ -138,7 +138,7 @@ void parallelBranching::hubPrune()
     pruneIfNeeded();
   else if (enumCount > 1)             // To make sure repository is pruned
     pruneRepository();                // on "pure" hubs
-  LOG_EVENT(2,end,hubPruneLogState);
+  UTILIB_LOG_EVENT(2,end,hubPruneLogState);
   HUBDEBUG(3,ucout << "Hub pruning complete.\n");
 }
 
@@ -179,9 +179,9 @@ void parallelBranching::handleHubMessage(UnPackBuffer& inBuf,int src)
     {
       (*receiveCounterP)++;
       tokensReceived++;
-      MEMDEBUG_START_NEW("spToken")
+      UTILIB_MEMDEBUG_START_NEW("spToken")
       spToken* t = new spToken(this,inBuf);
-      MEMDEBUG_END_NEW("spToken")
+      UTILIB_MEMDEBUG_END_NEW("spToken")
       if (t->canFathom())
 	{
 	  HUBDEBUG(100,ucout << "Ignoring " << t << " (fathomed).\n");
@@ -284,7 +284,7 @@ void parallelBranching::activateHub()
   HUBDEBUG(100,ucout << "Hub activation\n");
 #endif
 
-  LOG_EVENT(1,start,hubLogState);
+  UTILIB_LOG_EVENT(1,start,hubLogState);
 
   if (!suspending())
     hubDistributeWork();
@@ -316,7 +316,7 @@ void parallelBranching::activateHub()
       earlyOutputter->activateEarlyOutput();
     }
 
-  LOG_EVENT(1,end,hubLogState);
+  UTILIB_LOG_EVENT(1,end,hubLogState);
 #ifdef ACRO_VALIDATING
   HUBDEBUG(100,ucout << "Hub activation completed, dispatch count " <<
 	   (messages.hubDispatch.sent - baseMessages) << endl);
@@ -473,9 +473,9 @@ spToken*
       thePool->remove(t);
       return t;
     }
-  MEMDEBUG_START_NEW("spToken")
+  UTILIB_MEMDEBUG_START_NEW("spToken")
   spToken* tCopy = new spToken(*t);
-  MEMDEBUG_END_NEW("spToken")
+  UTILIB_MEMDEBUG_END_NEW("spToken")
   tCopy->childrenRepresented = 1;
   tCopy->poolPtr = 0;
   (t->childrenRepresented--);
@@ -642,9 +642,9 @@ void parallelBranching::unloadLoadBalBuffer(UnPackBuffer& buffer)
   buffer >> flag;
   while(flag)
     {
-      MEMDEBUG_START_NEW("spToken");
+      UTILIB_MEMDEBUG_START_NEW("spToken");
       spToken* t = new spToken(this,buffer);
-      MEMDEBUG_END_NEW("spToken");
+      UTILIB_MEMDEBUG_END_NEW("spToken");
       DEBUGPRX(160,loadBalancer,"Unpacked " << t << '\n');
       if (canFathom(t->bound))
 	delete t;         // A new incumbent etc. may have come along

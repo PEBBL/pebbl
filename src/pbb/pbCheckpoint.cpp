@@ -68,7 +68,7 @@ namespace pebbl {
 
   void parallelBranching::writeCheckpoint()
   {
-    LOG_EVENT(1,start,checkpointLogState);
+    UTILIB_LOG_EVENT(1,start,checkpointLogState);
 
     writingCheckpoint = true;
 
@@ -178,7 +178,7 @@ namespace pebbl {
     writingCheckpoint = false;
     checkpointing     = false;
 
-    LOG_EVENT(1,end,checkpointLogState);
+    UTILIB_LOG_EVENT(1,end,checkpointLogState);
 
     // If we have to abort now, do it.
 

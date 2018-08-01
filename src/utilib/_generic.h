@@ -32,8 +32,8 @@ namespace utilib {
  *
  * Ownership categories for objects with reference counts.
  */
-#ifndef _ENUMDATAOWNED_
-#define _ENUMDATAOWNED_
+#ifndef UTILIB_ENUMDATAOWNED
+#define UTILIB_ENUMDATAOWNED
 enum EnumDataOwned
 {
   DataNotOwned=0,	/**< Data owned by some other object */
@@ -42,22 +42,6 @@ enum EnumDataOwned
   AssumeOwnership=2	/**< We own it now, but it comes from elsewhere */
                         /**< Once the object has been made this is      */
                         /**< identical to DataOwned                     */
-};
-#endif
-
-/**
- * \enum OrderSense
- *
- * Bias used for comparisons in a dynamic ADT.
- */
-#ifndef ORDERSENSE
-#define ORDERSENSE
-enum OrderSense
-{
-  increasing=1, /**< Order from least to greatest */
-  decreasing=-1, /**< Order from greatest to least */
-  minimal=1,
-  maximal=-1
 };
 #endif
 
@@ -82,26 +66,14 @@ enum { PEBBL_ERR = -999 };
 #endif
 #define NULL		0
 
-/**
- * \def _(args)
- *
- * Used to provide a consistent definition for non-ansi C and ansi C.
- */
-#if defined(UTILIB_STDC_HEADERS) || defined(__cplusplus)
-#define _(args) args
-#else
-#define _(args) ()
-#endif
-
-
 #if !defined(UTILIB_HAVE_STD) && !defined(__cplusplus)
 /**
  * \typedef size_t
  *
  * The typedef for \a size_t arguments.
  */
-#ifndef _SIZE_T
-#define _SIZE_T
+#ifndef UTILIB_SIZE_T
+#define UTILIB_SIZE_T
 typedef unsigned size_t;
 #endif
 #endif

@@ -75,7 +75,7 @@ void coTreeReadyPBThread::setToWaitFor(MessageID& tag_)
 
 ThreadObj::RunStatus parBranchingThreadObj::run(double* controlParam)
 {  
-  LOG_EVENTX(global,logLevel,start,myLogState);
+  UTILIB_LOG_EVENTX(global,logLevel,start,myLogState);
 
   global->currentThread = this;
 
@@ -91,7 +91,7 @@ ThreadObj::RunStatus parBranchingThreadObj::run(double* controlParam)
   DEBUGPR(dbgLevel,ucout << name << " slice done at " << 
 	  CPUSeconds() - startTime << " seconds, control " <<
 	  *controlParam << '\n');
-  LOG_EVENTX(global,logLevel,end,myLogState);
+  UTILIB_LOG_EVENTX(global,logLevel,end,myLogState);
   return sliceStatus;
 };
 

@@ -527,7 +527,7 @@ void parallelBranching::reset(bool VBFlag)
 
   // Set up the scheduler
 
-  IF_LOGGING_EVENTS(1,initEventLog(););
+  UTILIB_IF_LOGGING_EVENTS(1,initEventLog(););
 
   DEBUGPR(300,ucout << "Setting up scheduler\n");
   initializeScheduler();
@@ -788,9 +788,9 @@ double parallelBranching::parallelSearchFramework(parSPHandler* handler_)
   DEBUGPR(300,ucout << "Preprocessing\n");
   double startPreprocessTime = CPUSeconds();
   double startPreprocessWCTime = WallClockSeconds();
-  LOG_EVENT(1,start,preprocLogState);
+  UTILIB_LOG_EVENT(1,start,preprocLogState);
   preprocess();
-  LOG_EVENT(1,end,preprocLogState);
+  UTILIB_LOG_EVENT(1,end,preprocLogState);
   
   double endPreprocessTime = CPUSeconds();
   double endPreprocessWCTime = WallClockSeconds();
@@ -888,7 +888,7 @@ double parallelBranching::parallelSearchFramework(parSPHandler* handler_)
 
   finishLoadLogIfNeeded();
 
-  IF_LOGGING_EVENTS(1,finishEventLog(););
+  UTILIB_IF_LOGGING_EVENTS(1,finishEventLog(););
 
   if (checkpointNumber > 0)
     deleteCheckpointFile(checkpointNumber,myRank());
@@ -1293,7 +1293,7 @@ void parallelBranching::rampUpSearch()
 
   double startRampUpTime = CPUSeconds();
   double startRampUpWCTime = WallClockSeconds();
-  LOG_EVENT(1,start,rampUpLogState);
+  UTILIB_LOG_EVENT(1,start,rampUpLogState);
   rampUpFlag = true;
   DEBUGPR(1,ucout << "Starting ramp-up phase\n");
 
@@ -1492,7 +1492,7 @@ void parallelBranching::rampUpSearch()
 	  << " local-pool=" << workerPool->size() << endl);
 
   rampUpFlag = false;
-  LOG_EVENT(1,end,rampUpLogState);
+  UTILIB_LOG_EVENT(1,end,rampUpLogState);
   rampUpTime = CPUSeconds() - startRampUpTime;
   rampUpWCTime = WallClockSeconds() - startRampUpWCTime;
 

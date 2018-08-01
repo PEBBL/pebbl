@@ -43,14 +43,14 @@
 #include <mpe.h>
 
 /// Send a log message
-#define LOG_SEND(a,b,c,d)   if (messageLog) logSend(a,b,c,d)
+#define UTILIB_LOG_SEND(a,b,c,d)   if (messageLog) logSend(a,b,c,d)
 /// Receive a log message
-#define LOG_RECV(s)         if (messageLog) logRecv(s)
+#define UTILIB_LOG_RECV(s)         if (messageLog) logRecv(s)
 
 #else
 
-#define LOG_SEND(a,b,c,d)               // Nothing
-#define LOG_RECV(s)                     // Nothing
+#define UTILIB_LOG_SEND(a,b,c,d)               // Nothing
+#define UTILIB_LOG_RECV(s)                     // Nothing
 
 #endif
 
@@ -215,7 +215,7 @@ public:
   static void isend(void* buffer,int count,MPI_Datatype datatype,int dest,
 		    int tag,MPI_Request* request)
 	{
-	LOG_SEND(dest,tag,count,datatype);
+	UTILIB_LOG_SEND(dest,tag,count,datatype);
 	errorCode = MPI_Isend(buffer,count,datatype,dest,tag,comm, request);
 	if (errorCode)
 	   EXCEPTION_MNGR(std::runtime_error, "MPI_Isend failed, code "
@@ -239,7 +239,7 @@ public:
   static void send(void* buffer,int count,MPI_Datatype datatype,int dest,
 		   int tag)
 	{
-	LOG_SEND(dest,tag,count,datatype);
+	UTILIB_LOG_SEND(dest,tag,count,datatype);
 	errorCode = MPI_Send(buffer,count,datatype,dest,tag,comm);
 	if (errorCode)
    	   EXCEPTION_MNGR(std::runtime_error, "MPI_Send failed, code "
@@ -250,7 +250,7 @@ public:
   static void ssend(void* buffer,int count,MPI_Datatype datatype,int dest,
 		    int tag)
 	{
-	LOG_SEND(dest,tag,count,datatype);
+	UTILIB_LOG_SEND(dest,tag,count,datatype);
 	errorCode = MPI_Ssend(buffer,count,datatype,dest,tag,comm);
 	if (errorCode)
    	   EXCEPTION_MNGR(std::runtime_error, "MPI_Ssend failed, code "
@@ -270,7 +270,7 @@ public:
   static void issend(void* buffer,int count,MPI_Datatype datatype,int dest,
 		     int tag,MPI_Request* request)
     	{
-      	LOG_SEND(dest,tag,count,datatype);
+      	UTILIB_LOG_SEND(dest,tag,count,datatype);
       	errorCode = MPI_Issend(buffer,count,datatype,dest,tag,comm, request);
       	if (errorCode)
 	   EXCEPTION_MNGR(std::runtime_error, "MPI_Issend failed, code "
@@ -295,7 +295,7 @@ public:
 	if (errorCode)
 	   EXCEPTION_MNGR(std::runtime_error, "MPI_Recv failed, code "
 								<< errorCode);
-	LOG_RECV(status);
+	UTILIB_LOG_RECV(status);
 	}
 
   /// Get the count from a data type.
@@ -318,7 +318,7 @@ public:
 								<< errorCode);
 #ifdef UTILIB_HAVE_MPI
 	if (*flag)
-	   LOG_RECV(status);
+	   UTILIB_LOG_RECV(status);
 #endif
 	}
 
@@ -375,7 +375,7 @@ public:
 								<< errorCode);
 #ifdef UTILIB_HAVE_MPI
 	for (int i=0; i<outcount; i++)
-	  LOG_RECV(status_array+i);
+	  UTILIB_LOG_RECV(status_array+i);
 #endif
 	return (outcount > 0);
 	}
@@ -398,7 +398,7 @@ public:
 		       "MPI_Wait failed, code " << errorCode);
 	if (!killing)
 	  {
-	    LOG_RECV(status);
+	    UTILIB_LOG_RECV(status);
 	  }
 	}
 

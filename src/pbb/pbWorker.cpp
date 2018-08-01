@@ -43,7 +43,7 @@ namespace pebbl {
 
 void parallelBranching::signalIncumbent()
 {
-  LOG_EVENT(1,start,foundIncLogState);
+  UTILIB_LOG_EVENT(1,start,foundIncLogState);
 
   branching::signalIncumbent();
   incumbentSource = myRank();
@@ -61,7 +61,7 @@ void parallelBranching::signalIncumbent()
   if (!rampingUp())
     incumbentCaster->initiateBroadcast();
 
-  LOG_EVENT(1,end,foundIncLogState);
+  UTILIB_LOG_EVENT(1,end,foundIncLogState);
 
   if (trackIncumbent)
     ucout << "New incumbent found: value=" << incumbentValue 
@@ -122,7 +122,7 @@ void parallelBranching::workerExecute(double* controlParam)
   workLeft = *controlParam;
   workUsed = 0;
 
-  LOG_EVENT(1,start,workerLogState);
+  UTILIB_LOG_EVENT(1,start,workerLogState);
 
   if (!suspending())
     {
@@ -151,7 +151,7 @@ void parallelBranching::workerExecute(double* controlParam)
   else if (!didARebalance && shouldCommunicateWithHub(localScatterQuantum))
     workerCommunicateWithHub();
 
-  LOG_EVENT(1,end,workerLogState);
+  UTILIB_LOG_EVENT(1,end,workerLogState);
   
   WORKERDEBUG(40,ucout << "Worker slice done at " << 
 	      CPUSeconds() - startTime << " seconds, control " <<
@@ -235,7 +235,7 @@ bool parEagerHandler::boundSubHandler()
 
 void parallelBranching::computeBound(parallelBranchSub* p)
 {
-  LOG_EVENT(1,start,boundLogState);
+  UTILIB_LOG_EVENT(1,start,boundLogState);
   double control = 1;
   if (!rampingUp())
     control = workLeft;
@@ -254,7 +254,7 @@ void parallelBranching::computeBound(parallelBranchSub* p)
       WORKERDEBUG(100,ucout << "Work done = " << control << ", workLeft = "
 		  << workLeft << ", workUsed = " << workUsed << ".\n");
     }
-  LOG_EVENT(1,end,boundLogState);
+  UTILIB_LOG_EVENT(1,end,boundLogState);
 }
 
 
@@ -267,7 +267,7 @@ parallelBranchSub* parallelBranchSub::parallelChild(int whichChild)
     EXCEPTION_MNGR(runtime_error, "Attempt to extract child of " <<
 		   stateString(state) << " subproblem");
 
-  LOG_EVENTX(pGlobal(),4,start,pGlobal()->pCreateLogState);
+  UTILIB_LOG_EVENTX(pGlobal(),4,start,pGlobal()->pCreateLogState);
 
   whichChild = chooseChild(whichChild);  // If whichChild==anyChild, fix it.
   if (--childrenLeft < 0)
@@ -278,7 +278,7 @@ parallelBranchSub* parallelBranchSub::parallelChild(int whichChild)
   if (rampingUp())
     c->id.creatingProcessor = 0;
 
-  LOG_EVENTX(pGlobal(),4,end,pGlobal()->pCreateLogState);
+  UTILIB_LOG_EVENTX(pGlobal(),4,end,pGlobal()->pCreateLogState);
 
   DEBUGPR(10,ucout 
 	  << "Extracted (parallel) child " << c << ", child "
@@ -636,9 +636,9 @@ void parallelBranching::workerRelease(parallelBranchSub* p,
     {
       if (iAmHub())
 	{
-          MEMDEBUG_START_NEW("spToken")
+          UTILIB_MEMDEBUG_START_NEW("spToken")
           spToken* tmp = new spToken(p,whichChild,multiplicity);
-          MEMDEBUG_END_NEW("spToken")
+          UTILIB_MEMDEBUG_END_NEW("spToken")
 	  hubPool->insert(tmp);
 	  hubHandledCount++;
 	  WORKERDEBUG(100,ucout << "Completed locally.\n");
@@ -764,7 +764,7 @@ void parallelBranching::pruneIfNeeded()
   if (!needPruning)
     return;
 
-  LOG_EVENT(2,start,pruneLogState);
+  UTILIB_LOG_EVENT(2,start,pruneLogState);
   WORKERDEBUG(4 - iAmHub(),ucout << "Pruning invoked.\n");
 
   workerPool->prune();
@@ -788,7 +788,7 @@ void parallelBranching::pruneIfNeeded()
     pruneRepository();
 
   WORKERDEBUG(4 - iAmHub(),ucout << "Pruning done.\n");
-  LOG_EVENT(2,end,pruneLogState);
+  UTILIB_LOG_EVENT(2,end,pruneLogState);
 };
 
 
@@ -936,7 +936,7 @@ int parallelBranching::rebalanceIfNeeded()
       if (p->state == separated) 
 	tokenType = anyChild;  
       
-      LOG_EVENT_CONDITIONAL(2,sent == 0,start,rebalLogState);
+      UTILIB_LOG_EVENT_CONDITIONAL(2,sent == 0,start,rebalLogState);
 
       int tokensToSend = 1;
       if (p->state == separated)
@@ -966,7 +966,7 @@ int parallelBranching::rebalanceIfNeeded()
   if (!iAmHub() && (sent > 0) && (releaseProbCount > 0))
     workerCommunicateWithHub(true);
 
-  LOG_EVENT_CONDITIONAL(2,sent > 0,end,rebalLogState);
+  UTILIB_LOG_EVENT_CONDITIONAL(2,sent > 0,end,rebalLogState);
 
   return sent;
 }

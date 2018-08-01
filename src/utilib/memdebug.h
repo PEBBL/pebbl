@@ -33,7 +33,7 @@
 #include <utilib/IntVector.h>
 
 
-#define MEMDEBUG_START_NEW(this)					\
+#define UTILIB_MEMDEBUG_START_NEW(this)					\
 	{								\
 	int i=0;							\
 	for (; i<utilib::memdebug::num; i++)					\
@@ -56,7 +56,7 @@
 	utilib::memdebug::last_total[i] = utilib::memdebug::nbytes;			\
 	}
 
-#define MEMDEBUG_END_NEW(this)						\
+#define UTILIB_MEMDEBUG_END_NEW(this)						\
 	{								\
 	for (int i=0; i<utilib::memdebug::num; i++)				\
           if (utilib::memdebug::name[i] == this) {				\
@@ -68,7 +68,7 @@
 	}
 
 
-#define MEMDEBUG_START_RESIZE(this)					\
+#define UTILIB_MEMDEBUG_START_RESIZE(this)					\
 	{								\
 	int i=0;							\
 	for (; i<utilib::memdebug::num; i++)					\
@@ -76,7 +76,7 @@
 	     utilib::memdebug::last_total[i] = utilib::memdebug::nbytes;		\
 	}
 
-#define MEMDEBUG_END_RESIZE(this)					\
+#define UTILIB_MEMDEBUG_END_RESIZE(this)					\
 	{								\
 	for (int i=0; i<utilib::memdebug::num; i++)				\
           if (utilib::memdebug::name[i] == this) {				\
@@ -86,11 +86,11 @@
 	}
 
 
-#define MEMDEBUG_START_DEL(this)					\
+#define UTILIB_MEMDEBUG_START_DEL(this)					\
 	{								\
 	}
 
-#define MEMDEBUG_END_DEL(this)						\
+#define UTILIB_MEMDEBUG_END_DEL(this)						\
 	{								\
 	for (int i=0; i<utilib::memdebug::num; i++)				\
           if (utilib::memdebug::name[i] == this) {				\
@@ -99,7 +99,7 @@
 	}
 
 
-#define MEMDEBUG_DUMP(os)		utilib::memdebug::print_summary(os);
+#define UTILIB_MEMDEBUG_DUMP(os)		utilib::memdebug::print_summary(os);
 
 namespace utilib {
 
@@ -130,13 +130,13 @@ public:
 
 #else
 
-#define MEMDEBUG_START_NEW(this)
-#define MEMDEBUG_END_NEW(this)	
-#define MEMDEBUG_START_RESIZE(this)	
-#define MEMDEBUG_END_RESIZE(this)
-#define MEMDEBUG_START_DEL(this)
-#define MEMDEBUG_END_DEL(this)
-#define MEMDEBUG_DUMP(os)
+#define UTILIB_MEMDEBUG_START_NEW(this)
+#define UTILIB_MEMDEBUG_END_NEW(this)	
+#define UTILIB_MEMDEBUG_START_RESIZE(this)	
+#define UTILIB_MEMDEBUG_END_RESIZE(this)
+#define UTILIB_MEMDEBUG_START_DEL(this)
+#define UTILIB_MEMDEBUG_END_DEL(this)
+#define UTILIB_MEMDEBUG_DUMP(os)
 
 #endif
 

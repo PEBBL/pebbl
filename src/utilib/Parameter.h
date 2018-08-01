@@ -270,7 +270,7 @@ protected:
 
 };
 
-DEFINE_DEFAULT_ANY_COMPARATOR(Parameter);
+UTILIB_DEFINE_DEFAULT_ANY_COMPARATOR(Parameter);
 
 } // namespace utilib
 

@@ -393,7 +393,7 @@ return vars;
 }
 
 namespace utilib {
-DEFINE_FULL_ANY_EXTENSIONS(utilib::MixedIntVars);
+UTILIB_DEFINE_FULL_ANY_EXTENSIONS(utilib::MixedIntVars);
 } // namespace utilib
 
 #endif

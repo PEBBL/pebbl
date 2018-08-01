@@ -615,7 +615,7 @@ void UnPackBuffer::unpack(TYPE* data, const size_type num)
 
 #ifdef UTILIB_HAVE_MPI
 
-#define PACKBUF(TYPE)\
+#define UTILIB_PACKBUF(TYPE)\
 inline void PackBuffer::pack(const TYPE* data, const int num)\
 {\
 resize(PackSize(data[0],num));\
@@ -625,7 +625,7 @@ MPI_Pack((void*)data, num, mpi_datatype<TYPE>(),\
 
 #else
 
-#define PACKBUF(TYPE)\
+#define UTILIB_PACKBUF(TYPE)\
 inline void PackBuffer::pack(const TYPE* data, const int num)\
 { \
 size_t curr = sizeof(TYPE);\
@@ -637,23 +637,23 @@ Index += curr;\
 
 #endif
 
-PACKBUF(int)
-PACKBUF(unsigned_int)
-PACKBUF(long)
-//PACKBUF(long long)
-PACKBUF(unsigned_long)
-PACKBUF(short)
-PACKBUF(unsigned_short)
-PACKBUF(char)
-PACKBUF(unsigned_char)
-PACKBUF(double)
-PACKBUF(long double)
-PACKBUF(float)
+UTILIB_PACKBUF(int)
+UTILIB_PACKBUF(unsigned_int)
+UTILIB_PACKBUF(long)
+//UTILIB_PACKBUF(long long)
+UTILIB_PACKBUF(unsigned_long)
+UTILIB_PACKBUF(short)
+UTILIB_PACKBUF(unsigned_short)
+UTILIB_PACKBUF(char)
+UTILIB_PACKBUF(unsigned_char)
+UTILIB_PACKBUF(double)
+UTILIB_PACKBUF(long double)
+UTILIB_PACKBUF(float)
 
 
 #ifdef UTILIB_HAVE_MPI
 
-#define UNPACKBUF(TYPE)\
+#define UTILIB_UNPACKBUF(TYPE)\
 inline void UnPackBuffer::unpack(TYPE* data, const int num)\
 {\
 if (num == 0) {\
@@ -676,7 +676,7 @@ else\
 
 #else
 
-#define UNPACKBUF(TYPE)\
+#define UTILIB_UNPACKBUF(TYPE)\
 inline void UnPackBuffer::unpack(TYPE* data, const int num)\
 { \
   if (num == 0) \
@@ -701,18 +701,18 @@ inline void UnPackBuffer::unpack(TYPE* data, const int num)\
 }
 #endif
 
-UNPACKBUF(int)
-UNPACKBUF(unsigned_int)
-UNPACKBUF(long)
-UNPACKBUF(unsigned_long)
-UNPACKBUF(short)
-UNPACKBUF(unsigned_short)
-UNPACKBUF(char)
-UNPACKBUF(unsigned_char)
-UNPACKBUF(double)
-UNPACKBUF(long double)
-UNPACKBUF(float)
-//UNPACKBUF(long long)
+UTILIB_UNPACKBUF(int)
+UTILIB_UNPACKBUF(unsigned_int)
+UTILIB_UNPACKBUF(long)
+UTILIB_UNPACKBUF(unsigned_long)
+UTILIB_UNPACKBUF(short)
+UTILIB_UNPACKBUF(unsigned_short)
+UTILIB_UNPACKBUF(char)
+UTILIB_UNPACKBUF(unsigned_char)
+UTILIB_UNPACKBUF(double)
+UTILIB_UNPACKBUF(long double)
+UTILIB_UNPACKBUF(float)
+//UTILIB_UNPACKBUF(long long)
 
 #endif 
 
