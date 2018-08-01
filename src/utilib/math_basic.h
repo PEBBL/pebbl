@@ -19,8 +19,6 @@
 #define utilib_math_basic_h
 
 #include <utilib/std_headers.h>
-#include <utilib/_generic.h>
-
 
 #ifdef UTILIB_SOLARIS_CC
 #include <sunmath.h>
@@ -53,20 +51,7 @@
 #define MAXLONGDOUBLE LDBL_MAX
 #endif
 
-#ifdef _MSC_VER
-const long double M_PI = 3.1415926535897932384626433832795029L;
-const long double M_E  = 2.7182818284590452354L;
-#endif
-
-
 namespace utilib {
-
-/*
- * 
- * OPERATIONS ON SIMPLE VALUES
- *
- */
-
 
 /** Returns +1 if argument is positive, -1 if it is negative, and 0 otherwise. */
 template<class T>
@@ -79,45 +64,7 @@ inline int sgn(const T& thing)
   return 0;
 }
 
-// convert any printable thing to a std::string
-// used by pscientific
-template <class T>
-std::string tostring(const T &arg) {
-  std::ostringstream out;
-  out << arg;
-  return(out.str());
-  }
-
-
-///
-/// pscientific returns a portable scientific notation output, consistent
-/// across platforms and bit sizes (within the machine precision).
-/// stream options ios::uppercase and ios::showpos are supported
-/// this does not support all stream options, and will have undetermined
-/// results if flags such as left, right, hex, etc are set.
-/// ios::setpoint and ios::width are not supported, but probably should be
-///
-std::string pscientific(const double t, int mantissa=6, int expwidth=3,
-	std::ostream* os = NULL);
-
 }
-
-
-/*
- *
- * MISCELLANEOUS 
- *
- */
-
-/** Compute the number of lines in file filename. */
-int calc_filesize(char* filename);
-
-/**
- * A method for rounding a double to num_digits
- * number of decimal digits after the decimal point.
- */
-double d_round(double to_round, unsigned int num_digits);
-
 
 /* Compute number of bits needed to hold an integer value */
 unsigned int bitWidth(unsigned int x);
@@ -128,5 +75,4 @@ unsigned int bitWidth(unsigned int x);
 unsigned int gcd(unsigned int a, unsigned int b);
 
 #endif
-
 
