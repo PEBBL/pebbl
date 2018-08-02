@@ -24,7 +24,7 @@
 #include <mpi.h>
 #include <utilib/PM_LCG.h>
 #include <utilib/IntVector.h>
-#include <utilib/IntMatrix.h>
+#include <utilib/Basic2DArray.h>
 #include <misc/clusterTree.h>
 #include <pbb/loadBalPair.h>
 #include <pbb/parLoadObject.h>
@@ -84,8 +84,6 @@ private:
 //  This is another coTree-based class.  Counts potential donors and
 //  receivers of work, and assigns unique numbers to each cluster.
 
-using utilib::IntMatrix;
-
 class loadBalCount : public parBranchingCoTree
 {
 public:
@@ -122,7 +120,7 @@ private:
 
   IntVector upBuf;
   IntVector downBuf;
-  IntMatrix childBuf;
+  Basic2DArray<int> childBuf;
 
 };
 

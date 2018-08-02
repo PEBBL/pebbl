@@ -59,8 +59,6 @@ template <class T>
 class Basic2DArrayRep {
  
   friend class Basic2DArray<T>;
-  friend class Simple2DArray<T>;
-  friend class Num2DArray<T>;
 
 protected:
  
