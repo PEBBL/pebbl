@@ -44,12 +44,6 @@ namespace utilib {
 template <class T>
 class Basic2DArray;
 
-template <class T>
-class Simple2DArray;
-
-template <class T>
-class Num2DArray;
-
 
 /**
  * The internal class that is used to manage the data for
