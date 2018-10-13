@@ -320,7 +320,7 @@ public:
     {
       messages.general.received++;
       // preventIdleDeadlock(callingThread);
-      DEBUGPR(50, ucout << "Recorded message sent by "
+      DEBUGPR(50, ucout << "Recorded message received by "
                         << callingThread->name << ", count now "
                         << messages.general.received << '\n');
     };
