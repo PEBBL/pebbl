@@ -117,7 +117,7 @@ namespace pebblMonom {
     }
 
     // need to implement compare, read and write operations
-    void appendVar(const size_type idx) throw (exception) 
+    void appendVar(const size_type idx) // throw (exception) 
     {
       if (idx < 0 || idx >= maxDegree()) 
 	throw out_of_range("idx out of range in append");
@@ -126,7 +126,7 @@ namespace pebblMonom {
       _lastSetIdx=idx;
     }
 
-    void appendCompVar(const size_type idx) throw (exception) 
+    void appendCompVar(const size_type idx) // throw (exception) 
     {
       if (idx < 0 || idx >= maxDegree()) 
 	throw out_of_range("idx out of range in append c");
@@ -135,7 +135,7 @@ namespace pebblMonom {
       _lastSetIdx=idx;
     }
 
-    void setOutOfMonom(const size_type idx) throw (exception) 
+    void setOutOfMonom(const size_type idx) // throw (exception) 
     {
       if (idx < 0 || idx >= maxDegree()) 
 	throw out_of_range("idx out of range in append c"); 
@@ -143,7 +143,7 @@ namespace pebblMonom {
       _notInMonom.insert(idx);_lastSetIdx=idx;
     }
 
-    bool evaluatePoint(const observation_t boolVector) const throw (exception);
+    bool evaluatePoint(const observation_t boolVector) const; // throw (exception);
 
     size_type degree()    const {return _varIdxs.size();}
     size_type maxDegree() const {return _vars.size();}
@@ -157,7 +157,7 @@ namespace pebblMonom {
 
     const set<size_type> & getVarIdxs() const {return _varIdxs;}
 
-    void remove(const size_type idx) throw (exception) 
+    void remove(const size_type idx) // throw (exception) 
     {
       if (idx < 0 || idx >= maxDegree()) 
 	throw invalid_argument("idx out of range in remove");
@@ -370,23 +370,23 @@ namespace pebblMonom {
 
     // returns the positive observations covered by monomial
     void getPosCovg(const monomialObj &, 
-		    set<size_type> & output) const throw (exception);
+		    set<size_type> & output) const; // throw (exception);
 
     void getNegCovg(const monomialObj &, 
-		    set<size_type> & output) const throw (exception);
+		    set<size_type> & output) const; // throw (exception);
 
     void getCovg(const monomialObj &, 
-		 set<size_type> & output) const throw (exception);
+		 set<size_type> & output) const; // throw (exception);
 
     // returns the positive observations covered by monomial
     void getPosCovgFast(const monomialObj &, 
-			set<size_type> & output) const throw (exception);
+			set<size_type> & output) const; // throw (exception);
 
     void getNegCovgFast(const monomialObj &, 
-			set<size_type> & output) const throw (exception);
+			set<size_type> & output) const; // throw (exception);
 
     const observation_t& getObservation(const unsigned int i) 
-      const throw (exception) 
+      const // throw (exception) 
       {
 #ifdef ACRO_VALIDATING
 	if (i >= _dataStore.size()) 
@@ -396,10 +396,9 @@ namespace pebblMonom {
       }
 
     const monomialObj getNthMonomChild(const monomialObj &parent, 
-				       const size_type n) 
-      const throw (exception);
+				       const size_type n) const; // throw (exception);
 
-    double getWeight(const set<size_type> & obsIdxs) const throw (exception);
+    double getWeight(const set<size_type> & obsIdxs) const; // throw (exception);
 
     double getWeight(size_type idx) const 
     {
@@ -423,7 +422,7 @@ namespace pebblMonom {
 
     void getFilteredCovg(const monomialObj &, 
 			 const set<size_type> & filter, 
-			 set<size_type> & output) const throw (exception);
+			 set<size_type> & output) const; // throw (exception);
 
     const set<size_type> & getPositives() const {return _posIdx;}
     const set<size_type> & getNegatives() const {return _negIdx;}
@@ -470,7 +469,7 @@ namespace pebblMonom {
       
     const set<size_type> & getPosVarCovg(size_type idx, 
 					 variable_val_t val) 
-      const throw (exception) 
+      const // throw (exception) 
     {
       assert(val!=NOT_IN_MONOM && idx>=0 && idx < _attribNum); 
       if (val==IN_MONOM) 
@@ -481,7 +480,7 @@ namespace pebblMonom {
      
     const set<size_type> & getNegVarCovg(size_type idx, 
 					 variable_val_t val) 
-      const throw (exception) 
+      const // throw (exception) 
     {
       assert(val!=NOT_IN_MONOM && idx >=0 && idx < _attribNum);
       if (val==IN_MONOM) 
@@ -678,8 +677,8 @@ namespace pebblMonom {
 				      double       suppliedBound = -2.0);
 
   private:
-    virtual void initChild(maxMonomSub* parent,int whichChild) 
-      throw (std::exception);
+    virtual void initChild(maxMonomSub* parent,int whichChild) ;
+      // throw (std::exception);
 
   public:
 
@@ -729,8 +728,8 @@ namespace pebblMonom {
     double findMostNonSeparating(const vector<size_type> & outOfMonom, 
 				 const vector<size_type> & freeVariables, 
 				 vector<size_type> & ret, 
-				 vector<pair<double,double> > & insepWts) 
-      throw (exception);
+				 vector<pair<double,double> > & insepWts) ;
+      // throw (exception);
  
     virtual maxMonomSub * allocateObject() const 
     {
