@@ -311,12 +311,18 @@ public:
     {
       messages.general.sent++;
       // preventIdleDeadlock(callingThread);
+      DEBUGPR(50, ucout << "Recorded message sent from "
+                        << callingThread->name << ", count now "
+                        << messages.general.sent << '\n');
     };
 
   void recordMessageReceived(parBranchingThreadObj* callingThread)
     {
       messages.general.received++;
       // preventIdleDeadlock(callingThread);
+      DEBUGPR(50, ucout << "Recorded message received by "
+                        << callingThread->name << ", count now "
+                        << messages.general.received << '\n');
     };
 
   // JE commented this out (along with calls to it above), as we're

@@ -249,7 +249,7 @@ namespace pebblMonom {
 
   //monomialObj::evaluatePoint
   bool monomialObj::evaluatePoint(const observation_t boolVector) 
-    const throw (exception)
+    const // throw (exception)
   {
 #ifdef __DEBUG2
     cout << "monomialObj::evaluatePoint invoked" << endl;
@@ -732,7 +732,7 @@ namespace pebblMonom {
 
   const monomialObj maxMonomialData::
   getNthMonomChild(const monomialObj &parent, 
-		   const size_type n) const throw (exception)
+		   const size_type n) const // throw (exception)
   {
     DEBUGPR(40,ucout << "In maxMonomialData::getNthMonomChild, "
 	    "threeWayBranching: " << threeWayBranching() << endl);
@@ -856,7 +856,7 @@ namespace pebblMonom {
 
   //maxMonomialData::getWeight
   double maxMonomialData::getWeight(const set<size_type> & obsIdxs) 
-    const throw(exception)
+    const // throw(exception)
   {
     DEBUGPR(40,ucout << "In maxMonomialData::getWeight" << endl);
 
@@ -882,7 +882,7 @@ namespace pebblMonom {
   void maxMonomialData::getFilteredCovg(const monomialObj &monom, 
 					const set<size_type> & flter, 
 					set<size_type> & ret) 
-    const throw (exception)
+    const // throw (exception)
   { 
     DEBUGPR(20,ucout << "In maxMonomialData::getFilteredCovg" << endl);
 
@@ -915,7 +915,7 @@ namespace pebblMonom {
 
   void maxMonomialData::getPosCovg(const monomialObj & monom, 
 				   set<size_type> & output) 
-    const throw (exception) 
+    const // throw (exception) 
   {
     try
       {
@@ -931,7 +931,7 @@ namespace pebblMonom {
 
   void maxMonomialData::getNegCovg(const monomialObj & monom, 
 				   set<size_type> & output) 
-    const throw (exception)
+    const // throw (exception)
   {
     try
       {
@@ -948,7 +948,7 @@ namespace pebblMonom {
 
   void maxMonomialData::getCovg(const monomialObj & monom,  
 				set<size_type> & output) 
-    const throw (exception)
+    const // throw (exception)
   {
     try
       {
@@ -1068,7 +1068,7 @@ namespace pebblMonom {
   // maxMonomialData::getPosCovgFast
   void maxMonomialData::getPosCovgFast(const monomialObj &monomArg, 
 				       set<size_type> & ret) 
-    const throw (exception)
+    const // throw (exception)
   // returns the positive observations covered by monomial
   { 
     DEBUGPR(50,ucout << "maxMonomialData::getPosCovgFast invoked" << endl);
@@ -1140,7 +1140,7 @@ namespace pebblMonom {
 
   void maxMonomialData::getNegCovgFast(const monomialObj &monomArg, 
 				       set<size_type> & ret) 
-    const throw (exception)
+    const // throw (exception)
   { 
     DEBUGPR(50,ucout << "maxMonomialData::getNegCovgFast invoked" << endl);
     try
@@ -1343,7 +1343,7 @@ namespace pebblMonom {
 
 
   void maxMonomSub::initChild(maxMonomSub* parent,int whichChild) 
-    throw (exception)
+    // throw (exception)
   {  
     try
       {
@@ -1367,7 +1367,7 @@ namespace pebblMonom {
 			const vector<size_type> & freeVariables,
 			vector<size_type> & ret,
 			vector<pair<double,double> > & insepWts) 
-    throw (exception)
+    // throw (exception)
   {
     DEBUGPR(20,ucout << "maxMonomSub::findMostNonSeparating invoked, "
 	    "freeVariables.size: " << freeVariables.size() << endl);
