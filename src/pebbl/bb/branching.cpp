@@ -1054,8 +1054,6 @@ double branching::searchFramework(spHandler* handler_)
 
   // Clean up, record time, and close log files.
 
-  ucout << "Out of main loop";  //TMP
-
   applicCommFinish();
 
   searchTime = CPUSeconds() - startTime;
