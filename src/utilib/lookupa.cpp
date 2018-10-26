@@ -21,7 +21,6 @@
 #include <pebbl_config.h>
 #include <utilib/BasicArray.h>
 #include <utilib/BitArray.h>
-#include <utilib/MixedIntVars.h>
 
 namespace utilib {
 
