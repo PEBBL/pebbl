@@ -454,4 +454,13 @@ utilib::UnPackBuffer& operator>>(utilib::UnPackBuffer& is, std::map<KEY,VALUE>& 
    return is;
 }
 
+/// Read a std::pair from an input stream
+template <class FIRST, class SECOND>
+std::istream& operator<<(std::istream& is, const std::pair<FIRST, SECOND>& obj)
+{
+  is >> obj.second >> obj.first;
+  return is;
+}
+
+
 #endif
