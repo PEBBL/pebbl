@@ -171,6 +171,14 @@ if (obj.size() > 0) {
 return os;
 }
 
+/// Write a std::pair to an output stream
+template <class FIRST, class SECOND>
+std::ostream& operator<<(std::ostream& os, const std::pair<FIRST, SECOND>& obj)
+{
+  os << obj.first << obj.second;
+  return os;
+}
+
 
 /// Write a list to a Pack buffer
 /// Write a list to an output stream
