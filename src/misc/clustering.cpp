@@ -18,8 +18,8 @@
 
 
 #include <pebbl_config.h>
-#include <misc/fundamentals.h>
 #include <misc/clustering.h>
+#include <utilib/math_basic.h>
 
 using namespace std;
 

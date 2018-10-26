@@ -32,7 +32,6 @@
 #include <pebbl_config.h>
 #include <utilib/math_basic.h>
 #include <utilib/ParameterList.h>
-#include <misc/fundamentals.h>
 
 #if defined(NO_STRING_STREAM)
 #define ISSTREAM istrstream
@@ -42,7 +41,6 @@
 #define OSSTREAM std::ostringstream
 #endif
 
-using namespace pebbl;
 using namespace utilib;
 using namespace std;
 

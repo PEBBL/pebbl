@@ -22,7 +22,6 @@
 #include <utilib/GenericHeap.h>
 #include <utilib/comments.h>
 #include <example/serialKnapsack.h>
-#include <misc/fundamentals.h>
 #include <misc/gRandom.h>
 
 using namespace utilib;

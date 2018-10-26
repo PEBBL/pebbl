@@ -31,7 +31,6 @@
 
 #include <misc/clustering.h>
 #include <misc/treeTopology.h>
-#include <misc/fundamentals.h>
 
 namespace pebbl {
 

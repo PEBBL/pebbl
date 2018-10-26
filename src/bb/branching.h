@@ -37,7 +37,6 @@
 #include <utilib/PackBuf.h>
 #endif
 #include <misc/memUtil.h>
-#include <misc/fundamentals.h>
 #include <bb/pebblBase.h>
 #include <bb/pebblParams.h>
 #include <bb/loadObject.h>

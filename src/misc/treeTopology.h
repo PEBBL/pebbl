@@ -28,10 +28,7 @@
 
 #ifdef ACRO_HAVE_MPI
 
-// Should not need mpiUtil any more
-// #include <utilib/mpiUtil.h>
-
-#include <misc/fundamentals.h>
+#include <utilib/math_basic.h>
 
 namespace pebbl {
 

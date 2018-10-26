@@ -19,7 +19,6 @@
 
 #include <pebbl_config.h>
 #include <utilib/seconds.h>
-#include <misc/fundamentals.h>
 #include <sched/SelfAdjustThread.h>
 
 namespace pebbl {

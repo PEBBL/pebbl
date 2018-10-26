@@ -35,7 +35,6 @@
 #include <utilib/PackBuf.h>
 #include <utilib/IntVector.h>
 #include <utilib/LinkedList.h>
-#include <misc/fundamentals.h>
 
 namespace pebbl {
 

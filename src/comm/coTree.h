@@ -36,7 +36,6 @@
 #include <comm/MessageID.h>
 #include <comm/mpiComm.h>
 #include <misc/treeTopology.h>
-#include <misc/fundamentals.h>
 
 
 namespace pebbl {

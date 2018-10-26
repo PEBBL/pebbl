@@ -21,7 +21,6 @@
 
 #include <pebbl_config.h>
 #include <utilib/ParameterSet.h>
-#include <misc/fundamentals.h>
 
 namespace pebbl {
 

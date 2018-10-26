@@ -18,10 +18,6 @@
 // AbstractHashTable are well-suited for these hash functions.
 //
 
-#include <pebbl_config.h>
-#include <utilib/BasicArray.h>
-#include <utilib/BitArray.h>
-
 namespace utilib {
 
 typedef unsigned long int  ub4; /* unsigned 4-byte quantities */
