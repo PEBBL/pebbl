@@ -56,7 +56,8 @@ void uMPI::init(int* argcP, char*** argvP, MPI_Comm comm_)
       // applied in serial, since otherwise we assume that mpirun has
       // handled this...
       if (size == 1)
-	 chdir(prev_dir);
+	 if(!chdir(prev_dir))
+     ucerr << "chdir failed, code " << errno << endl;
       free(prev_dir);
     }
   else
