@@ -22,10 +22,10 @@
 #include <sys/types.h>
 #include <dirent.h>
 
-#include <utilib/mpiUtil.h>
-#include <utilib/nicePrint.h>
-#include <pbb/parBranching.h>
-#include <misc/gRandom.h>
+#include <pebbl/utilib/mpiUtil.h>
+#include <pebbl/utilib/nicePrint.h>
+#include <pebbl/pbb/parBranching.h>
+#include <pebbl/misc/gRandom.h>
 
 #ifdef ACRO_HAVE_MPI
 

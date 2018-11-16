@@ -25,12 +25,12 @@
 #endif
 
 #ifdef ACRO_HAVE_MPI
-#include <utilib/mpiUtil.h>
+#include <pebbl/utilib/mpiUtil.h>
 #endif
-#include <utilib/math_basic.h>
-#include <utilib/_generic.h>
-#include <utilib/Uniform.h>
-#include <utilib/PM_LCG.h>
+#include <pebbl/utilib/math_basic.h>
+#include <pebbl/utilib/_generic.h>
+#include <pebbl/utilib/Uniform.h>
+#include <pebbl/utilib/PM_LCG.h>
 
 using namespace utilib;
 

@@ -29,8 +29,8 @@
 
 #ifdef ACRO_HAVE_MPI
 
-#include <misc/clustering.h>
-#include <misc/treeTopology.h>
+#include <pebbl/misc/clustering.h>
+#include <pebbl/misc/treeTopology.h>
 
 namespace pebbl {
 

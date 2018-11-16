@@ -18,12 +18,12 @@
 #ifndef utilib_ArrayBase_h
 #define utilib_ArrayBase_h
 
-#include <utilib/std_headers.h>
-#include <utilib/_generic.h>
-#include <utilib/exception_mngr.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/_generic.h>
+#include <pebbl/utilib/exception_mngr.h>
 
 #ifdef   HAVE_SERIALIZER
-#include <utilib/Serialize.h>
+#include <pebbl/utilib/Serialize.h>
 #endif
 
 namespace utilib {

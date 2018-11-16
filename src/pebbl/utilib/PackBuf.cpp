@@ -15,11 +15,11 @@
  * \author William E. Hart
  */
  
-#include <utilib/std_headers.h>
+#include <pebbl/utilib/std_headers.h>
 
 #define USING_STL
-#include <utilib/PackBuf.h>
-#include <utilib/comments.h>
+#include <pebbl/utilib/PackBuf.h>
+#include <pebbl/utilib/comments.h>
 
 #ifdef UTILIB_HAVE_NAMESPACES
 using namespace std;

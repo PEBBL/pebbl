@@ -30,8 +30,8 @@
 
 
 #include <pebbl_config.h>
-#include <utilib/math_basic.h>
-#include <utilib/ParameterList.h>
+#include <pebbl/utilib/math_basic.h>
+#include <pebbl/utilib/ParameterList.h>
 
 #if defined(NO_STRING_STREAM)
 #define ISSTREAM istrstream

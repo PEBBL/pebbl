@@ -14,8 +14,8 @@
 //
 
 #include <pebbl_config.h>
-#include <utilib/exception_mngr.h>
-#include <utilib/CommonIO.h>
+#include <pebbl/utilib/exception_mngr.h>
+#include <pebbl/utilib/CommonIO.h>
 
 #ifdef UTILIB_HAVE_MPI
 #include <mpi.h>

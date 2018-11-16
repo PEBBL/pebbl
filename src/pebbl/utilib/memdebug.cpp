@@ -17,11 +17,11 @@
 
 
 #include <pebbl_config.h>
-#include <utilib/memdebug.h>
+#include <pebbl/utilib/memdebug.h>
 
 #ifdef UTILIB_YES_MEMDEBUG
-#include <utilib/std_headers.h>
-#include <utilib/CommonIO.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/CommonIO.h>
 
 namespace utilib {
 

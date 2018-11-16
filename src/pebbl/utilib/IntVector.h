@@ -19,7 +19,7 @@
 #define utilib_IntVector_h
 
 #include <pebbl_config.h>
-#include <utilib/NumArray.h>
+#include <pebbl/utilib/NumArray.h>
 
 namespace utilib {
 

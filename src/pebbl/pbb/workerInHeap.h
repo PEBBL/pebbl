@@ -21,7 +21,7 @@
 #define pebbl_workerInHeap_h
 
 #include <pebbl_config.h>
-#include <utilib/std_headers.h>
+#include <pebbl/utilib/std_headers.h>
 
 namespace pebbl {
 

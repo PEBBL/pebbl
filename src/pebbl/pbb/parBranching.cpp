@@ -19,8 +19,8 @@
 
 #include <pebbl_config.h>
 
-#include <utilib/mpiUtil.h>
-#include <pbb/parBranching.h>
+#include <pebbl/utilib/mpiUtil.h>
+#include <pebbl/pbb/parBranching.h>
 
 // These may be system dependent and may have to get taken over by
 // the build system (JE)

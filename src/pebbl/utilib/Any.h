@@ -27,12 +27,12 @@
 #define utilib_Any_h
 
 #include <pebbl_config.h>
-#include <utilib/exception_mngr.h>
+#include <pebbl/utilib/exception_mngr.h>
 
 // The following are required for PackBuf support (which I hope to
 // deprecate some day)
-#include <utilib/PackBuf.h>
-#include <utilib/stl_auxiliary.h>
+#include <pebbl/utilib/PackBuf.h>
+#include <pebbl/utilib/stl_auxiliary.h>
 #include <cstddef>
 #include <cassert>
 

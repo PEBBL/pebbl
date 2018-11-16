@@ -14,9 +14,9 @@
 
 #include <pebbl_config.h>
 
-#include <bb/pebblParams.h>
-#include <bb/pebblBase.h>
-#include <misc/gRandom.h>
+#include <pebbl/bb/pebblParams.h>
+#include <pebbl/bb/pebblBase.h>
+#include <pebbl/misc/gRandom.h>
 
 
 namespace pebbl {

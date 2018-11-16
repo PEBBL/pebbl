@@ -19,13 +19,13 @@
 
 #include <utility> // for std::pair 
 #include <pebbl_config.h>
-#include <utilib/exception_mngr.h>
-#include <utilib/BitArray.h>
-#include <utilib/BasicArray.h>
-#include <utilib/stl_auxiliary.h>
-#include <bb/branching.h>
-#include <example/DockingProblem.h>
-#include <misc/gRandom.h>
+#include <pebbl/utilib/exception_mngr.h>
+#include <pebbl/utilib/BitArray.h>
+#include <pebbl/utilib/BasicArray.h>
+#include <pebbl/utilib/stl_auxiliary.h>
+#include <pebbl/bb/branching.h>
+#include <pebbl/example/DockingProblem.h>
+#include <pebbl/misc/gRandom.h>
 
 namespace pebbl {
 
@@ -948,7 +948,7 @@ return temp;
 #ifdef ACRO_HAVE_MPI
 }
 
-#include <pbb/parBranching.h>
+#include <pebbl/pbb/parBranching.h>
 
 namespace pebbl {
 

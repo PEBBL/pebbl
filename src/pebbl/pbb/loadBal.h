@@ -22,12 +22,12 @@
 
 #include <pebbl_config.h>
 #include <mpi.h>
-#include <utilib/PM_LCG.h>
-#include <utilib/IntVector.h>
-#include <utilib/Basic2DArray.h>
-#include <misc/clusterTree.h>
-#include <pbb/loadBalPair.h>
-#include <pbb/parLoadObject.h>
+#include <pebbl/utilib/PM_LCG.h>
+#include <pebbl/utilib/IntVector.h>
+#include <pebbl/utilib/Basic2DArray.h>
+#include <pebbl/misc/clusterTree.h>
+#include <pebbl/pbb/loadBalPair.h>
+#include <pebbl/pbb/parLoadObject.h>
 
 
 #ifdef ACRO_HAVE_MPI

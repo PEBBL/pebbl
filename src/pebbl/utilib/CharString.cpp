@@ -15,8 +15,8 @@
 
 #include <string>
 #include <cstdlib>
-#include <utilib/std_headers.h>
-#include <utilib/CharString.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/CharString.h>
 
 #ifdef UTILIB_HAVE_NAMESPACES
 using namespace std;

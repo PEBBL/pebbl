@@ -19,7 +19,7 @@
 
 
 #include <pebbl_config.h>
-#include <pbb/parBranching.h>
+#include <pebbl/pbb/parBranching.h>
 
 #ifdef ACRO_HAVE_MPI
 

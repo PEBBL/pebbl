@@ -21,15 +21,15 @@
 
 #include <pebbl_config.h>
 
-#include <utilib/mpiUtil.h>
-#include <utilib/logEvent.h>
-#include <utilib/PackBuf.h>
-#include <utilib/math_basic.h>
-#include <pbb/parPebblBase.h>
-#include <sched/ThreadObj.h>
-#include <sched/SelfAdjustThread.h>
-#include <comm/coTree.h>
-#include <comm/outBufferQ.h>
+#include <pebbl/utilib/mpiUtil.h>
+#include <pebbl/utilib/logEvent.h>
+#include <pebbl/utilib/PackBuf.h>
+#include <pebbl/utilib/math_basic.h>
+#include <pebbl/pbb/parPebblBase.h>
+#include <pebbl/sched/ThreadObj.h>
+#include <pebbl/sched/SelfAdjustThread.h>
+#include <pebbl/comm/coTree.h>
+#include <pebbl/comm/outBufferQ.h>
 
 
 #ifdef ACRO_HAVE_MPI                     // Compile to stub if no MPI.

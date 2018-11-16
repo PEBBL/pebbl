@@ -10,8 +10,8 @@
  */
 
 #include <pebbl_config.h>
-#include <example/serialCore.h>
-#include <example/parallelCore.h>
+#include <pebbl/example/serialCore.h>
+#include <pebbl/example/parallelCore.h>
 
 int main()
 {

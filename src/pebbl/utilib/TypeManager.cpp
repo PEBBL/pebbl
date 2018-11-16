@@ -17,8 +17,8 @@
  * 
  */
 
-#include <utilib/TypeManager.h>
-#include <utilib/ReferenceCounted.h>
+#include <pebbl/utilib/TypeManager.h>
+#include <pebbl/utilib/ReferenceCounted.h>
 
 #include <climits>
 

@@ -15,7 +15,7 @@
 
 #include <pebbl_config.h>
 
-#include <utilib/seconds.h>
+#include <pebbl/utilib/seconds.h>
 
 #if UTILIB_TIME_WITH_SYS_TIME
 #include <sys/time.h>

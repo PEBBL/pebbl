@@ -18,9 +18,9 @@
 //
 
 #include <pebbl_config.h>
-#include <pbb/parBranching.h>
-#include <comm/packPointer.h>
-#include <comm/outBufferQ.h>
+#include <pebbl/pbb/parBranching.h>
+#include <pebbl/comm/packPointer.h>
+#include <pebbl/comm/outBufferQ.h>
 
 #ifdef ACRO_HAVE_MPI
 

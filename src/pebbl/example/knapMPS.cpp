@@ -15,8 +15,8 @@
 //
 
 #include <pebbl_config.h>
-#include <utilib/ParameterSet.h>
-#include <example/serialKnapsack.h>
+#include <pebbl/utilib/ParameterSet.h>
+#include <pebbl/example/serialKnapsack.h>
 
 using namespace utilib;
 using namespace pebbl;

@@ -15,10 +15,10 @@
 //
 
 #include <pebbl_config.h>
-#include <utilib/math_basic.h>
-#include <utilib/seconds.h>
-#include <utilib/mpiUtil.h>
-#include <sched/Scheduler.h>
+#include <pebbl/utilib/math_basic.h>
+#include <pebbl/utilib/seconds.h>
+#include <pebbl/utilib/mpiUtil.h>
+#include <pebbl/sched/Scheduler.h>
 
 using namespace std;
 using namespace utilib;

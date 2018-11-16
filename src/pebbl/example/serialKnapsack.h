@@ -21,18 +21,18 @@
 #define pebbl_knapsack_h
 
 #include <pebbl_config.h>
-#include <bb/branching.h>
-#include <utilib/CharString.h>
-#include <utilib/BasicArray.h>
-#include <utilib/BitArray.h>
-#include <utilib/IntVector.h>
-#include <utilib/DoubleVector.h>
-#include <utilib/math_basic.h>
-#include <utilib/ParameterSet.h>
+#include <pebbl/bb/branching.h>
+#include <pebbl/utilib/CharString.h>
+#include <pebbl/utilib/BasicArray.h>
+#include <pebbl/utilib/BitArray.h>
+#include <pebbl/utilib/IntVector.h>
+#include <pebbl/utilib/DoubleVector.h>
+#include <pebbl/utilib/math_basic.h>
+#include <pebbl/utilib/ParameterSet.h>
 #ifdef ACRO_HAVE_MPI
-#include <utilib/PackBuf.h>
+#include <pebbl/utilib/PackBuf.h>
 #endif
-#include <misc/chunkAlloc.h>
+#include <pebbl/misc/chunkAlloc.h>
 
 
 namespace pebbl {

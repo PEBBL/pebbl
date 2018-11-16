@@ -18,14 +18,14 @@
  */
 
 
-#include <comm/mpiComm.h>
+#include <pebbl/comm/mpiComm.h>
 
 #ifdef ACRO_HAVE_MPI
 
 
 #include <unistd.h>
-#include <utilib/std_headers.h>
-#include <utilib/CommonIO.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/CommonIO.h>
 
 
 #ifdef UTILIB_HAVE_NAMESPACES

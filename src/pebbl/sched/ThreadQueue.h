@@ -19,8 +19,8 @@
 #define pebbl_ThreadQueue_h
 
 #include <pebbl_config.h>
-#include <utilib/OrderedList.h>
-#include <sched/ThreadObj.h>
+#include <pebbl/utilib/OrderedList.h>
+#include <pebbl/sched/ThreadObj.h>
 
 namespace pebbl {
 

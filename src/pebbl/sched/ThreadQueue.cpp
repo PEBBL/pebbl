@@ -15,8 +15,8 @@
 //
 
 #include <pebbl_config.h>
-#include <utilib/math_basic.h>
-#include <sched/ThreadQueue.h>
+#include <pebbl/utilib/math_basic.h>
+#include <pebbl/sched/ThreadQueue.h>
 
 using namespace std;
 using namespace utilib;

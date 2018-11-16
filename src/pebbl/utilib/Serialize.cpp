@@ -13,8 +13,8 @@
  * \file Serialize.cpp
  */
 
-#include <utilib/Serialize.h>
-#include <utilib/exception_mngr.h>
+#include <pebbl/utilib/Serialize.h>
+#include <pebbl/utilib/exception_mngr.h>
 
 using std::cerr;
 using std::endl;

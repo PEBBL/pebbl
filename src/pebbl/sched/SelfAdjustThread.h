@@ -21,8 +21,8 @@
 #define pebbl_SelfAdjustThread_h
 
 #include <pebbl_config.h>
-#include <utilib/DoubleVector.h>
-#include <sched/ThreadObj.h>
+#include <pebbl/utilib/DoubleVector.h>
+#include <pebbl/sched/ThreadObj.h>
 
 namespace pebbl {
 

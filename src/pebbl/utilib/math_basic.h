@@ -18,7 +18,7 @@
 #ifndef utilib_math_basic_h
 #define utilib_math_basic_h
 
-#include <utilib/std_headers.h>
+#include <pebbl/utilib/std_headers.h>
 
 #ifdef UTILIB_SOLARIS_CC
 #include <sunmath.h>

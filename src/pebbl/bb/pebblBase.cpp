@@ -21,7 +21,7 @@
 
 #include <pebbl_config.h>
 
-#include <bb/pebblBase.h>
+#include <pebbl/bb/pebblBase.h>
 
 using namespace std;
 

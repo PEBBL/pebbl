@@ -24,13 +24,13 @@
 //
 
 #include <iostream>
-#include <utilib/BasicArray.h>
-#include <utilib/exception_mngr.h>
-#include <utilib/CharString.h>
-#include <utilib/BitArray.h>
-#include <utilib/math_basic.h>
-#include <utilib/PackObject.h>
-#include <utilib/Uniform.h> 
+#include <pebbl/utilib/BasicArray.h>
+#include <pebbl/utilib/exception_mngr.h>
+#include <pebbl/utilib/CharString.h>
+#include <pebbl/utilib/BitArray.h>
+#include <pebbl/utilib/math_basic.h>
+#include <pebbl/utilib/PackObject.h>
+#include <pebbl/utilib/Uniform.h> 
 
 using namespace utilib;
 

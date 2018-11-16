@@ -99,7 +99,7 @@ extern double scauchy1 _((void));
 
 
 /* Setup stuff for the global rng */
-#include <utilib/LEC_rng.h>
+#include <pebbl/utilib/LEC_rng.h>
 
 /*
 ** TODO - What's OLDSTYLE_RANLIB?

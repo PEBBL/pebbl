@@ -19,9 +19,9 @@
 
 
 #include <pebbl_config.h>
-#include <utilib/mpiUtil.h>
-#include <utilib/nicePrint.h>
-#include <pbb/parBranching.h>
+#include <pebbl/utilib/mpiUtil.h>
+#include <pebbl/utilib/nicePrint.h>
+#include <pebbl/pbb/parBranching.h>
 
 #ifdef ACRO_HAVE_MPI
 

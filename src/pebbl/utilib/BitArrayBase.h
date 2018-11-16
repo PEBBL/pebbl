@@ -19,12 +19,12 @@
 #define utilib_BitArrayBase_h
 
 #include <pebbl_config.h>
-#include <utilib/std_headers.h>
-#include <utilib/_generic.h>
-#include <utilib/math_basic.h>
-#include <utilib/PackBuf.h>
-#include <utilib/ArrayBase.h>
-#include <utilib/exception_mngr.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/_generic.h>
+#include <pebbl/utilib/math_basic.h>
+#include <pebbl/utilib/PackBuf.h>
+#include <pebbl/utilib/ArrayBase.h>
+#include <pebbl/utilib/exception_mngr.h>
 
 namespace utilib {
 

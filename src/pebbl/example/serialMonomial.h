@@ -27,12 +27,12 @@
 
 #include <pebbl_config.h>
 
-#include <utilib/math_basic.h>
-#include <utilib/ParameterSet.h>
-#include <bb/branching.h>
+#include <pebbl/utilib/math_basic.h>
+#include <pebbl/utilib/ParameterSet.h>
+#include <pebbl/bb/branching.h>
 
 #ifdef ACRO_HAVE_MPI
-#include <utilib/PackBuf.h>
+#include <pebbl/utilib/PackBuf.h>
 #endif
 
 

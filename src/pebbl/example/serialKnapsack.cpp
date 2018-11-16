@@ -18,11 +18,11 @@
 //
 
 #include <pebbl_config.h>
-#include <utilib/exception_mngr.h>
-#include <utilib/GenericHeap.h>
-#include <utilib/comments.h>
-#include <example/serialKnapsack.h>
-#include <misc/gRandom.h>
+#include <pebbl/utilib/exception_mngr.h>
+#include <pebbl/utilib/GenericHeap.h>
+#include <pebbl/utilib/comments.h>
+#include <pebbl/example/serialKnapsack.h>
+#include <pebbl/misc/gRandom.h>
 
 using namespace utilib;
 using namespace std;

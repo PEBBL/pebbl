@@ -10,8 +10,8 @@
  */
 
 #include <pebbl_config.h>
-#include <utilib/seconds.h>
-#include <example/parallelLipshitzian.h>
+#include <pebbl/utilib/seconds.h>
+#include <pebbl/example/parallelLipshitzian.h>
 
 using namespace pebbl;
 using utilib::BasicArray;

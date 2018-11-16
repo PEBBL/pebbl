@@ -18,9 +18,9 @@
 #ifndef utilib_stl_auxiliary_h
 #define utilib_stl_auxiliary_h
 
-#include <utilib/PackBuf.h>
-#include <utilib/std_headers.h>
-#include <utilib/exception_mngr.h>
+#include <pebbl/utilib/PackBuf.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/exception_mngr.h>
 #include <string>
 #include <algorithm>
 

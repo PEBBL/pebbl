@@ -20,12 +20,12 @@
 
 #include <pebbl_config.h>
 
-#include <pbb/parBranching.h>
+#include <pebbl/pbb/parBranching.h>
 
 #ifdef ACRO_HAVE_MPI
 
-#include <comm/packPointer.h>
-#include <utilib/logEvent.h>
+#include <pebbl/comm/packPointer.h>
+#include <pebbl/utilib/logEvent.h>
 
 using namespace std;
 

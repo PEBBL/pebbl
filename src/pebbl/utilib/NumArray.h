@@ -19,8 +19,8 @@
 #define utilib_NumArray_h
 
 #include <pebbl_config.h>
-#include <utilib/std_headers.h>
-#include <utilib/BasicArray.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/BasicArray.h>
 
 namespace utilib {
 

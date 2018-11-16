@@ -29,8 +29,8 @@
 
 #ifdef ACRO_HAVE_MPI
 
-#include <utilib/PackBuf.h>
-#include <bb/loadObject.h>
+#include <pebbl/utilib/PackBuf.h>
+#include <pebbl/bb/loadObject.h>
 
 namespace pebbl {
 

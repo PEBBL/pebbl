@@ -19,12 +19,12 @@
 
 
 #include <pebbl_config.h>
-#include <utilib/memdebug.h>
-#include <utilib/mpiUtil.h>
-#include <utilib/seconds.h>
-#include <pbb/parBranching.h>
-#include <comm/packPointer.h>
-#include <misc/gRandom.h>
+#include <pebbl/utilib/memdebug.h>
+#include <pebbl/utilib/mpiUtil.h>
+#include <pebbl/utilib/seconds.h>
+#include <pebbl/pbb/parBranching.h>
+#include <pebbl/comm/packPointer.h>
+#include <pebbl/misc/gRandom.h>
 
 #ifdef ACRO_HAVE_MPI
 

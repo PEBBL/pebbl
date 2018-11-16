@@ -28,14 +28,14 @@
 #define nextafter _nextafter
 #endif
 
-#include <utilib/math_basic.h>
-#include <utilib/nicePrint.h>
-#include <utilib/seconds.h>
-#include <utilib/hash_fn.h>
-#include <utilib/file_util.h>
+#include <pebbl/utilib/math_basic.h>
+#include <pebbl/utilib/nicePrint.h>
+#include <pebbl/utilib/seconds.h>
+#include <pebbl/utilib/hash_fn.h>
+#include <pebbl/utilib/file_util.h>
 
-#include <bb/branching.h>
-#include <misc/gRandom.h>
+#include <pebbl/bb/branching.h>
+#include <pebbl/misc/gRandom.h>
 
 #include <iostream>
 #include <iomanip>

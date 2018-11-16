@@ -32,11 +32,11 @@
 #ifdef ACRO_HAVE_MPI
 #include <mpi.h>
 #endif
-#include <utilib/LinkedList.h>
-#include <utilib/QueueList.h>
-#include <utilib/BasicArray.h>
-#include <sched/ThreadObj.h>
-#include <sched/ThreadQueue.h>
+#include <pebbl/utilib/LinkedList.h>
+#include <pebbl/utilib/QueueList.h>
+#include <pebbl/utilib/BasicArray.h>
+#include <pebbl/sched/ThreadObj.h>
+#include <pebbl/sched/ThreadQueue.h>
 
 namespace pebbl {
 

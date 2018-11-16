@@ -16,8 +16,8 @@
 
 
 #include <pebbl_config.h>
-#include <utilib/std_headers.h>
-#include <example/parKnapsack.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/example/parKnapsack.h>
 
 #ifdef ACRO_HAVE_MPI
 

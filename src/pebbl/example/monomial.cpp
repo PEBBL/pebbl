@@ -8,7 +8,7 @@
  */
 
 #include <pebbl_config.h>
-#include <utilib/seconds.h>
+#include <pebbl/utilib/seconds.h>
 
 #ifdef ACRO_USING_COIN_CBC
 #include <ClpSimplex.hpp>
@@ -23,11 +23,11 @@
 
 
 #ifdef ACRO_HAVE_MPI
-#include <example/parMonomial.h>
+#include <pebbl/example/parMonomial.h>
 #define outstream ucout
 #define IO(action) if (uMPI::iDoIO) { CommonIO::end_tagging(); action; }
 #else
-#include <example/serialMonomial.h>
+#include <pebbl/example/serialMonomial.h>
 typedef void parMaxMonomialData;
 #define outstream cout
 #define IO(action) action;

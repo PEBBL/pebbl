@@ -18,8 +18,8 @@
 //
 
 #include <pebbl_config.h>
-#include <utilib/seconds.h>
-#include <sched/SelfAdjustThread.h>
+#include <pebbl/utilib/seconds.h>
+#include <pebbl/sched/SelfAdjustThread.h>
 
 namespace pebbl {
 

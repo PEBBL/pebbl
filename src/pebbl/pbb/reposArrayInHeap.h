@@ -21,8 +21,8 @@
 #define pebbl_reposArrayInHeap_h
 
 #include <pebbl_config.h>
-#include <utilib/std_headers.h>
-#include <bb/branching.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/bb/branching.h>
 
 
 namespace pebbl {

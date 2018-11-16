@@ -19,9 +19,9 @@
 #define utilib_BasicArray_h
 
 #include <pebbl_config.h>
-#include <utilib/std_headers.h>
-#include <utilib/ArrayBase.h>
-#include <utilib/Any.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/ArrayBase.h>
+#include <pebbl/utilib/Any.h>
 
 namespace utilib {
 

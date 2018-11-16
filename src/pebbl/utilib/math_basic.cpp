@@ -11,7 +11,7 @@
 
 #include <pebbl_config.h>
 #include <stdlib.h>
-#include <utilib/math_basic.h>
+#include <pebbl/utilib/math_basic.h>
 #include <math.h>
 
 /// Calculates how many bits are needed to hold an unsigned value.

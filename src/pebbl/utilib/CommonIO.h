@@ -21,7 +21,7 @@
 #define utilib_CommonIO_h
 
 #include <pebbl_config.h>
-#include <utilib/std_headers.h>
+#include <pebbl/utilib/std_headers.h>
 
 // NB: If compilers gripe about static_cast<void>(0), we can switch back
 // to the "do { } while ( false )" form (which, while portable, may
@@ -132,7 +132,7 @@
 
 
 
-#include <utilib/_generic.h>
+#include <pebbl/utilib/_generic.h>
 
 // [15 Sep 11] JDS: removing these until someone can prove they are necessary
 //#if !defined(UTILIB_HAVE_NAMESPACES)

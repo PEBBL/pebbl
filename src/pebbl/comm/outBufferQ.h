@@ -28,13 +28,13 @@
 
 #ifdef ACRO_HAVE_MPI
 #include <mpi.h>
-#include <utilib/mpiUtil.h>
-#include <comm/mpiComm.h>
+#include <pebbl/utilib/mpiUtil.h>
+#include <pebbl/comm/mpiComm.h>
 
-#include <utilib/CommonIO.h>
-#include <utilib/PackBuf.h>
-#include <utilib/IntVector.h>
-#include <utilib/LinkedList.h>
+#include <pebbl/utilib/CommonIO.h>
+#include <pebbl/utilib/PackBuf.h>
+#include <pebbl/utilib/IntVector.h>
+#include <pebbl/utilib/LinkedList.h>
 
 namespace pebbl {
 

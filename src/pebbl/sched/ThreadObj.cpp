@@ -13,8 +13,8 @@
 //
 
 #include <pebbl_config.h>
-#include <utilib/std_headers.h>
-#include <sched/ThreadObj.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/sched/ThreadObj.h>
 
 using namespace std;
 

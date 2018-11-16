@@ -25,18 +25,18 @@
 
 #include <pebbl_config.h>
 #ifdef  UTILIB_YES_MEMDEBUG
-#include <utilib/std_headers.h>
+#include <pebbl/utilib/std_headers.h>
 
 
-#include <utilib/BasicArray.h>
-#include <utilib/CharString.h>
-#include <utilib/IntVector.h>
+#include <pebbl/utilib/BasicArray.h>
+#include <pebbl/utilib/CharString.h>
+#include <pebbl/utilib/IntVector.h>
 
 
 #define UTILIB_MEMDEBUG_START_NEW(this)					\
 	{								\
 	int i=0;							\
-	for (; i<utilib::memdebug::num; i++)					\
+	for (; i<pebbl/utilib::memdebug::num; i++)					\
           if (utilib::memdebug::name[i] == this) {				\
 	     utilib::memdebug::last_total[i] = utilib::memdebug::nbytes;		\
 	     break;							\
@@ -58,7 +58,7 @@
 
 #define UTILIB_MEMDEBUG_END_NEW(this)						\
 	{								\
-	for (int i=0; i<utilib::memdebug::num; i++)				\
+	for (int i=0; i<pebbl/utilib::memdebug::num; i++)				\
           if (utilib::memdebug::name[i] == this) {				\
 	     utilib::memdebug::memory_allocated[i] += 				\
 			utilib::memdebug::nbytes - utilib::memdebug::last_total[i];	\
@@ -71,14 +71,14 @@
 #define UTILIB_MEMDEBUG_START_RESIZE(this)					\
 	{								\
 	int i=0;							\
-	for (; i<utilib::memdebug::num; i++)					\
+	for (; i<pebbl/utilib::memdebug::num; i++)					\
           if (utilib::memdebug::name[i] == this)				\
 	     utilib::memdebug::last_total[i] = utilib::memdebug::nbytes;		\
 	}
 
 #define UTILIB_MEMDEBUG_END_RESIZE(this)					\
 	{								\
-	for (int i=0; i<utilib::memdebug::num; i++)				\
+	for (int i=0; i<pebbl/utilib::memdebug::num; i++)				\
           if (utilib::memdebug::name[i] == this) {				\
 	     utilib::memdebug::memory_allocated[i] += 				\
 			utilib::memdebug::nbytes - utilib::memdebug::last_total[i];	\
@@ -92,7 +92,7 @@
 
 #define UTILIB_MEMDEBUG_END_DEL(this)						\
 	{								\
-	for (int i=0; i<utilib::memdebug::num; i++)				\
+	for (int i=0; i<pebbl/utilib::memdebug::num; i++)				\
           if (utilib::memdebug::name[i] == this) {				\
 	     utilib::memdebug::num_del[i]++;					\
 	     }								\

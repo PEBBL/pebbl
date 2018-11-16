@@ -21,9 +21,9 @@
 #define utilib_PackObject_h
 
 #include <pebbl_config.h>
-#include <utilib/std_headers.h>
-#include <utilib/PackBuf.h>
-#include <utilib/exception_mngr.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/PackBuf.h>
+#include <pebbl/utilib/exception_mngr.h>
 
 namespace utilib {
 

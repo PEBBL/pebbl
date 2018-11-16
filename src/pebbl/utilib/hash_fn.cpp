@@ -15,8 +15,8 @@
 // WEH: note that I have not tested the fidelity of these hash functions!
 //
 
-#include <utilib/std_headers.h>
-#include <utilib/hash_fn.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/hash_fn.h>
 
 #ifdef UTILIB_HAVE_NAMESPACES
 using namespace std;

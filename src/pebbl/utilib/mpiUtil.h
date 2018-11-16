@@ -31,8 +31,8 @@
 #ifdef UTILIB_HAVE_MPI
 #include <mpi.h>
 #endif
-#include <utilib/_generic.h>
-#include <utilib/exception_mngr.h>
+#include <pebbl/utilib/_generic.h>
+#include <pebbl/utilib/exception_mngr.h>
 
 //
 // To compile code for logging of all messages.

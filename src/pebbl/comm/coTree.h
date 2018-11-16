@@ -30,12 +30,12 @@
 #ifdef ACRO_HAVE_MPI
 
 
-#include <utilib/CommonIO.h>
-#include <utilib/mpiUtil.h>
-#include <utilib/BasicArray.h>
-#include <comm/MessageID.h>
-#include <comm/mpiComm.h>
-#include <misc/treeTopology.h>
+#include <pebbl/utilib/CommonIO.h>
+#include <pebbl/utilib/mpiUtil.h>
+#include <pebbl/utilib/BasicArray.h>
+#include <pebbl/comm/MessageID.h>
+#include <pebbl/comm/mpiComm.h>
+#include <pebbl/misc/treeTopology.h>
 
 
 namespace pebbl {

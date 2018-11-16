@@ -23,7 +23,7 @@
 #include <pebbl_config.h>
 #if defined(__cplusplus) || defined(DOXYGEN)
 
-#include <utilib/RNG.h>
+#include <pebbl/utilib/RNG.h>
 
 namespace utilib {
 /**

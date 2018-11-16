@@ -26,8 +26,8 @@
 #define pebbl_serialLipshitzian_h
 
 #include <pebbl_config.h>
-#include <utilib/BasicArray.h>
-#include <bb/branching.h>
+#include <pebbl/utilib/BasicArray.h>
+#include <pebbl/bb/branching.h>
 
 namespace pebbl {
 

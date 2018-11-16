@@ -20,9 +20,9 @@
 #define pebbl_parKnapsack_h
 
 #include <pebbl_config.h>
-#include <example/serialKnapsack.h>
+#include <pebbl/example/serialKnapsack.h>
 #ifdef ACRO_HAVE_MPI
-#include <pbb/parBranching.h>
+#include <pebbl/pbb/parBranching.h>
 
 namespace pebbl {
 

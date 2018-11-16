@@ -21,11 +21,11 @@
 #define UTILIB_HAVE_MPI
 #endif
 
-#include <utilib/std_headers.h>
-#include <utilib/Parameter.h>
-#include <utilib/ParameterSet.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/Parameter.h>
+#include <pebbl/utilib/ParameterSet.h>
 #if defined(UTILIB_HAVE_MPI)
-#include <utilib/mpiUtil.h>
+#include <pebbl/utilib/mpiUtil.h>
 #endif
 
 namespace utilib {

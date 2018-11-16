@@ -18,9 +18,9 @@
 #ifndef utilib_hash_fn_h
 #define utilib_hash_fn_h
 
-#include <utilib/std_headers.h>
-#include <utilib/BasicArray.h>
-#include <utilib/CharString.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/BasicArray.h>
+#include <pebbl/utilib/CharString.h>
 
 namespace utilib {
 

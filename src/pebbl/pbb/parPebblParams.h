@@ -29,7 +29,7 @@
 
 #ifdef ACRO_HAVE_MPI
 
-#include <utilib/ParameterSet.h>
+#include <pebbl/utilib/ParameterSet.h>
 
 namespace pebbl {
 

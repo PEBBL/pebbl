@@ -12,19 +12,19 @@
 // Noam Goldberg 11/2/2008
 
 #include <pebbl_config.h>
-#include <utilib/exception_mngr.h>
+#include <pebbl/utilib/exception_mngr.h>
 
 #include <stdlib.h>
 #include <sstream>
 #include <algorithm>
 #include <vector>
 
-#include <utilib/stl_auxiliary.h>
-#include <utilib/PackBuf.h>
-#include <utilib/BitArray.h>
-#include <utilib/std_headers.h>
-#include <example/parMonomial.h>
-#include <example/serialMonomial.h>
+#include <pebbl/utilib/stl_auxiliary.h>
+#include <pebbl/utilib/PackBuf.h>
+#include <pebbl/utilib/BitArray.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/example/parMonomial.h>
+#include <pebbl/example/serialMonomial.h>
 
 #ifdef ACRO_HAVE_MPI
 

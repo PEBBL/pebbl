@@ -18,8 +18,8 @@
 #ifndef utilib_CachedAllocator_h
 #define utilib_CachedAllocator_h
 
-#include <utilib/std_headers.h>
-#include <utilib/CommonIO.h>
+#include <pebbl/utilib/std_headers.h>
+#include <pebbl/utilib/CommonIO.h>
 
 namespace utilib {
 

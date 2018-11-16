@@ -10,7 +10,7 @@
  */
 
 #include <pebbl_config.h>
-#include <example/parKnapsack.h>
+#include <pebbl/example/parKnapsack.h>
 
 using namespace pebbl;
 using namespace std;

@@ -31,9 +31,9 @@
 #if defined(DOXYGEN) || (defined(UTILIB_HAVE_MPI) && defined(UTILIB_VALIDATING) && defined(UTILIB_HAVE_MPE)) 
 
 #include <values.h>
-#include <utilib/mpiUtil.h>
+#include <pebbl/utilib/mpiUtil.h>
 #include <mpe.h>
-#include <utilib/ParameterSet.h>
+#include <pebbl/utilib/ParameterSet.h>
 
 namespace utilib {
 
