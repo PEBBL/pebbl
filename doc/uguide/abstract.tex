@@ -1,13 +1,21 @@
-This document provides a user's guide for the Acro software library.
-The Acro Project is an effort to facilitate the design, development,
-integration and support of optimization software libraries.  The goal
-of the Acro Project is to develop (parallel) optimization solvers and
-libraries using object-oriented software frameworks that facilitate the
-application of these solvers to large-scale engineering and scientific
-applications.  Thus Acro includes both individual optimization solvers
-as well as optimization frameworks that provide abstract interfaces for
-flexible interoperability of solver components.  Acro has been written
-to support optimizers that are broadly useful for DOE's engineering and
-scientific applications.  In particular, many solvers included in Acro
-can exploit parallel computing resources to solve optimization problems
-more quickly.
+PEBBL is a C++ framework for implementing general parallel
+branch-and-bound optimization algorithms, providing a mechanism for
+the efficient implementation of a wide range of branch-and-bound
+methods on an large variety of parallel computing platforms.
+This document describes:
+\begin{itemize}
+\item The history, goals, and general properties of PEBBL
+\item How to download and compile PEBBL
+\item PEBBL's special search capabilities, including enumeration,
+  early output, and checkpointing
+\item PEBBL's ability to enumerate multiple solutions meeting various criteria
+\item PEBBL's basic architecture, including its serial and parallel layers
+\item The design of the serial layer and the notion of manipulating
+  subproblem states
+\item The design and capabilities of the parallel layer
+\item How to build a simple serial branch-and-bound algorithm using
+  PEBBL
+\item How to extend a serial implementation into a parallel one
+\item Many of the numerous parameters that can be used to 
+control PEBBL's behavior.
+\end{itemize}
