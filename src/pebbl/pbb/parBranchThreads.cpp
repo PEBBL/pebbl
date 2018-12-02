@@ -225,11 +225,12 @@ void broadcastPBThread::relay(int initiateFlag)
   
   nAryTree* treeP = makeTreeObject();
 
-  DEBUGPRP(dbgLevel, ucout << name << " data sent to:");
+  DEBUGPR(dbgLevel, ucout << name << " broadcast data sent to:\n");
 
   while(treeP->childrenLeft() > 0)
     {
-      DEBUGPRP(dbgLevel, ucout << ' ' << treeP->currentChild());
+      DEBUGPR(dbgLevel, ucout << "Broadcast child " << treeP->currentChild() 
+                              << endl);
       // Purify complains that this outBuf is never deleted, but 
       // that is OK, as soon as it is sent, outQueue owns it, and will
       // delete it.
@@ -243,9 +244,9 @@ void broadcastPBThread::relay(int initiateFlag)
       global->recordMessageSent(this);
     }
 
-  DEBUGPRX(dbgLevel,global," (done)\n");
-
   delete treeP;
+
+  DEBUGPR(dbgLevel,ucout << name << " activation complete\n");
 }
 
 } // namespace pebbl
