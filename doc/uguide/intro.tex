@@ -1,3 +1,4 @@
+%!TEX root = userguide.tex
 \section{Introduction}
 
 
@@ -24,6 +25,26 @@ parallelized.  PEBBL contains numerous tuning parameters that can
 adapt the resulting parallel implementation to any parallel
 architecture that supports an MPI message passing
 library~\cite{SOHWD96}.
+
+
+\subsection{Changes in this release}
+The principal changes in PEBBL since the prior release (version 1.6) are:
+\begin{enumerate}
+\item The ability to run within a user-specified MPI communicator, as opposed
+to only within \texttt{MPI\_COM\_WORLD}.
+\item Support for multi-level parallelism throughout the search process ---
+for example having clusters of 100 MPI processes to process each subproblem,
+but using many such clusters in parallel to explore different parts of the
+search tree simultaneously \textbf{Still have to do this!}
+\item Distribution through \texttt{github.com} using \texttt{git}, rather than
+through a Sandia labs server using subversion (\texttt{svn}).
+\item Adoption of the \texttt{cmake} build system in place of \texttt{autoconf}.
+\item Separation from the ACRO family of packages and radical simplification
+of the directory structure.  PEBBL now consists of just one package and has no
+external dependencies.  Some parts of the old UTILIB package are now embedded
+with PEBBL.
+\item Miscellaneous bug fixes.
+\end{enumerate}
 
 
 \subsection{The Genealogy of PEBBL}
