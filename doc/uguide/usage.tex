@@ -1,44 +1,62 @@
+%!TEX root = userguide.tex
 \section{Creating PEBBL Applications}
-
 When using PEBBL, you should generally first create a serial PEBBL
 application and debug it using whatever C++ development tools
 you are most comfortable with.  Then you should extend it to a
 parallel application using MPI.
 
 \subsection{Compiling and linking your application}
-In developing a new PEBBL application, you may either keep your source
-files outside the \texttt{acro-pebbl} directory tree, or incorporate
-them into the tree.  If you keep your files outside, you should
-inspect the results of the PEBBL \texttt{make} command or the contents
-of \texttt{acro-pebbl/test/build.out}, and use compatible commands to
-compile and link your application source files.  In particular, your
-compile commands' \texttt{\#include} path should contain the directory
-\texttt{acro-pebbl/include}, and your link commands should include the
-libraries \texttt{acro-pebbl/lib/libpebbl.a} and
-\texttt{acro-pebbl/lib/libutilib.a}.  In standard unix/Linux
-environments, for example, you could use the compiler/linker directives
+To build a PEBBL application, you must indicate the proper include path to the
+compiler and the proper library location to the linker.  There are two choices
+for the include directory root:
+\begin{itemize}
+\item \emph{path}\texttt{/pebbl/src}, where \emph{path} is the location where
+you downloaded PEBBL
+\item If you performed the \texttt{make install} step after compiling, you may
+also use include file location specified in the install step,
+\texttt{\emph{CMAKE\_INSTALL\_PREFIX}/\emph{include\_install\_dir}}, where
+\texttt{\emph{CMAKE\_INSTALL\_PREFIX}} and
+\texttt{\emph{include\_install\_dir}} are as selected in the \texttt{cmake}
+configuration process.  With the configuration settings shown in
+Section~\ref{sec:configure}, this directory would be
+\emph{path}\texttt{/installpebbl/include}.
+\end{itemize}
+PEBBL is compiled to a static library \texttt{libpebbl.a}.   After
+compilation, this library file is located in
+\emph{path}\texttt{/buildpebbl/src/pebbl}, where \texttt{buildpebbl} is the
+\texttt{cmake} build directory.  The \texttt{make install} step copies this
+library to \texttt{\emph{CMAKE\_INSTALL\_PREFIX}/\emph{lib\_install\_dir}},
+where \texttt{\emph{CMAKE\_INSTALL\_PREFIX}} and
+\texttt{\emph{lib\_install\_dir}} are as selected in the \texttt{cmake}
+configuration process.  With the configuration settings shown in
+Section~\ref{sec:configure}, this directory would be
+\emph{path}\texttt{/installpebbl/lib}.
+
+In a standard unix/Linux environment the compiler directives needed if you did
+not perform the \texttt{make install} step would be
 \begin{codeblock}
--I\textrm{[\emph{path}}/\textrm{]}acro-pebbl/include
--L\textrm{[\emph{path}}/\textrm{]}acro-pebbl/lib -lpebbl -lutilib
+-I\textrm{[\emph{path}}/\textrm{]}pebbl/src
+-L\textrm{[\emph{path}}/\textrm{]}buildpebbl/src/pebbl -lpebbl
 \end{codeblock}
-An alternative approach is to place your application source and header
-files within the PEBBL directory tree and use PEBBL's own compilation
-tools to compile your code.  The recommended location for both your
-source and header files is \url{acro-pebbl/src/example/pebbl}.  To
-incorporate your files into PEBBL's build process, you should proceed
-as follows:
-\begin{enumerate}
-\item Modify the file \url{acro-pebbl/src/Makefile.am}
-  to include your new source files in a pattern similar to those for
-  the \texttt{knapsack} application.  
-\item Incorporate any
-  new header files you have created into the list contained in the
-  file \url{acro-pebbl/src/headers/Makefile.am}.  
-\item Rerun the configuration and compilation procedure of
-  Section~\ref{sec:compile}.  The \texttt{configure} step, guided by
-  your altered \texttt{Makefile.am} files, will incorporate your
-  application into PEBBL's build process.
-\end{enumerate}
+where \emph{path} is the directory where you downloaded PEBBL, assuming that
+the \texttt{cmake} build directory is named \texttt{buildpebbl}.
+
+If you did perform the \texttt{make install} step, you may specify the install
+locations instead.  Assuming that \emph{\texttt{lib\_install\_dir}} and
+\emph{\texttt{include\_install\_dir}} were left at their default values of
+\texttt{include} and \texttt{lib}, respectively, the required compiler/linker
+directives would be
+\begin{codeblock}
+-I\emph{CMAKE\_INSTALL\_DIR}/include
+-L\emph{CMAKE\_INSTALL\_DIR}/lib -lpebbl
+\end{codeblock}
+If PEBBL was downloaded to location \emph{path} and the configuration options
+are as shown in Section~\ref{sec:configure}, these directives would be
+\begin{codeblock}
+-I\textrm{[\emph{path}}/\textrm{]}installpebbl/include
+-L\textrm{[\emph{path}}/\textrm{]}installpebbl/lib -lpebbl
+\end{codeblock}
+
 
 \subsection{Defining a serial application}
 \label{sec:serialMethods}
@@ -58,7 +76,7 @@ classes, and a separate C++ source file containing the driver.
 To load the basic definitions of \texttt{branching},
 \texttt{branchSub}, and \texttt{solution} 
 into the compiler, you should \texttt{\#include}
-the file \texttt{<pebbl/branching.h>}.  Supposing your classes are
+the file \texttt{<pebbl/bb/branching.h>}.  Supposing your classes are
 called \texttt{\emph{myBranching}} and \texttt{\emph{myBranchSub}},
 and you are using a single header file, it should take the general
 form shown in Figure~\ref{fig:code1}.
@@ -69,7 +87,7 @@ form shown in Figure~\ref{fig:code1}.
 \begin{minipage}{0.96\textwidth}
 \vspace{1ex}
 \begin{codeblock}
-\#include <pebbl/branching.h> \\
+\#include <pebbl/bb/branching.h> \\
 \\
 using namespace pebbl; \\
 \\
@@ -1079,20 +1097,18 @@ running a PEBBL application with the command-line option
 
 \subsection{Defining a parallel application}
 \label{sec:parMethods}
-Now suppose that your serial layer applications runs acceptably, and
-you wish to parallelize it.  If you want to use parallelism, be sure
-that you have configured PEBBL with MPI; see Section~\ref{sec:compiling}, and
-especially Section~\ref{sec:configoptions}.  In particular, you should
-run \texttt{configure} with an option such as
-\texttt{--with-mpi-compilers=yes} or
-\texttt{--with-mpi-compilers=}\emph{pathname}.
+Now suppose that your serial layer applications runs acceptably, and you wish
+to parallelize it.  If you want to use parallelism, be sure that you have
+configured PEBBL with the \texttt{enable\_mpi} option; see
+Section~\ref{sec:configure}.
 
 When Acro is compiled with MPI, the preprocessor symbol
-\texttt{ACRO\_HAVE\_MPI} is defined; otherwise it is not defined.
-When \texttt{ACRO\_HAVE\_MPI} is undefined, only the serial portions
-of PEBBL are compiled; the parallel portions are omitted or become
-stubs.  You may wish to follow this same pattern within your own
-application source code.
+\texttt{ACRO\_HAVE\_MPI} is defined; otherwise it is not defined (the ``ACRO''
+in this symbol refers to a larger package within which PEBBL used to be
+distributed). When \texttt{ACRO\_HAVE\_MPI} is undefined, only the serial
+portions of PEBBL are compiled; the parallel portions are omitted or become
+stubs.  You may wish to follow this same pattern within your own application
+source code.
 
 Figure~\ref{fig:code2} outlines the
 recommended inheritance and pointer pattern for creating parallel
@@ -1101,7 +1117,7 @@ classes are \texttt{\emph{myBranching}} and
 \texttt{\emph{myBranchSub}}, and the corresponding 
 respective parallel layer classes
 are \texttt{\emph{myParBranching}} and \texttt{\emph{myParSub}}.  Note
-that the header file \texttt{<pebbl/parBranching.h>} defines all the
+that the header file \texttt{<pebbl/pbb/parBranching.h>} defines all the
 classes in both the serial and parallel layers.  
 
 \begin{figure}[tbp]
@@ -1110,7 +1126,7 @@ classes in both the serial and parallel layers.
 \begin{minipage}{0.85\textwidth}
 \vspace{1ex}
 \begin{codeblock}
-\#include <pebbl/parBranching.h> \\
+\#include <pebbl/pbb/parBranching.h> \\
 \\
 using namespace pebbl; \\
 \\

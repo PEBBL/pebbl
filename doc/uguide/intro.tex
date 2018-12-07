@@ -39,10 +39,20 @@ search tree simultaneously \textbf{Still have to do this!}
 \item Distribution through \texttt{github.com} using \texttt{git}, rather than
 through a Sandia labs server using subversion (\texttt{svn}).
 \item Adoption of the \texttt{cmake} build system in place of \texttt{autoconf}.
-\item Separation from the ACRO family of packages and radical simplification
-of the directory structure.  PEBBL now consists of just one package and has no
-external dependencies.  Some parts of the old UTILIB package are now embedded
-with PEBBL.
+\item Separation from the ACRO family of packages.  PEBBL now consists of just
+one package and has no external dependencies.  Some parts of the old UTILIB
+package are now embedded with PEBBL.
+\item As part of the separation from ACRO, the directory structure of PEBBL
+has been completely reworked and greatly simplified, as described in
+Section~\ref{sec:dirstruct} below.  Related changes include
+\begin{itemize}
+\item C++ \texttt{\#include} directives for PEBBL are now naturally
+self-documenting in that header file names starting with \texttt{pebbl/}.
+There is no longer a ``flattened'' copy of the include files structure, so
+subdirectories such as \texttt{pebbl/bb} or \texttt{pebbl/pbb} must be
+explicitly specified.
+\item The file names for the included Python scripts now end in \texttt{.py}.
+\end{itemize}
 \item Miscellaneous bug fixes.
 \end{enumerate}
 

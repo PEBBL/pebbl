@@ -36,9 +36,28 @@ git clone https://github.com/PEBBL/pebbl.git
 \texttt{pebbl}.  
 
 
+\subsection{Structure of the \texttt{pebbl} directory}
+\label{sec:dirstruct}
+PEBBL's directory structure has been greatly simplified from prior releases.
+The subdirectories of \texttt{pebbl} are:
+\begin{description}
+\item[\texttt{src}]  Contains the source code.  Nearly all the contents of
+this directory is within a subdirectory \texttt{pebbl} (which allows PEBBL C++
+\texttt{\#include} statements to naturally self documenting).  Within
+\texttt{pebbl/src/pebbl}, header and \texttt{.cpp} files are mixed in seven
+further directories \texttt{pebbl/src/pebbl/bb} (for ``branch-and-bound''),
+\texttt{pebbl/src/pebbl/comm} (for ``communication''), and so forth.
+\item[\texttt{data}] Contains data files for the example application programs.
+Its subdirectories are \texttt{pebbl/\linebreak[1]data/knapsack} for the
+simple knapsack solver and \texttt{pebbl/data/monomial} for the maximum
+monomial agreement solver.
+\item[\texttt{doc}] Contains documentation.  Currently, its only contents are subdirctory \texttt{pebbl/doc/uguide}, which contains the \LaTeX source and other files necessary to produce this document.
+\item[\texttt{scripts}] contains some useful Python scripts related to PEBBL.
+\end{description}
+
+
 \subsection{Configuration}
-\label{sec:compile}
-\label{sec:compiling}
+\label{sec:configure}
 PEBBL now uses \texttt{cmake} and an ``out-of-source'' build scheme.  To
 configure PEBBL for your system, create another directory at the same level as
 the \texttt{pebbl} directory created by \texttt{git}; this directory will hold
@@ -171,7 +190,7 @@ configuration iteration.
 
 \begin{figure}[tpb]
 \begin{center}
-\includegraphics[width=0.5\textwidth]{cmake5}
+\includegraphics[width=0.5\textwidth]{cmake5.pdf}
 \vspace{-0.3in}
 \end{center}{}
 \caption{Appearance of lower \texttt{cmake-gui} pane after third
@@ -186,9 +205,65 @@ configured using the \texttt{ccmake} terminal-interface tool or by issuing
 \texttt{cmake} shell commands.  This section describes the \texttt{ccmake}
 configuration procedure.
 
-You initiate \texttt{ccmake} configuration much as with \texttt{cmake-gui}.
+You initiate \texttt{ccmake} configuration much as with \texttt{cmake-gui}:
+descend into the \texttt{buildpebbl} (or equivalent) directory and enter the
+command
+\begin{codeblock}
+ccmake ../pebbl
+\end{codeblock}
+Near the top of the terminal screen, you should now see the message
+\texttt{EMPTY CACHE}.  Press the \texttt{c} key to initiate the first
+\texttt{cmake} configuration cycle.  Shortly, the display should change to
+\begin{quote}
+\begin{verbatim}
+ CMAKE_BUILD_TYPE                *Release
+ CMAKE_INSTALL_PREFIX            */usr/local
+ enable_examples                 *ON
+ enable_mpi                      *OFF
+ enable_serializer               *OFF
+ enable_validation               *OFF
+ include_install_dir             *include
+ lib_install_dir                 *lib
+\end{verbatim}
+\end{quote}
+These options have the same interpretation as the those in the previous
+section of this document.  You move between options with the keyboard up and
+down arrow keys, and pressing the enter key toggles between \texttt{ON} and
+\texttt{OFF} settings or allows you to enter new values.  For example, to turn
+on debugging, validation, and the parallel layer, while setting the
+installation directory to be \texttt{installpebbl} in the same parent
+directory as \texttt{buildpebbl}, you would change the options above to
+\begin{quote}
+\begin{verbatim}
+ CMAKE_BUILD_TYPE                *Debug
+ CMAKE_INSTALL_PREFIX            *../installpebbl
+ enable_examples                 *ON
+ enable_mpi                      *ON
+ enable_serializer               *OFF
+ enable_validation               *ON
+ include_install_dir             *include
+ lib_install_dir                 *lib
+\end{verbatim}
+\end{quote}
+Press the \texttt{c} key again to initiate another cycle of configuration.
+Shortly you shoud see the following display:
+\begin{codeblock}
+ MPI enabled. \\
+\\
+Debug mode enabled.
+\end{codeblock}
+Press the \texttt{e} key to return to the main \texttt{ccmake} display level.
+Continue pressing the \texttt{c} and then \texttt{e} keys until the option
+\begin{codeblock}
+Press [g] to generate and exit
+\end{codeblock}
+becomes visible among the choices near the bottom of the main \texttt{ccmake}
+display screen.  At this point, press the \texttt{g} key; \texttt{ccmake}
+should then generate the necessary makefiles and exit.
 
-\textbf{FILL THIS IN}
+If you need access to advanced \texttt{cmake} options during the
+\texttt{ccmake} configuration process, press the \texttt{t} key to make them
+visible.  Pressing \texttt{t} again hides the advanced options.
 
 \subsection{Compiling and installing}
 Once the \texttt{cmake} configuration process is complete (using either
@@ -227,7 +302,25 @@ make -j 8
 \end{codeblock}
 which would attempt to use 8 processes in parallel to speed up the compilation.
 
-\textbf{Discuss make install and location of files}
+After compilation, the PEBBL object library, \texttt{libpebbl.a} may be found
+in the directory \texttt{buildpebbl/src/pebbl}, and the example application
+executables (if enabled) may be found in
+\texttt{buildpebbl/src/pebbl/example}.
+
+If you wish to use the install procedure, issue the command 
+\begin{codeblock}
+make install
+\end{codeblock}
+after the compilation has completed successfully.  If the configured install
+directory is a system directory such as \texttt{/usr/local}, you must have
+administrator priviledges and use the command \texttt{sudo make install}
+instead.
+
+The \texttt{make install} command copies the PEBBL header files to the
+installation directories specified during configuration.  With the options
+shown in the previous two subsections, the header and library files would be
+copied to \texttt{../installpebbl/include} and \texttt{../installpebbl/lib},
+respectively.
 
 \textbf{Test commands knapsack}
 
