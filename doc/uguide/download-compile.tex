@@ -316,12 +316,83 @@ directory is a system directory such as \texttt{/usr/local}, you must have
 administrator priviledges and use the command \texttt{sudo make install}
 instead.
 
-The \texttt{make install} command copies the PEBBL header files to the
-installation directories specified during configuration.  With the options
-shown in the previous two subsections, the header and library files would be
-copied to \texttt{../installpebbl/include} and \texttt{../installpebbl/lib},
-respectively.
+The \texttt{make install} command copies the PEBBL header files and static 
+library to the installation directories specified during configuration.  With
+the options shown in the previous two subsections, the header and library
+files would be copied to \texttt{../installpebbl/include} and
+\texttt{../installpebbl/lib}, respectively.
 
-\textbf{Test commands knapsack}
+\subsection{Testing}
+\label{sec:test}
+PEBBL provides a testing script to verify the success of the compilation
+process.  In the same \texttt{buildpebbl} directory as you performed the
+\texttt{make} operation, you launch the testing script by giving the command
+\begin{codeblock}
+../pebbl/scripts/testScript.py
+\end{codeblock}
+The script will only work correctly when run with the current working
+directory set to the top of the build directory tree.  The test script does
+not require the install step described at the end of the previous section.
 
-\textbf{How to set up makefiles for applications -- maybe defer until later?}
+If you only configured with the serial layer, the testing script will only
+perform serial testing.  In this case, the output should look like:
+\begin{quote}
+\begin{verbatim}
+Only a serial configuration found -- maxprocs reset to 1.
+Knapsack tests --
+animals.1: 1
+animals.2: 1
+scor1k.3: 1
+test-data.1000.1: 1
+Monomial tests --
+testdata: 1
+pima-indians-diabetes.ss.33.bin: 1
+Tests passed
+\end{verbatim}
+\end{quote}
+If you cofigured with the parallel layer, the script defaults to running both
+serial tests and parallel tests using between 2 and 32 MPI processes.  In this
+situation, its output should look like:
+\begin{quote}
+\begin{verbatim}
+Knapsack tests --
+animals.1: 1 2 4 8
+animals.2: 1 2 4 8
+hard24: 4 8 16 32
+scor1k.3: 1 2 4 8 16 32
+test-data.1000.1: 1 2 4 8
+v24: 4 8 16 32
+v24b: 4 8 16 32
+Monomial tests --
+testdata: 1 2
+cmc.data.ss.bin: 16 32
+pima-indians-diabetes.ss.33.bin: 1 2 4 8
+Tests passed
+\end{verbatim}
+\end{quote}
+For example, \texttt{animals.1:~1 2 4 8} means that the knapsack test instance
+\texttt{animals.1} was run successfully in serial and with 2, 4, and 8 MPI
+processes (each test instance has a range of MPI process counts in which it
+is tested).
+
+The test script has a variety of command-line options, as follows:
+\begin{description}
+\item[\texttt{--minprocs=}$p$:] The smallest number of MPI processes to be
+tested to $p$ (default 1)
+\item[\texttt{--maxprocs=}$P$:] The largest number of MPI processes to be
+tested to $P$ (default 32 if parallel layer was compiled, and 1 if only the
+serial layer wascompiled)
+\item[\texttt{--add=}$a$:] The additive step between successive MPI process
+counts to be tested (default $0$)
+\item[\texttt{--multiply=}$m$:] The multiplicative step between MPI process
+counts to be tested (default value $2$)
+\item[\texttt{--mpicommand=\emph{command}}:]  The command used to invoke MPI;
+the default is \texttt{mpirun}; use \texttt{--mpicommand=mpiexec} on systems
+that have \texttt{mpiexec} but not \texttt{mpirun}.
+\end{description}
+An MPI process count of $1$ denotes using only the serial layer.  The test
+script starts at an MPI process count of $p = \mathtt{minprocs}$ and then
+updates it by the formula $p \leftarrow mp + a$; thus, the default values of
+$m=2$ and $a=0$ cause the processor count to be successivly doubled. You may
+also list the options by invoking the script with the single option
+\texttt{-h} or \texttt{--help} (in which case no testing is attempted).
