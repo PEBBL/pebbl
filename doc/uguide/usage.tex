@@ -1190,12 +1190,17 @@ constructor.
 
 \subsubsection{Methods you should create ---
   \texttt{parallelBranching}-derived class}
+\label{sec:pbDerived}
 \boxheader{Constructor}
-A constructor with no arguments is advised; it will automatically call
-the no-argument constructor for your serial application class, such as
+It is advised that you create a constructor with a single argument, the MPI
+communicator under which the search will be run, with a default value of
+\texttt{MPI\_COMM\_WORLD}.  This constructor should set the MPI communicator member \texttt{mpiComm} of the \texttt{parBranching} class and call the no-argument constructor for your serial application class, such as
 \texttt{\emph{myBranching}}. 
 \begin{codeblock}
-\emph{myParBranching}() \{ $\cdots$ \}; \\
+\emph{myParBranching}(MPI\_Comm comm\_ = MPI\_COMM\_WORLD) : \\
+myBranching(), \\
+mpiComm(comm\_) \\
+\{ $\cdots$ \}; 
 \end{codeblock}
 
 \boxheader{Destructor} 
@@ -1891,6 +1896,28 @@ See Section~\ref{sec:pthread} for a description of the
 
 Note, however, that some installations may use different, nonstandard
 commands for running MPI programs.
+
+\subsubsection{Running in communicators other than \texttt{MPI\_COMM\_WORLD}}
+The provided drivers will run PEBBL within the communicator
+\texttt{MPI\_COMM\_WORLD}.  For an example of how to invoke PEBBL within a
+different communicator, please refer to
+the program \texttt{commTest.cpp} in the
+\texttt{src/pebbl/example} directory.  This program runs the example knapsack
+application in a communicator consisting of MPI ranks $\lfloor P/2 \rfloor,
+\ldots, P-1$, where $P$ is the total number of MPI processes.  The other MPI
+processes remain idle, which makes the program somewhat pointless, other than
+to illustrate how to run within a specific communicator.  Doing so is quite
+straightforward: you simply pass the desired communicator as an argument to
+the constructor for your \texttt{parallelBranching}-derived class, assuming
+that this constructor is set up as specified at the beginning of
+Section~\ref{sec:pbDerived}.  For example, if the
+\texttt{parallelBranching}-derived class is called
+\emph{\texttt{myParBranching}} and you wish to run within the (already
+declared and constructed) communicator \texttt{specialCommunicator}, you would
+simply declare your problem instance by
+\begin{codeblock}
+\emph{myParBranching} instance(specialCommunicator);
+\end{codeblock}
 
 \subsubsection{Retrieving solutions to C++ code}
 \label{sec:pargetsol}
