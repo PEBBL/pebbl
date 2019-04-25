@@ -46,23 +46,39 @@ void uMPI::init(int* argcP, char*** argvP, MPI_Comm comm_)
 {
   if (!running())
     {
-      char* prev_dir = getcwd(0,256);
       errorCode = MPI_Init(argcP,argvP);
       if (errorCode)
-	 ucerr << "MPI_Init failed, code " << errorCode << endl;
-      init(comm_);
-      // Work around an mpich problem: force the current working directory
-      // after mpi_init to be the same as before we called it.  This is only
-      // applied in serial, since otherwise we assume that mpirun has
-      // handled this...
-      if (size == 1)
-	 if(!chdir(prev_dir))
-     ucerr << "chdir failed, code " << errno << endl;
-      free(prev_dir);
+         ucerr << "MPI_Init failed, code " << errorCode << endl;
     }
-  else
-    init(comm_);
+  init(comm_);
 }
+
+
+// The version below is presumed to be an old temporary version working around some
+// Weird MPICH bug.  Not used at present.
+
+// void uMPI::init(int* argcP, char*** argvP, MPI_Comm comm_)
+// {
+//   if (!running())
+//     {
+//       char* prev_dir = getcwd(0,256);
+//       errorCode = MPI_Init(argcP,argvP);
+//       if (errorCode)
+// 	 ucerr << "MPI_Init failed, code " << errorCode << endl;
+//       init(comm_);
+//       // Work around an mpich problem: force the current working directory
+//       // after mpi_init to be the same as before we called it.  This is only
+//       // applied in serial, since otherwise we assume that mpirun has
+//       // handled this...
+//       if (size == 1)
+// 	 if(!chdir(prev_dir))
+//             ucerr << "chdir failed, code " << errno << endl;
+//       free(prev_dir);
+//     }
+//   else
+//     init(comm_);
+// }
+
 
 void uMPI::init(MPI_Comm comm_)
 {
