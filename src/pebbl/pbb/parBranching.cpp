@@ -209,10 +209,8 @@ void parallelBranching::reset(bool VBFlag)
 
   // Initialize stuff to do with scattering
 
-  double workerLoadFac = 1 - hubLoadFac;
-  
   DEBUGPR(20,ucout << "hubLoadFac=" << hubLoadFac 
-	  << " workerLoadFac=" << workerLoadFac << endl);
+	  << " workerLoadFac=" << 1 - hubLoadFac << endl);
 
   if (!parameter_initialized("targetScatterProb"))
     targetScatterProb = scatterFac*hubLoadFac;
@@ -577,20 +575,20 @@ void parallelBranching::reset(bool VBFlag)
 // Most of the stuff that used to be here is now in reset().
 
 parallelBranching::parallelBranching(MPI_Comm comm_) :
-  currentParSP(NULL),
-  heapOfWorkers("Worker Tracking"),
-  qHeapOfWorkers("Worker Quality Tracking"),
-  reposArrayHeap("Repository Array"),
   mpiComm(comm_),
-  workerOutQ(mpiCommObj()),           // All these buffer queues need communicator
+  currentParSP(NULL),
+  workerOutQ(mpiCommObj()),           // All buffer queues need communicator
   deliverSPBuffers(mpiCommObj()),     //   information
   auxDeliverSPQ(mpiCommObj()),
   dispatchSPBuffers(mpiCommObj()),
   hubAuxBufferQ(mpiCommObj()),
+  heapOfWorkers("Worker Tracking"),
+  qHeapOfWorkers("Worker Quality Tracking"),
   solHashQ(mpiCommObj()),
   reposArrayQ(mpiCommObj()),
   newLastSolQ(mpiCommObj()),
-  solAckQ(mpiCommObj())
+  solAckQ(mpiCommObj()),
+  reposArrayHeap("Repository Array")
 {
   workerPool = NULL;
   hubPool    = NULL;
@@ -975,7 +973,7 @@ solution* parallelBranching::unpackSolution(UnPackBuffer& inBuf)
 {
   int typeId = -1;
   inBuf >> typeId;
-  if ((typeId < 0) || (typeId >= numRefSols))
+  if ((typeId < 0) || ((unsigned) typeId >= numRefSols))
     EXCEPTION_MNGR(runtime_error,"Unpacked solution type id "
 		   << typeId << " is out of range 0.." << numRefSols-1);
   solution* sol = refSolArray[typeId]->blankClone();

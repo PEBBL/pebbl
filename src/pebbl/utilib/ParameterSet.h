@@ -417,8 +417,10 @@ std::vector<Parameter*>::iterator curr = param_info.begin();
 std::vector<Parameter*>::iterator last = param_info.end();
 while (curr != last) {
   if ( !((*curr)->disabled) )
-     (*curr)->initialized=false;
-     (*curr)->referenced=false;
+    {
+      (*curr)->initialized=false;
+      (*curr)->referenced=false;
+    }
   curr++;
   }
 }

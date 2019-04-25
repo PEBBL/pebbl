@@ -358,7 +358,6 @@ void parallelBranching::activateHub(parBranchingThreadObj* callingThread)
 
 void parallelBranching::hubDistributeWork()
 {
-  int w;
   HUBDEBUG(100,ucout << "Hub work distribution: " << hubPool->size() 
 	   << " pool elements.\n");
   if (needHubPruning)

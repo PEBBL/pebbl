@@ -220,11 +220,9 @@ namespace pebbl {
   void parallelBranching::deleteCheckpointFile(int k, int p)
   {
     int code = remove(checkpointFilename(k,p).c_str());
-    DEBUGPR(1000,
-            if (code) {
-               ucerr << "Could not remove checkpoint file (" << k 
-                     << "," << p << ")" << endl;
-            });
+    if (code) 
+       ucerr << "Could not remove checkpoint file (" << k 
+             << "," << p << ")" << endl;
   }
 
 

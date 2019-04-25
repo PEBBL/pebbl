@@ -188,7 +188,9 @@ ThreadObj::ThreadState reposMergeObj::state()
 
 ThreadObj::RunStatus reposMergeObj::runWithinLogging(double* controlParam)
 {
+#ifdef UTILIB_YES_DEBUGPR
   int globalDebug = 0;
+#endif
   DEBUGPR(1,
 	  globalDebug = global->debug;
 	  if (globalDebug < debug)         // Temporarily increase main debug

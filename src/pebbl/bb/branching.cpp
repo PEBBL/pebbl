@@ -524,7 +524,7 @@ bool branching::canFathom(solutionIdentifier* solPtr)
     {
       if (lastSolId.compare(solPtr) <= 0)
 	return true;
-      if ((repositorySize() == enumCount) &&
+      if ((repositorySize() == (unsigned) enumCount) &&
 	  (worstReposSol()->compare(solPtr) <= 0))
 	return true;
     }
@@ -1635,7 +1635,7 @@ void branching::closeSolutionFile(ostream* fileStream)
          solFileName += problemName;
       solFileName += ".sol.txt";
   }
-  int delcode = remove(solFileName.c_str());     // Required for Windows OS
+  remove(solFileName.c_str());            // Required for Windows OS
   utilib::move_file("temp-sol.txt",solFileName.c_str());
   DEBUGPR(50,ucout << "Closed solution file " << solFileName << endl);
 }
@@ -2310,7 +2310,7 @@ bool branching::localReposOffer(solution* sol)
   // in parallel, where each processor will normally have only about
   // 1/p-th of the solutions in the repository.
 
-  if ((enumCount > 0) && (repositorySize() == enumCount))
+  if ((enumCount > 0) && (repositorySize() == (unsigned) enumCount))
     {
       GenericHeapItem<solution>* oldTop = reposHeap.swapTop(*sol);
       solution* oldTopSol = &(oldTop->key());
@@ -2347,7 +2347,8 @@ void branching::offerToRepository(solution* sol,syncType sync)
 
   bool accepted = localReposOffer(sol);
 
-  if (accepted && (enumCount > 1) && (repositorySize() == enumCount))
+  if (accepted && (enumCount > 1) && 
+                  (repositorySize() == (unsigned) enumCount))
     {
       double oldPruneValue = lastSolId.value;
       updateLastSolId(worstReposSol());

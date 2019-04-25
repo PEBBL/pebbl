@@ -62,12 +62,13 @@ pebblParams::pebblParams()
     enumCount(-1),
     enumHashSize(1024),
     debug_solver_params(false),
-    printSpTimes(0),
 #ifdef ACRO_VALIDATING
-    use_abort(true)
+    use_abort(true),
 #else
-    use_abort(false)
-#endif
+    use_abort(false),
+#endif    
+    printSpTimes(0)
+
 {
 /// GENERAL
 

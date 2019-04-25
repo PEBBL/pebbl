@@ -231,7 +231,7 @@ namespace pebblMonom {
 	      "unpacking children, num of children: " << childNum << endl);
     _children.resize(childNum);
 
-    for (size_type i = 0; i < childNum; i++)
+    for (int i = 0; i < (int) childNum; i++)
       {
 	bool nonNull;
         inBuffer >> nonNull;

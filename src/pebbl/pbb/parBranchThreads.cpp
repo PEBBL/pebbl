@@ -35,12 +35,12 @@ parBranchingThreadObj::parBranchingThreadObj(parallelBranching* global_,
 					     const char* logColor,
 					     int   logLevel_,
 					     int   dbgLevel_) :
+  mpiComm(global_->mpiCommObj()),
   global(global_),
   messagesReceived(0),
   logLevel(logLevel_),
   dbgLevel(dbgLevel_),
-  active(false),
-  mpiComm(global_->mpiCommObj())
+  active(false)
   {
     name    = name_;
     request = MPI_REQUEST_NULL;
@@ -79,11 +79,13 @@ ThreadObj::RunStatus parBranchingThreadObj::run(double* controlParam)
 
   global->currentThread = this;
 
+#ifdef UTILIB_YES_DEBUGPR
 #if defined(ACRO_VALIDATING) || defined(WARNINGS)
   double startTime = CPUSeconds();
 #else
   double startTime = 0.0;
-#endif      
+#endif
+#endif
 
   DEBUGPR(dbgLevel,ucout << name << " slice, control " 
       << *controlParam << '\n');

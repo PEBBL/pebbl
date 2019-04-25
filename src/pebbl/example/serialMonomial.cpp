@@ -291,7 +291,7 @@ namespace pebblMonom {
     inBuff >> _lastSetIdx >> _vars;
     assert (!_vars.empty());
      
-    for(size_type i = 0; i < _vars.size(); i++)
+    for(size_type i = 0; i < (size_type) _vars.size(); i++)
       {
 	if (_vars[i] == pebblMonom::NOT_IN_MONOM)
 	  _notInMonom.insert(_notInMonom.end(),i);
@@ -313,13 +313,13 @@ namespace pebblMonom {
     _improvedBound(true),
     _saveCoverages(false),
     _threeWayBranching(true),
+    _branchingFactor(0),
     _roundingQuantum(1e-5),
     _verifyLog(false),
-    _vlFile(NULL),
+    _vlFile(NULL)
 #ifdef ACRO_USING_COIN_CBC
-    _iterations(1),
+    , _iterations(1)
 #endif
-    _branchingFactor(0)
   {
     min_num_required_args = 1;
     branchingInit(maximization, relTolerance, absTolerance);
@@ -460,12 +460,12 @@ namespace pebblMonom {
 	    if (_nonUniformWt)
 	      {
 		delim = line.find(";");
-		if (delim == string::npos)
+		if (delim == (int) string::npos)
 		  throw domain_error("inconsistent row without delim ;");
 		_wts.push_back( (double) atof((line.substr(0,delim)).c_str()));
 	      }
 	      
-	    if (line.size()-delim-2 != _attribNum)
+	    if ((int) (line.size())-delim-2 != _attribNum)
 	      {
 		cerr << line.size() << " " << _attribNum 
 		     << " " << line << " " << " delim: " << delim << " ";
@@ -473,7 +473,7 @@ namespace pebblMonom {
 				   "inconsistent line size");
 	      }
 	    observation_t row(_attribNum + 1);
-	    for (int i = delim+1; i < line.size(); i++)
+	    for (int i = delim+1; i < (int) line.size(); i++)
 	      {
 		switch (line[i])
 		  {
@@ -866,7 +866,7 @@ namespace pebblMonom {
 
     for (iter = obsIdxs.begin(); iter != obsIdxs.end(); iter++)
       {  
-	if (*iter < 0 || *iter >= _wts.size())
+	if (*iter < 0 || *iter >= (int) _wts.size())
 	  throw out_of_range("invalid obs idx, cannot obtain weight");
 	ret += _wts[*iter];
       }
@@ -902,7 +902,7 @@ namespace pebblMonom {
 	set<size_type>::const_iterator iter;
 	for (iter = flter.begin(); iter != flter.end(); iter++)
 	  {
-	    if (*iter < 0 || *iter >= _dataStore.size())
+	    if (*iter < 0 || *iter >= (int) _dataStore.size())
 	      throw out_of_range("invalid idx in filter"); 
 	    if (monom.evaluatePoint(_dataStore[*iter]))
 	      ret.insert(ret.end(), *iter);
@@ -1272,7 +1272,7 @@ namespace pebblMonom {
 	     "whichChild: " << whichChild << endl);
 
 #ifdef ACRO_VALIDATING
-    if (whichChild >= _children.size())
+    if (whichChild >= (int) _children.size())
       {
 	cerr << "requested whichChild: " << whichChild 
 	     << " but there are only: " << _children.size() << endl;
@@ -2054,7 +2054,7 @@ namespace pebblMonom {
     // to the same value, it could possibly be wrong.  If there are no 
     // children, this subproblem is dead, and the bound is -1.
     bound = -1.0;
-    for (size_type j=0; j<_children.size(); j++)
+    for (size_type j=0; j < (int) _children.size(); j++)
       if (_children[j]->bound > bound)
 	bound = _children[j]->bound;
       
@@ -2129,7 +2129,7 @@ namespace pebblMonom {
 	for (iter = _children.begin(); iter != _children.end(); iter++)
 	  delete *iter;
 	_children.resize(temp.size());
-	for (size_type jj=0; jj<temp.size(); jj++)
+	for (size_type jj=0; jj < (int) temp.size(); jj++)
 	  _children[jj] = temp[thisChoice.branch[jj].arrayPosition];
 	_branchChoice = thisChoice;
 	DEBUGPR(15,ucout << "Improves best: " << i << endl);
@@ -2330,7 +2330,7 @@ namespace pebblMonom {
 		<< outOfMonomList.size() << endl);
 	_monom = parent->getMonomialObj();
 
-	for (int i=0; i < outOfMonomList.size(); i++)
+	for (int i=0; i < (int) outOfMonomList.size(); i++)
 	  {
 	    
 	    DEBUGPR(40,ucout << " with attribute: " << outOfMonomList[i] 

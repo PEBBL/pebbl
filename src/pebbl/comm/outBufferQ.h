@@ -138,9 +138,9 @@ class multiOutBufferQueue : public CommonIO
  public:
 
   multiOutBufferQueue(mpiComm* comm_) : 
+    bufferQ(comm_),
     buffer(0), 
-    firstProc(noProcessor),
-    bufferQ(comm_) 
+    firstProc(noProcessor)
   { };
 
   void clear();

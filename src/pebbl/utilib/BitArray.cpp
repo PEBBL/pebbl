@@ -24,6 +24,9 @@ using namespace std;
 #endif
 
 namespace utilib {
+
+// Note: these are not in the header file and are not used in this file.
+// Delete?
 namespace {
 int cast_bitArray_to_vector(const Any& from, Any& to)
 {
@@ -46,6 +49,7 @@ int cast_vector_to_bitArray(const Any& from, Any& to)
    for( ; i > 0; --i, src[i] ? ans.set(i) : ans.reset(i) );
    return 0;
 }
+
 
 } // namespace utilib::(local)
 
@@ -158,9 +162,9 @@ void bitwise_and(BitArray& a1, BitArray& a2, BitArray& result)
 
 int BitArray::shared_one(BitArray& other) const
 {
-size_type min_length = other.size();
-if (size() < min_length)
-  min_length = size();
+  size_type min_length = other.size();
+  if (size() < min_length)
+    min_length = size();
 
   // Do all the full words of data
 
@@ -172,16 +176,16 @@ if (size() < min_length)
 
   // Check the last word, if any
 
-  size_t leftover = (Len & index_mask);
-  if (leftover > 0)
+    size_t leftover = (Len & index_mask);
+    if (leftover > 0)
     {
       workingBitData mask = (1 << leftover) - 1;
       if (Data[i] & other.Data[i] & mask)
-	return 1;
-    }
-  
-  return 0;
-}
+        return 1;
+   }
+
+   return 0;
+ }
 
 #ifdef HAVE_SERIALIZER
 int BitArray::serializer( SerialObject::elementList_t& serial, 

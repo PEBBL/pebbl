@@ -222,17 +222,17 @@ tree(global_->cluster, global_->loadBalTreeRadix),
 surveyObject(this,&tree),
 countObject(this,&tree),
 termCheckObject(this,&tree),
-lastLoadBalTime(WallClockSeconds()),
 receiverLoad(global_),
 lbRandom(1),
 bufferSize(computeBufferSize()),
+outBufQ(global_->mpiCommObj()),
 inBuf(bufferSize),
+lastLoadBalTime(WallClockSeconds()),
 surveyRestartFlag(false),
 roundNumber(0),
 surveyRestarts(0),
 quiescencePolls(0),
-termChecks(0),
-outBufQ(global_->mpiCommObj())
+termChecks(0)
 {
   myState   = start;
   myCluster = global->clusterNumber();
@@ -355,7 +355,8 @@ ThreadObj::ThreadState loadBalObj::state()
 
 int loadBalObj::subproblemsProcessed()
 {
-  return global->subCount[bounded] + global->subCount[dead];
+  return global->subCount[pebblBase::bounded] + 
+                  global->subCount[pebblBase::dead];
 };
 
 

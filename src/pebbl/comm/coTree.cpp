@@ -37,13 +37,13 @@ coTree::coTree(MPI_Datatype  datatype_,
 	       int           exitForReceives_,
 	       mpiComm*      comm_) :
 
+	       mpiComm(comm_),
 	       t(t_),
 	       datatype(datatype_),
 	       request(request_),
 	       status(status_),
 	       exitForReceives(exitForReceives_),
-	       messagesReceived(0),
-	       mpiComm(comm_)
+	       messagesReceived(0)	       
 {
   reset();
 };

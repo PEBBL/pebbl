@@ -163,8 +163,9 @@ namespace pebbl {
 	    << psol->value << " in the direction of " << psol->owner << endl);
 
     // Find the bits where the owner differs from the current rank
+    // This was formerly unsigned; changed to signed to avoid warnings.
 
-    unsigned int bitDiff = psol->owner ^ myRank();
+    int bitDiff = psol->owner ^ myRank();
 
 #ifdef ACRO_VALIDATING
     if (bitDiff == 0)
@@ -176,7 +177,8 @@ namespace pebbl {
     size_type bestLink = nProcessorBits;   // Start with invalid value
     size_type bestLen  = MAXINT;
 
-    unsigned int mask = 1;
+    // This was formerly unsigned; now signed to suppress warnings
+    int mask = 1;
 
     for(size_type b=0; b<nProcessorBits; b++)
       {
@@ -282,8 +284,8 @@ namespace pebbl {
   {
     // Which link was this sent on?
 
-    unsigned int bitDiff = sender ^ myRank();
-    size_type    link    = bitWidth(bitDiff) - 1;
+    int       bitDiff = sender ^ myRank();
+    size_type link    = bitWidth(bitDiff) - 1;
 
     DEBUGPR(100,ucout << "solAckAction for ack from processor "
 	    << sender << ", link " << link << endl);
@@ -355,7 +357,7 @@ namespace pebbl {
       for(size_type b=0; b<nProcessorBits; b++)
 	{
 	  GenericHeap<packedSolution>& heap = solSendQ[b];
-	  size_type n = heap.size();
+	  int n = heap.size();
 	  while(n > (heap.size() >> 1))
 	    {
 	      GenericHeapItem<packedSolution>* item = heap.member(n);
@@ -438,7 +440,7 @@ namespace pebbl {
     lastMergeTime       = startWall;
     childArraysReceived = 0;
 
-    for(size_type child=0; child<reposChildren; child++)
+    for(int child=0; child<reposChildren; child++)
       gotChildArray[child] = false;
 
     // We might now be able to terminate; prevent hangs by forcing the
@@ -519,7 +521,7 @@ namespace pebbl {
   {
     DEBUGPR(100,ucout << "In parallelBranching::reposTreeRootAction\n");
 
-    size_type arraySize = treeReposArray.size();
+    int  arraySize = treeReposArray.size();
     bool changed = false;
     if (arraySize == enumCount)
       changed = updateLastSolId(&(treeReposArray[arraySize - 1]));
@@ -651,7 +653,7 @@ namespace pebbl {
       {
 	// Update lastSolId from the result of the syncReposArray
 
-	if (treeReposArray.size() >= enumCount)
+	if (treeReposArray.size() >= (unsigned int) enumCount)
 	  needPruning |= updateLastSolId(&treeReposArray[enumCount - 1]);
 
 	DEBUGPR(100,ucout << "Broadcasting " << &lastSolId << endl);
@@ -760,7 +762,7 @@ namespace pebbl {
     IntVector              usingBuffer(mySize());
     size_type              myMaxBufSize = 0;
 
-    for(size_type p=0; p<mySize(); p++)
+    for(int p=0; p<mySize(); p++)
       usingBuffer[p] = 0;
 
     int messagesToSend = 0;
@@ -1056,7 +1058,6 @@ namespace pebbl {
     int bufSize = 0;
     if (reposTree->isRoot())
       {
-	MPI_Status status;
 	DEBUGPR(100,ucout << "Sending treeReposArray\n");
 	PackBuffer outBuf(bufSize);
 	outBuf << treeReposArray;

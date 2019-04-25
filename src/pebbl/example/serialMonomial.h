@@ -93,7 +93,7 @@ namespace pebblMonom {
     //finalize into a solution
     void finalize() 
     {
-      for(int i=0; i < _vars.size(); i++) 
+      for(unsigned int i=0; i < _vars.size(); i++) 
 	if (_vars[i]==NULL_VAL) 
 	  _vars[i]=NOT_IN_MONOM;
     }

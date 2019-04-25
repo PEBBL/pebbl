@@ -25,6 +25,14 @@
 namespace pebbl {
 
 
+#define PEBBL_packAs(buf,what,kind,castType) \
+   { \
+       castType packTemp_ = 0; \
+       memcpy(&packTemp_,&what,sizeof(kind)); \
+       buf << packTemp_; \
+   }
+
+
 #define PEBBL_unpackAs(buf,what,kind,castType) \
    { \
        castType unpackTemp_; \
@@ -34,14 +42,16 @@ namespace pebbl {
    }
 
 
+// JE rewrote this 4/19/2019 to avoid -Wall warnings
+
 inline void packPointer(PackBuffer& outBuffer,void* ptr)
 {
   if (sizeof(void*) == sizeof(int))
-    outBuffer << *((int*) &ptr);
+    PEBBL_packAs(outBuffer,ptr,void*,int)
   else if (sizeof(void*) == sizeof(long))
-    outBuffer << *((long*) &ptr);
+    PEBBL_packAs(outBuffer,ptr,void*,long)
   else if (sizeof(void*) == sizeof(double))
-    outBuffer << *((double*) &ptr);
+    PEBBL_packAs(outBuffer,ptr,void*,double)
   else
     EXCEPTION_MNGR(std::runtime_error, "Can't figure out how to pack " << sizeof(void*) << "-byte pointers");
 }
