@@ -507,7 +507,7 @@ solution object, invoke a constructor (supplied by PEBBL) of the form
   \text{\texttt{global()}}$, and within the
   \texttt{\emph{myBranching}} of Figure~\ref{fig:code1}, you would set
   $b = \text{\texttt{this}}$.  One function of this argument is to
-  make sure that the maximization/minimization \texttt{sense} of the
+  make sure that the maximization / minimization \texttt{sense} of the
   \texttt{arraySolution} is set correctly.
 \item[$t$] is optional, and is simply a \texttt{const char*} pointing to a
   description of the type of solution, for example, \texttt{"Vector
@@ -659,7 +659,8 @@ solution is useful, and otherwise delete it.  Note that calling
 \item The caller should invoke \texttt{sol->incrementRefs()} before calling 
 \texttt{foundSolution(sol)}
 \item The caller should not alter the contents of \texttt{*sol}
-solution after calling \texttt{foundSolution(sol)}, since doing so could cause
+solution after invoking the method
+\texttt{foundSolution(sol)}, since doing so could cause
 internal errors or unpredictable behavior in PEBBL
 \item Once it no longer needs \texttt{*sol}, the caller should invoke
 \texttt{sol->dispose()}.
@@ -1304,8 +1305,8 @@ processors.
 
 Instead of direct calculation, one possible approach to implementing
 \texttt{spPackSize()} is to create a ``dummy'' subproblem of the largest
-possible size, invoke your \texttt{\emph{myParSub}::pack($\cdots$)}
-method to write it to a dummy buffer \texttt{\emph{dumBuf}}, and then measure
+size you anticipate needing, invoke your \texttt{\emph{myParSub}::pack($\cdots$)}
+method to write it to a dummy buffer \texttt{\emph{dumBuf}}, and finally measure
 the size of that buffer with \texttt{\emph{dumBuf}.size()}.
 
 ~

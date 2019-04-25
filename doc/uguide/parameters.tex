@@ -104,6 +104,14 @@ retained.
         within 10\% of optimality.  The default value means the
         feature is disabled.
 
+\pparam{enumFlowControl}{bool}{\texttt{false}}
+Enables a hypercube flow control scheme for solution objects when enumeration
+is being used in parallel.  This scheme is designed to prevent MPI errors
+resulting from too many messages converging simultaneously at a single
+receiving processor.  This mode should only be needed if there is very high
+solution transmission volume, and only with certain MPI implementations.  In
+serial or without enumeration, it has no effect.
+
 
 \subsection{General}
 \vspace{-3ex}

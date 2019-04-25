@@ -51,7 +51,10 @@ further directories \texttt{pebbl/src/pebbl/bb} (for ``branch-and-bound''),
 Its subdirectories are \texttt{pebbl/\linebreak[1]data/knapsack} for the
 simple knapsack solver and \texttt{pebbl/data/monomial} for the maximum
 monomial agreement solver.
-\item[\texttt{doc}] Contains documentation.  Currently, its only contents are subdirctory \texttt{pebbl/doc/uguide}, which contains the \LaTeX source and other files necessary to produce this document.
+\item[\texttt{doc}] Contains documentation, include the PDF of this document.
+Currently, the only subdirectory in 
+this location is \texttt{pebbl/doc/uguide}, which contains the \LaTeX~source
+and other files necessary to produce this document. 
 \item[\texttt{scripts}] contains some useful Python scripts related to PEBBL.
 \end{description}
 
@@ -167,7 +170,7 @@ configuration options.
 \end{figure}
 
 Figure~\ref{fig:cmake3} shows the appearance of \texttt{cmake-gui} after
-enabling MPI and selecting \texttt{installpebbl} (at the same level as
+enabling MPI and specifying the directory \texttt{installpebbl} (at the same level as
 \texttt{pebbl} and \texttt{buildpebbl}) as the installation target directory.
 Press the ``Configure'' button again, and the message pane at the bottom of
 the \texttt{cmake-gui} window should the messages shown in
