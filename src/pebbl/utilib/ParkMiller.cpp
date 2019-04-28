@@ -10,8 +10,7 @@
  */
 
 /* Turned into C++ by Jonathan Eckstein, April 2018
-
-/**
+ *
  * \file	ParkMiller.cpp
  *
  * Implementation of the \c PMrand function

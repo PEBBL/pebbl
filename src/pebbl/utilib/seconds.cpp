@@ -60,7 +60,7 @@ static double CPU_start_time=0.0;
 static double WallClock_start_time=0.0;
 #if defined(UTILIB_HAVE_TIMES) && defined(UTILIB_HAVE_SYSCONF)
 static double clock_tick = 1. / (double)sysconf(_SC_CLK_TCK);
-#else
+#elif defined(UTILIB_HAVE_TIMES)
 static double clock_tick=1.;
 #endif
 
