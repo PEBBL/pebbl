@@ -1,3 +1,4 @@
+%!TEX root = userguide.tex
 \section{Parameters}
 \label{sec:param}
 This section describes various command line parameters that PEBBL
@@ -42,9 +43,18 @@ the run that wrote the checkpoint.
 \label{sec:debugparams}
 \vspace{-3ex}
 \sparamc{debug}{int}{0}{Nonnegative}
-Debugging diagnostic output level.  To add diagnostic output
-controlled by this parameter to your application, you may use the
-\texttt{DEBUGPR} and related macros.  
+Debugging diagnostic output level.  To add diagnostic output controlled by
+this parameter to your application, you may use the \texttt{DEBUGPR} and
+related macros.  PEBBL already contains extensive diagnostic output controlled
+by this parameter.
+
+However, this parameter will have no effect unless the configuration specifier
+\texttt{CMAKE\_CXX\_\linebreak[1]FLAGS} was set to include the option
+\texttt{-DUTILIB\_YES\_DEBUGPR} when PEBBL was compiled.  If this was not the
+case and you need to use this option, configure PEBBL with
+\texttt{-DUTILIB\_YES\_\linebreak[1]DEBUGPR} as discussed on
+page~\pageref{advancedoptions}, then recompile all of PEBBL and your
+application.
 
 \sparam{debug-solver-params}{bool}{\texttt{false}}
 If \texttt{true}, print the value of all parameters.

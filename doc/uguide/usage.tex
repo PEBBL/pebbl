@@ -1047,6 +1047,7 @@ Section~\ref{sec:solclassdetails}, one should never directly use
 reference-counted.
 
 \subsubsection{Debugging outputs}
+\label{sec:debugOutput}
 In the process of debugging a PEBBL application, it may be necessary
 to print diagnostic outputs.  Through the companion UTILIB package
 that it automatically includes, PEBBL provides special mechanisms for
@@ -1073,6 +1074,12 @@ features that make it more convenient in a parallel setting.  In
 particular, when used in parallel, each line of text sent to
 \texttt{ucout} will be prefixed by a tag indicating which processor
 wrote the information.
+
+Note that \texttt{DEBUGPR} and the other macros described in this section will
+operate only if the configuration specifier \texttt{CMAKE\_CXX\_FLAGS} is set to
+include the option \texttt{-DUTILIB\_YES\_DEBUGPR}, as discussed on
+page~\pageref{advancedoptions}.  If this is not the case, the macros will be
+converted to stubs during C++ preprocessing.
 
 A slightly different form of debug printing is used in subproblem
 classes derived from \texttt{branchSub}, as opposed to problem classes

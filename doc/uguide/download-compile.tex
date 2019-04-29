@@ -156,8 +156,22 @@ It should ordinarily be left unchanged.
 \end{description}
 A host of additional options are available by checking the ``Advanced'' box
 above the option table.  These options may be helpful if you are need to
-configure with specific compilation or linking flags, but are not discussed
-further in this document.
+configure with specific compilation or linking flags.  Here, we will discuss
+only one of the advanced option settings, \texttt{CMAKE\_CXX\_FLAGS}.  This
+field is used to pass option flags to the C++ compiler.  Options that may be
+entered in this field include: \label{advancedoptions}
+\begin{description}
+\item[\texttt{-DUTILIB\_YES\_DEBUGPR}:]  turns on PEBBL/Utilib internal
+debugging output macros.  Output from these macros can be useful in
+undertanding PEBBL's execution path and decision making.  If this option is
+not specified, the debugging output macros become stubs during compiler
+preprocessing.  See Section~\ref{sec:debugOutput} for a discussion of how to
+use these macros in your own application code. Section~\ref{sec:debugparams}
+describes the command-line-settable parameters that control the amount of
+output from appearing from these macros.
+\item[\texttt{-Wall}:] enable the maximum level of compiler warnings (applicable 
+when using the \texttt{gcc} compiler suite).
+\end{description}
 
 \begin{figure}[tpb]
 \begin{center}
@@ -266,7 +280,9 @@ should then generate the necessary makefiles and exit.
 
 If you need access to advanced \texttt{cmake} options during the
 \texttt{ccmake} configuration process, press the \texttt{t} key to make them
-visible.  Pressing \texttt{t} again hides the advanced options.
+visible.  Pressing \texttt{t} again hides the advanced options.  A few uses
+for the advanced options field \texttt{CMAKE\_CXX\_FLAGS} are discussed on
+page~\pageref{advancedoptions}.
 
 \subsection{Compiling and installing}
 Once the \texttt{cmake} configuration process is complete (using either
