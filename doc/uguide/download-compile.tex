@@ -163,10 +163,15 @@ entered in this field include: \label{advancedoptions}
 \begin{description}
 \item[\texttt{-DUTILIB\_YES\_DEBUGPR}:]  turns on PEBBL/Utilib internal
 debugging output macros.  Output from these macros can be useful in
-undertanding PEBBL's execution path and decision making.  If this option is
-not specified, the debugging output macros become stubs during compiler
-preprocessing.  See Section~\ref{sec:debugOutput} for a discussion of how to
-use these macros in your own application code. Section~\ref{sec:debugparams}
+undertanding PEBBL's execution path and decision making. Debugging macros are
+automatically enabled if the \texttt{cmake} build type is ``Debug'', but for
+``Release'' builds these macros become stubs during compiler preprocessing.
+If you would like a ``Release'' (optimized) build but still want debugging
+macros enabled, specify \texttt{-DUTILIB\_YES\_DEBUGPR} in the
+\texttt{CMAKE\_CXX\_FLAGS} field.
+
+See Section~\ref{sec:debugOutput} for a discussion of how to
+use debugging output macros in your own application code. Section~\ref{sec:debugparams}
 describes the command-line-settable parameters that control the amount of
 output from appearing from these macros.
 \item[\texttt{-Wall}:] enable the maximum level of compiler warnings (applicable 
