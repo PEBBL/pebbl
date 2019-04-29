@@ -25,6 +25,7 @@ using namespace std;
 
 namespace utilib {
 
+#ifdef  HAVE_SERIALIZER
 // Note: these are not in the header file and are not used in this file.
 // Delete?
 namespace {
@@ -50,8 +51,8 @@ int cast_vector_to_bitArray(const Any& from, Any& to)
    return 0;
 }
 
-
 } // namespace utilib::(local)
+#endif
 
 #ifdef HAVE_SERIALIZER
 
@@ -60,17 +61,15 @@ const volatile bool BitArray::registrations_complete =
 
 bool BitArray::register_aux_functions()
 {
-#ifdef   HAVE_SERIALIZER
    Serializer().register_serializer<BitArray>
       ( "utilib::BitArray", BitArray::serializer );
-#endif
 
    TypeManager()->register_lexical_cast
       ( typeid(BitArray), typeid(std::vector<bool>), 
-        &cast_bitArray_to_vector );
+        &::cast_bitArray_to_vector );
    TypeManager()->register_lexical_cast
       ( typeid(std::vector<bool>), typeid(BitArray), 
-        &cast_vector_to_bitArray );
+        &::cast_vector_to_bitArray );
 
    return true;
 }

@@ -548,19 +548,23 @@ catch (std::invalid_argument& ) {
 //
 inline Parameter& ParameterSet::get_parameter_object(const std::string& name)
 {
+Parameter dummy;
+Parameter& tmp = dummy;
+
 try {
-  return find_parameter(name);
+  tmp = find_parameter(name);
   }
 catch (std::invalid_argument& ) {
-   EXCEPTION_MNGR(runtime_error,
+    EXCEPTION_MNGR(runtime_error,
                   "ParameterSet::get_parameter - parameter \"" << name << "\" does not exist!");
   }
-/*
-** TODO- What test should this be?
-*/
-#if defined(UTILIB_SGI_CC) || defined(UTILIB_OSF_CC) || defined(UTILIB_AIX_CC) || defined(__PGI)
-  return find_parameter(name);
-#endif
+catch (std::exception& e) {
+    EXCEPTION_MNGR(runtime_error,
+                  "ParameterSet::get_parameter - unexpected exception");
+    }
+
+// Logically, this line is never reached. But compilers can't figure that out.
+return tmp;
 }
 
 
