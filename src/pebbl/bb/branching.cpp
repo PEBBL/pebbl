@@ -2245,7 +2245,7 @@ bool branching::localReposOffer(solution* sol)
 
   if (canFathom(sol->value))
     {
-      DEBUGPR(20,"branching::localReposOffer: solution fathomed\n");
+      DEBUGPR(20,ucout << "branching::localReposOffer: solution fathomed\n");
       sol->dispose();
       return false;
     }

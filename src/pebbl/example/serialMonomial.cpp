@@ -492,7 +492,9 @@ namespace pebblMonom {
 	    observationEntry_t obsE(_obsNum++, row);
 	    DEBUGPR(20,ucout << obsE << endl);
 	    if (!_wts.empty())
+	    {
 	      DEBUGPR(20,ucout <<" wt: " << *_wts.rbegin() << endl);
+	    }
 
 	    assert(row.size()==_attribNum+1);
 	    assert(obsE.obs.size()==_attribNum+1);
@@ -985,8 +987,10 @@ namespace pebblMonom {
       }
 
     if (!ret.empty())
+    {
       DEBUGPR(11,ucout << "returning intersection list of size: " 
-	      << ret.size() << endl);
+	               << ret.size() << endl);
+    }
   }
 
 
@@ -2012,7 +2016,7 @@ namespace pebblMonom {
 	boundComputationCleanUp(controlParam);
 
 	DEBUGPRP(50,ucout << "Sorted children at end of three-way :");
-	DEBUGPRP(50,for (size_type jj=0; jj<_children.size(); jj++)
+	DEBUGPRP(50,for (size_type jj=0; jj< (size_type) _children.size(); jj++)
 		      ucout << ' ' << _children[jj]->bound);
 	DEBUGPR(50,ucout << endl);
 
@@ -2135,7 +2139,7 @@ namespace pebblMonom {
 	DEBUGPR(15,ucout << "Improves best: " << i << endl);
 	DEBUGPR(15,ucout << "Branch choice now: " << _branchChoice << endl);
 	DEBUGPRP(15,ucout << "Sorted subproblems:");
-        DEBUGPRP(15,for (size_type jj=0; jj<_children.size(); jj++)
+        DEBUGPRP(15,for (size_type jj=0; jj< (size_type) _children.size(); jj++)
 		      ucout << ' ' << _children[jj]->bound);
 	DEBUGPR(15,ucout << endl);
       }

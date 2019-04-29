@@ -514,11 +514,17 @@ ThreadObj::RunStatus loadBalObj::runWithinLogging(double* controlParam)
 
 #ifdef ACRO_VALIDATING
 	  if (iAmDonor)
+	  {
 	    DEBUGPR(50,ucout << "I am a donor.\n");
+	  }
 	  if (iAmReceiver)
+	  {
 	    DEBUGPR(50,ucout << "I am a receiver.\n");
+	  }
 	  if (iAmRVPoint)
+	  {
 	    DEBUGPR(150,ucout << "I am a rendezvous point.\n");
+	  }
 #endif
 
 	  donorProc    = unknown;

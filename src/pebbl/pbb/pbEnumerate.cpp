@@ -923,7 +923,7 @@ namespace pebbl {
 	  }
       }
 
-    DEBUGPR(100,"rampUpRepositorySync loop done.\n");
+    DEBUGPR(100,ucout << "rampUpRepositorySync loop done.\n");
 
     rampUpMessages += numReceived;
 	

@@ -1470,7 +1470,9 @@ void parallelBranching::rampUpSearch()
 	  qHeapOfWorkers.add(workerQHeapObj[w]);
 	}
       if (iAmFirstHub())
+      {
 	DEBUGPR(1,statusLine(globalLoad,"x"));
+      }
     }
 
   // Set printing times.  These are only really meaningful on processor 0, 
