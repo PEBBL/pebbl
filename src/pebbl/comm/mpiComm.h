@@ -89,6 +89,7 @@ public:
     ioFlag(ptr->ioFlag)
     { };
   
+
   /// Executes a synchronous barrier command.
   void barrier()
     {

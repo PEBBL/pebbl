@@ -7,8 +7,8 @@
 
 
  
-#ifndef pebbl_parBranching_h
-#define pebbl_parBranching_h
+#ifndef pebbl_teamBranching_h
+#define pebbl_teamBranching_h
 
 
 #ifdef ACRO_HAVE_MPI
@@ -17,7 +17,7 @@ namespace pebbl {
 
 // Class that will implement methods used by the application for
 // parallel computation
-  class teamBranching : public branching 
+  class teamBranching : public virtual branching 
   {
     protected: 
 
@@ -55,6 +55,6 @@ namespace pebbl {
   }
 }
 
-#endif ACRO_HAVE_MPI
+#endif
       
     

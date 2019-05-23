@@ -183,7 +183,7 @@ public:
   virtual double
     parallelSearchFramework(parSPHandler* handler_ = NULL);
 
-  double search() { return parallelSearchFramework(NULL); };
+  virtual double search() { return parallelSearchFramework(NULL); };
 
   // To resolve ambiguities in diamond inheritance structure.
 
@@ -378,7 +378,7 @@ public:
 
   // Does the ramp up; returns total subproblems that result
 
-  void rampUpSearch();  
+  virtual void rampUpSearch();  
 
   // Makes sure all processors agree on value and location of incumbent.
 
