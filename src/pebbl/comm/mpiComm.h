@@ -77,8 +77,23 @@ public:
   /// The error code from the previous MPI call.
   int mpiErrorCode() { return errorCode; };
 
+  /// Set to use a specific communicator
+  void setup(MPI_Comm comm_);
+
+  /// Set up to be like another mpiComm object
+  void setup(mpiComm& otherComm) { setup(otherComm.myComm()); };
+
+  /// Empty constructor -- sets the communicator to be null/invalid
+  mpiComm() :
+    comm(MPI_COMM_NULL),
+    rank(-1),
+    size(-1),
+    ioProc(-1),
+    ioFlag(false) 
+  { };
+
   /// Constructor taking an MPI communicator argument
-  mpiComm(MPI_Comm comm_);  //=MPI_COMM_WORLD);
+  mpiComm(MPI_Comm comm_)  { setup(comm_); };
 
   /// Copy constructor
   mpiComm(mpiComm* ptr) :
