@@ -47,7 +47,6 @@ namespace pebblMonom {
     public:
 
     parMaxMonomialData(MPI_Comm comm_) : 
-      mpiComm(comm_),
       maxMonomialData()
  	{
 	  // Default is not to spend time on a dumb ramp up

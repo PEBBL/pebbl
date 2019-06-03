@@ -35,7 +35,7 @@ parBranchingThreadObj::parBranchingThreadObj(parallelBranching* global_,
 					     const char* logColor,
 					     int   logLevel_,
 					     int   dbgLevel_) :
-  mpiComm(global_->mpiCommObj()),
+  mpiComm(global_->searchComm),
   global(global_),
   messagesReceived(0),
   logLevel(logLevel_),
@@ -193,7 +193,7 @@ broadcastPBThread::broadcastPBThread(parallelBranching* global_,
 			   bufferSize_,
 			   tag_),
   radix(radix_),
-  outQueue(global_->mpiCommObj())
+  outQueue(&(global_->searchComm))
 {
   outQueue.reset(2*radix,bufferSize);
   DEBUGPRX(50,global,"Broadcast thread created for "

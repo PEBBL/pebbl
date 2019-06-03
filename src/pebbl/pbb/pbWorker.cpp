@@ -46,7 +46,7 @@ void parallelBranching::signalIncumbent()
   UTILIB_LOG_EVENT(1,start,foundIncLogState);
 
   branching::signalIncumbent();
-  incumbentSource = myRank();
+  incumbentSource = searchRank;
 
   WORKERDEBUG(1,ucout << "New incumbent found: value=" << incumbentValue 
 	      << ", source=" << incumbentSource 
@@ -305,7 +305,7 @@ void parallelBranching::deliverSP(branchSubId& id,
     EXCEPTION_MNGR(runtime_error,"Token mismatch error.");
   if (whichChild == self)
     {
-      if (destProcessor == myRank())
+      if (destProcessor == searchRank)
 	{                               // Token returns to creating processor.
 	  serverPool.remove(p);
 	  p->tokenCount = 0;            // The token is no longer on the loose.
@@ -324,7 +324,7 @@ void parallelBranching::deliverSP(branchSubId& id,
     }
   else
     {
-      if (destProcessor == myRank())
+      if (destProcessor == searchRank)
 	{
 	  parallelBranchSub* sp = p->parallelChild(whichChild);
 	  WORKERDEBUG(100,ucout << "Child token " << whichChild 
@@ -575,7 +575,7 @@ void parallelBranching::workerCommunicateWithHub(bool rebalanceFlag)
 #ifdef ACRO_VALIDATING
   hubMessageSeqNum++;
   *workerOutBuffer << hubMessageSeqNum;
-  WORKERDEBUG(100,ucout << "Sent sequence " << myRank()
+  WORKERDEBUG(100,ucout << "Sent sequence " << searchRank
 	      << '#' << hubMessageSeqNum << endl);
 #endif
 

@@ -54,7 +54,7 @@ namespace pebbl {
   {
     checkpointStartTime = WallClockSeconds();
     checkpointNumber++;
-    if (iDoIO())
+    if (iDoSearchIO)
       ucout << "Starting checkpoint " << checkpointNumber
 	    << " at " << checkpointStartTime << " seconds.\n";
     DEBUGPR(2,ucout << "Setting up checkpoint " << checkpointNumber << endl);
@@ -75,15 +75,15 @@ namespace pebbl {
     if (iAmHub())
       alertWorkers(writeCheckpointSignal);
 
-    ofstream bstream(checkpointFilename(checkpointNumber,myRank()).c_str(),
-		     (ios::out | ios::binary));
+    ofstream bstream(checkpointFilename(checkpointNumber,searchRank).c_str(),
+	             (ios::out | ios::binary));
 
     PackBuffer cpBuf;
 
     // Write global data
 
     cpBuf << incumbentValue << incumbentSource << probCounter;
-    if (myRank() == incumbentSource)
+    if (searchRank == incumbentSource)
       incumbent->pack(cpBuf);
     cpBuf.writeBinary(bstream);
 
@@ -155,10 +155,10 @@ namespace pebbl {
     // Done with writing the checkpoint!
 
     bstream.close();
-    barrier();
+    searchComm.barrier();
 
     if (checkpointNumber > 1)
-      deleteCheckpointFile(checkpointNumber-1,myRank());
+      deleteCheckpointFile(checkpointNumber-1,searchRank);
   
     double cpEndTime = WallClockSeconds();
     double cpTime    = cpEndTime - checkpointStartTime;
@@ -168,7 +168,7 @@ namespace pebbl {
   
     checkpointTotalTime += cpTime;
 
-    if (iDoIO())
+    if (iDoSearchIO)
       {
 	statusLine(globalLoad,"c");
 	ucout << "Checkpoint " << checkpointNumber 
@@ -186,7 +186,7 @@ namespace pebbl {
       {
 	// Say we're aborting and write a "flag" file
 
-	if (iDoIO())
+	if (iDoSearchIO)
 	  {
 	    ucout << "Aborting at checkpoint " << checkpointNumber 
 		  << endl << Flush;
@@ -311,7 +311,7 @@ namespace pebbl {
 		  highestProcFound = p;
 	      }
 
-	    if ((processor != MPI_ANY_SOURCE) && (p >= mySize()))
+	    if ((processor != MPI_ANY_SOURCE) && (p >= searchSize))
 	       EXCEPTION_MNGR(runtime_error, 
 			      "Processor number " << p << " too high in file " 
 			      << filename);
@@ -409,7 +409,7 @@ namespace pebbl {
     if (enumCount > 1)
       syncLastSol();
 
-    if (iDoIO())
+    if (iDoSearchIO)
       statusLine(globalLoad,"l");
     
     rampUpBounds = 0;
@@ -427,17 +427,17 @@ namespace pebbl {
     // Find which checkpoint we're going to start from, and check
     // for various errors.  Note: this sets checkPointNumber
 
-    int filesFound = scanForCheckpointFiles(myRank());
+    int filesFound = scanForCheckpointFiles(searchRank);
 
     // Check how many files were found.
 
     int minF = 0;
     int maxF = 0;
-    reduceCast(&filesFound,&minF,1,MPI_INT,MPI_MIN);
-    reduceCast(&filesFound,&maxF,1,MPI_INT,MPI_MAX);
+    searchComm.reduceCast(&filesFound,&minF,1,MPI_INT,MPI_MIN);
+    searchComm.reduceCast(&filesFound,&maxF,1,MPI_INT,MPI_MAX);
     DEBUGPR(10,ucout << "filesFound=" << filesFound 
 	    << " minF=" << minF << " maxF=" << maxF << endl);
-    if (myRank() == 0)
+    if (searchRank == 0)
       {
 	if (minF != maxF)
 	   EXCEPTION_MNGR(runtime_error, "Found " << minF << 
@@ -457,11 +457,11 @@ namespace pebbl {
 
     int minK = 0;
     int maxK = 0;
-    reduce(&checkpointNumber,&minK,1,MPI_INT,MPI_MIN,0);
-    reduce(&checkpointNumber,&maxK,1,MPI_INT,MPI_MAX,0);
+    searchComm.reduce(&checkpointNumber,&minK,1,MPI_INT,MPI_MIN,0);
+    searchComm.reduce(&checkpointNumber,&maxK,1,MPI_INT,MPI_MAX,0);
     DEBUGPR(10,ucout << "checkpointNumber=" << checkpointNumber
 	    << " minK=" << minK << " maxK=" << maxK << endl);
-   if (myRank() == 0)
+   if (searchRank == 0)
       {
 	if (minK != maxK)
 	   EXCEPTION_MNGR(runtime_error, "Found files for two checkpoints: "
@@ -472,7 +472,7 @@ namespace pebbl {
 
     // Things look good -- read the file!
 
-    ifstream bstream(checkpointFilename(checkpointNumber,myRank()).c_str(),
+    ifstream bstream(checkpointFilename(checkpointNumber,searchRank).c_str(),
 		     (ios::in | ios::binary));
 
     UnPackBuffer cpBuf;
@@ -481,7 +481,7 @@ namespace pebbl {
 
     cpBuf.readBinary(bstream);
     cpBuf >> incumbentValue >> incumbentSource >> probCounter;
-    if (myRank() == incumbentSource)
+    if (searchRank == incumbentSource)
       incumbent = unpackSolution(cpBuf);
     DEBUGPR(10,ucout << "incumbentValue=" << incumbentValue
 	    << " incumbentSource=" << incumbentSource << endl);
@@ -517,7 +517,7 @@ namespace pebbl {
     else if (numSPs > 0)
       EXCEPTION_MNGR(runtime_error, "Checkpoint has " << numSPs << 
 		     " subproblems for non-worker processor " <<
-		     uMPI::rank << '/' << myRank());
+		     uMPI::rank << '/' << searchRank);
 
     // If enumerating, read and store all solutions stored on this
     // processor.
@@ -542,8 +542,8 @@ namespace pebbl {
     // Done reading!
 
     bstream.close();
-    barrier();
-    if (myRank() != 0)
+    searchComm.barrier();
+    if (searchRank != 0)
       rampUpMessages += 2;
 
     DEBUGPR(2,ucout << "parallelRestart done\n");
@@ -565,12 +565,12 @@ namespace pebbl {
 
     int filesFound = 0;
 
-    if (iDoIO())
+    if (iDoSearchIO)
       filesFound = scanForCheckpointFiles(MPI_ANY_SOURCE);
     else
       rampUpMessages++;
 
-    broadcast(&filesFound,1,MPI_INT,uMPI::ioProc);
+    searchComm.broadcast(&filesFound,1,MPI_INT,uMPI::ioProc);
 
     DEBUGPR(10,ucout << "checkpointNumber=" << checkpointNumber
 	    << " filesFound=" << filesFound << endl);
@@ -578,16 +578,16 @@ namespace pebbl {
     if (filesFound == 0)
       return false;
 
-    broadcast(&checkpointNumber,1,MPI_INT,myIoProc());
-    rampUpMessages += (!iDoIO());
+    searchComm.broadcast(&checkpointNumber,1,MPI_INT,mySearchIoProc);
+    rampUpMessages += (!iDoSearchIO);
 
     // OK, we have some non-zero number of files. The I/O processor
     // reads these and sends out the work.  The incumbent always
     // resides on the reading processor.
 
-    incumbentSource = myIoProc();
+    incumbentSource = mySearchIoProc;
 
-    if (iDoIO())
+    if (iDoSearchIO)
       reconfigureRestartRoot(filesFound);
     else 
       reconfigureRestartLeaf(filesFound);
@@ -596,8 +596,8 @@ namespace pebbl {
     // value of all prior counters.  This will prevent overlaps
     // and complaints from logAnalyze.
 
-    broadcast(&probCounter,1,MPI_INT,myIoProc());
-    rampUpMessages += (!iDoIO());
+    searchComm.broadcast(&probCounter,1,MPI_INT,mySearchIoProc);
+    rampUpMessages += (!(iDoSearchIO));
 
     DEBUGPR(2,ucout << "reconfigureRestart done\n");
 
@@ -624,12 +624,12 @@ namespace pebbl {
 
     // We keep track of the buffer sizes of all other processors
 	
-    IntVector rBufSize(mySize());
+    IntVector rBufSize(searchSize);
 
     int rBufStart = spPackSize();
     if (parameter_initialized("spReceiveBuf"))
       rBufStart = spReceiveBuf;
-    for(int i=0; i<mySize(); i++)
+    for(int i=0; i<searchSize; i++)
 	  rBufSize[i] = rBufStart;
 
     // Main loop over checkpoint files.
@@ -654,7 +654,7 @@ namespace pebbl {
 	if (fileProbCounter > probCounter)
 	  probCounter = fileProbCounter;
 	if (p == 0)
-	  broadcast(&incumbentValue,1,MPI_DOUBLE,myIoProc());
+	  searchComm.broadcast(&incumbentValue,1,MPI_DOUBLE,mySearchIoProc);
 	if (p == oldIncumbentSource)
 	  incumbent = unpackSolution(cpBuf);
 
@@ -664,11 +664,11 @@ namespace pebbl {
 
 	cpBuf.readBinary(bstream);
 	int appDataSize = cpBuf.message_length();
-	broadcast(&appDataSize,1,MPI_INT,myIoProc());
-	broadcast((void *)cpBuf.buf(),
-		  appDataSize,
-		  MPI_PACKED,
-		  myIoProc());
+	searchComm.broadcast(&appDataSize,1,MPI_INT,mySearchIoProc);
+	searchComm.broadcast((void *)cpBuf.buf(),
+		             appDataSize,
+		             MPI_PACKED,
+		             mySearchIoProc);
 	DEBUGPR(10,ucout << "Broadcast " << appDataSize  
 		<< " bytes of application data\n");
 
@@ -676,7 +676,7 @@ namespace pebbl {
 
 	// Adjust buffer tracking to reflect broadcast of application data
 
-	for(int i=0; i<mySize(); i++)
+	for(int i=0; i<searchSize; i++)
 	  if (rBufSize[i] < appDataSize)
 	    rBufSize[i] = appDataSize;
 
@@ -693,7 +693,7 @@ namespace pebbl {
 	      ucout << "Subproblem " << i << " has " << cpBuf.message_length()
 		    << " bytes\n";
 	    int wProc = workerList[wNum];
-	    if (wProc == myRank())
+	    if (wProc == searchRank)
 	      {
 		parallelBranchSub* sp = blankParallelSub();
 		sp->unpackProblem(cpBuf);
@@ -709,8 +709,8 @@ namespace pebbl {
 		reconfigureBufferCheck(cpBuf,wProc,rBufSize);
 		if (i < cpDebugCount)
 		  ucout << "Sending to processor " << wProc << endl;
-		send((void *) cpBuf.buf(),cpBuf.message_length(),
-		     MPI_PACKED,wProc,reconfigSPTag);
+		searchComm.send((void *) cpBuf.buf(),cpBuf.message_length(),
+		                MPI_PACKED,wProc,reconfigSPTag);
 	      }
 
 	    // Advance so the next subproblem goes to a different worker.
@@ -747,7 +747,7 @@ namespace pebbl {
 		if (s < cpDebugCount)
 		  ucout << "Read solution " << sol << endl;
 		int owner = owningProcessor(sol);
-		if (owner == myRank())
+		if (owner == searchRank)
 		  {
 		    if (s < cpDebugCount)
 		      ucout << "Keeping\n";
@@ -759,8 +759,8 @@ namespace pebbl {
 		    reconfigureBufferCheck(cpBuf,owner,rBufSize);
 		    if (s < cpDebugCount)
 		      ucout << "Sending to " << owner << endl;
-		    send((void *) cpBuf.buf(),cpBuf.message_length(),
-			 MPI_PACKED,owner,reconfigSolTag);
+		    searchComm.send((void *) cpBuf.buf(),cpBuf.message_length(),
+			            MPI_PACKED,owner,reconfigSolTag);
 		    delete sol;
 		  }
 	      }
@@ -771,8 +771,8 @@ namespace pebbl {
 
 	DEBUGPR(10,ucout << "Declaring done with file " << p << endl);
 
-	for (int p=0; p<mySize(); p++)
-	  send(&p,0,MPI_PACKED,p,reconfigDoneTag);
+	for (int p=0; p<searchSize; p++)
+	  searchComm.send(&p,0,MPI_PACKED,p,reconfigDoneTag);
 	
       }
     
@@ -797,8 +797,8 @@ namespace pebbl {
 	DEBUGPR(100,ucout << "Requesting processor " << p
 		<< " to expand its buffer from " << rBufSize[p]
 		<< " to " << thisSize << endl);
-	send((void *) auxBuf.buf(),auxBuf.size(),
-	     MPI_PACKED,p,reconfigResizeTag);
+	searchComm.send((void *) auxBuf.buf(),auxBuf.size(),
+	                MPI_PACKED,p,reconfigResizeTag);
 	rBufSize[p] = thisSize;
       }
   }
@@ -823,7 +823,7 @@ namespace pebbl {
 
 	if (p == 0)
 	  {
-	    broadcast(&incumbentValue,1,MPI_DOUBLE,myIoProc());
+	    searchComm.broadcast(&incumbentValue,1,MPI_DOUBLE,mySearchIoProc);
 	    rampUpMessages++;
 	    DEBUGPR(10,ucout << "Got incumbentValue=" 
 		    << incumbentValue << endl);
@@ -834,13 +834,13 @@ namespace pebbl {
 	// if necessary
 
 	int appDataSize = -1;
-	broadcast(&appDataSize,1,MPI_INT,myIoProc());
+	searchComm.broadcast(&appDataSize,1,MPI_INT,mySearchIoProc);
 	if (appDataSize > (int) cpBuf.size())
 	  cpBuf.resize(appDataSize);
-	broadcast((void *) cpBuf.buf(),
-		  appDataSize,
-		  MPI_PACKED,
-		  myIoProc());
+	searchComm.broadcast((void *) cpBuf.buf(),
+		             appDataSize,
+		             MPI_PACKED,
+		             mySearchIoProc);
 	cpBuf.reset(appDataSize);
 	DEBUGPR(10,ucout << "Got " << appDataSize << 
 		" bytes of application data, with p=" << p << endl);
@@ -854,12 +854,12 @@ namespace pebbl {
 
 	do
 	  {
-	    recv((void *) cpBuf.buf(),
-		 cpBuf.size(),
-		 MPI_PACKED,
-		 myIoProc(),
-		 MPI_ANY_TAG,
-		 &status);
+	    searchComm.recv((void *) cpBuf.buf(),
+		            cpBuf.size(),
+		            MPI_PACKED,
+		            mySearchIoProc,
+		            MPI_ANY_TAG,
+		            &status);
 
 	    cpBuf.reset(&status);
 	    rampUpMessages++;
@@ -981,7 +981,10 @@ namespace pebbl {
     // Make a communicator for each cluster
 
     MPI_Comm clusterComm;
-    ierr = MPI_Comm_split(myComm(),myHub(),myRank(),&clusterComm);
+    ierr = MPI_Comm_split(searchComm.myComm(),
+                          myHub(),
+                          searchRank,
+                          &clusterComm);
     if (ierr)
        EXCEPTION_MNGR(runtime_error, "MPI_Comm_split returned " << ierr);
  
@@ -1047,7 +1050,7 @@ namespace pebbl {
 
     MPI_Comm hubComm;
 
-    ierr = MPI_Comm_split(myComm(),iAmHub(),myRank(),&hubComm);
+    ierr = MPI_Comm_split(searchComm.myComm(),iAmHub(),searchRank,&hubComm);
     if (ierr)
        EXCEPTION_MNGR(runtime_error, "MPI_Comm_split returned " << ierr);
 
@@ -1085,7 +1088,7 @@ namespace pebbl {
 
     // Now broadcast to everybody and unpack.
 
-    broadcast((void *) globalBuf.buf(),ploSize,MPI_PACKED,firstHub());
+    searchComm.broadcast((void *) globalBuf.buf(),ploSize,MPI_PACKED,firstHub());
     
     globalBuf.reset(ploSize);
     globalBuf >> globalLoad;

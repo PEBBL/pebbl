@@ -39,7 +39,7 @@ namespace pebbl {
   void parallelBranching::assignId(solution* sol)
   {
     DEBUGPRP(50,ucout << "Restamping id for " << sol << " -- now ");
-    sol->owningProcessor = myRank();
+    sol->owningProcessor = searchRank;
     sol->serial          = ++parallelSolCounter;
     DEBUGPR(50,ucout << sol << endl);
   }
@@ -56,7 +56,7 @@ namespace pebbl {
     solsOffered++;
 
     int  owner    = owningProcessor(sol);
-    bool iAmOwner = (owner == myRank());
+    bool iAmOwner = (owner == searchRank);
 
     DEBUGPR(50,ucout << "Parallel offerToRepository for "
 	    << sol << " owner=" << owner << " -- "
@@ -165,7 +165,7 @@ namespace pebbl {
     // Find the bits where the owner differs from the current rank
     // This was formerly unsigned; changed to signed to avoid warnings.
 
-    int bitDiff = psol->owner ^ myRank();
+    int bitDiff = psol->owner ^ searchRank;
 
 #ifdef ACRO_VALIDATING
     if (bitDiff == 0)
@@ -182,7 +182,7 @@ namespace pebbl {
 
     for(size_type b=0; b<nProcessorBits; b++)
       {
-	if (((myRank() ^ mask) < mySize()) &&
+	if (((searchRank ^ mask) < searchSize) &&
 	    ((bitDiff & mask) != 0))
 	  {
 	    size_type qlen = solSendQ[b].size();
@@ -227,10 +227,10 @@ namespace pebbl {
 
   void parallelBranching::sendPackedSolution(packedSolution* psol,int link)
   {
-    int dest = myRank() ^ (1 << link);
+    int dest = searchRank ^ (1 << link);
     DEBUGPR(100,ucout << "Sending packed solution with value " 
 	    << psol->value << " to " << dest << endl);
-    psol->isend(dest,repositoryTag,this);
+    psol->isend(dest,repositoryTag,&searchComm);
     solJustSent[link] = psol;
     recordMessageSent(currentThread);
   }
@@ -253,7 +253,7 @@ namespace pebbl {
     // If local, process locally.  Otherwise, copy the incoming buffer
     // and try to send it on its way.
 
-    if (owner == myRank())
+    if (owner == searchRank)
       {
 	solution* sol = unpackSolution(inBuf);
 	processOwnedSolution(sol);
@@ -284,7 +284,7 @@ namespace pebbl {
   {
     // Which link was this sent on?
 
-    int       bitDiff = sender ^ myRank();
+    int       bitDiff = sender ^ searchRank;
     size_type link    = bitWidth(bitDiff) - 1;
 
     DEBUGPR(100,ucout << "solAckAction for ack from processor "
@@ -566,7 +566,7 @@ namespace pebbl {
   {
     solution* sol = unpackSolution(inBuf);
 #ifdef ACRO_VALIDATING
-    if (owningProcessor(sol) != myRank())
+    if (owningProcessor(sol) != searchRank)
       EXCEPTION_MNGR(runtime_error,"Received a solution that should have "
 		     "hashed to processor " << owningProcessor(sol));
 #endif
@@ -662,18 +662,18 @@ namespace pebbl {
 
 	PackBuffer outBuf(solutionIdentifier::packSize());
 	lastSolId.pack(outBuf);
-	broadcast((void*) outBuf.buf(),
-		  outBuf.curr(),
-		  MPI_PACKED,
-		  myRank());
+	searchComm.broadcast((void*) outBuf.buf(),
+		             outBuf.curr(),
+		             MPI_PACKED,
+		             searchRank);
       }
     else
       {
 	UnPackBuffer inBuf(solutionIdentifier::packSize());
-	broadcast((void*) inBuf.buf(),
-		  inBuf.size(),
-		  MPI_PACKED,
-		  reposTree->rootNode());
+	searchComm.broadcast((void*) inBuf.buf(),
+		             inBuf.size(),
+		             MPI_PACKED,
+		             reposTree->rootNode());
 	inBuf.reset(solutionIdentifier::packSize());
 	solutionIdentifier tempId;
 	tempId.unpack(inBuf);
@@ -712,12 +712,12 @@ namespace pebbl {
 	     reposTree->childrenLeft();
 	     reposTree->advanceChild())
 	  {
-	    recv((void*) inBuf.buf(),
-		 inBuf.size(),
-		 MPI_PACKED,
-		 MPI_ANY_SOURCE,
-		 reposSyncTag,
-		 &status);
+	    searchComm.recv((void*) inBuf.buf(),
+		            inBuf.size(),
+		            MPI_PACKED,
+		            MPI_ANY_SOURCE,
+	                    reposSyncTag,
+		            &status);
 	    inBuf.reset(&status);
 	    incorporateReposArray(inBuf,status.MPI_SOURCE);
 	  }
@@ -735,11 +735,11 @@ namespace pebbl {
       {
 	PackBuffer outBuf;
 	outBuf << treeReposArray;
-	send((void*) outBuf.buf(),
-	     outBuf.curr(),
-	     MPI_PACKED,
-	     reposTree->parent(),
-	     reposSyncTag);
+	searchComm.send((void*) outBuf.buf(),
+	                outBuf.curr(),
+	                MPI_PACKED,
+	                reposTree->parent(),
+	                reposSyncTag);
 	DEBUGPR(100,ucout << "Sending to " << reposTree->parent() << endl);
       }
   }
@@ -758,11 +758,11 @@ namespace pebbl {
     // (this is an int rather than a bool, because we are going to
     // sum-reduce it).
 
-    BasicArray<PackBuffer> hashBuffer(mySize());
-    IntVector              usingBuffer(mySize());
+    BasicArray<PackBuffer> hashBuffer(searchSize);
+    IntVector              usingBuffer(searchSize);
     size_type              myMaxBufSize = 0;
 
-    for(int p=0; p<mySize(); p++)
+    for(int p=0; p<searchSize; p++)
       usingBuffer[p] = 0;
 
     int messagesToSend = 0;
@@ -776,7 +776,7 @@ namespace pebbl {
 	solution* sol = rampUpSolQ[s];
 	int owner = owningProcessor(sol);
 	DEBUGPR(100,ucout << sol << " owned by " << owner << endl);
-	if (owner == myRank())
+	if (owner == searchRank)
 	  {
 	    assignId(sol);
 	    localReposOffer(sol);
@@ -806,23 +806,23 @@ namespace pebbl {
     int messagesToReceive = 0;
 
     {
-      IntVector totalUses(mySize());
-      reduceCast((void*) usingBuffer.data(),
-		 (void*) totalUses.data(),
-		 mySize(),
-	         MPI_INT,
-		 MPI_SUM);
-      messagesToReceive = totalUses[myRank()];
+      IntVector totalUses(searchSize);
+      searchComm.reduceCast((void*) usingBuffer.data(),
+		            (void*) totalUses.data(),
+		            searchSize,
+	                    MPI_INT,
+	                    MPI_SUM);
+      messagesToReceive = totalUses[searchRank];
     }
 
     int maxBufSize = 0;
-    reduceCast(&myMaxBufSize,&maxBufSize,1,MPI_INT,MPI_MAX);
+    searchComm.reduceCast(&myMaxBufSize,&maxBufSize,1,MPI_INT,MPI_MAX);
 
     DEBUGPR(100,ucout << "Sending " << messagesToSend << " buffers "
 	    << "and receiving " << messagesToReceive << " buffers, "
 	    << "maximum size " << maxBufSize << endl);
 
-    if (myRank() > 0)
+    if (searchRank > 0)
       rampUpMessages += 4;
 
     // Enter a weird MPI_Waitsome loop where we get all the buffers
@@ -838,7 +838,7 @@ namespace pebbl {
     int numSent     = 0;
     int numReceived = 0;
 
-    size_type sendCursor = myRank();
+    size_type sendCursor = searchRank;
 
     BasicArray<MPI_Request> reqArray(2);
 
@@ -855,26 +855,26 @@ namespace pebbl {
 	if (!receiving && (numReceived < messagesToReceive))
 	  {
 	    receiving = true;
-	    irecv((void*) inBuf.buf(),
-			maxBufSize,
-			MPI_PACKED,
-			MPI_ANY_SOURCE,
-			rampUpHashTag,
-			&recvRequest);
+	    searchComm.irecv((void*) inBuf.buf(),
+			     maxBufSize,
+			     MPI_PACKED,
+			     MPI_ANY_SOURCE,
+			     rampUpHashTag,
+			     &recvRequest);
 	    DEBUGPR(150,ucout << "Issued receive\n");
 	  }
 	if (!sending && (numSent < messagesToSend))
 	  {
 	    sending = true;
 	    do
-	      sendCursor = (sendCursor + 1) % mySize();
+	      sendCursor = (sendCursor + 1) % searchSize;
 	    while (usingBuffer[sendCursor] == 0);
-	    isend((void*) hashBuffer[sendCursor].buf(),
-		hashBuffer[sendCursor].curr(),
-		MPI_PACKED,
-		sendCursor,
-		rampUpHashTag,
-		&sendRequest);
+	    searchComm.isend((void*) hashBuffer[sendCursor].buf(),
+		             hashBuffer[sendCursor].curr(),
+		              MPI_PACKED,
+		              sendCursor,
+		              rampUpHashTag,
+		              &sendRequest);
 	    DEBUGPR(100,ucout << "Sent to " << sendCursor << endl);
 	  }
 
@@ -944,7 +944,7 @@ namespace pebbl {
 	// the root of the repository tree (if that ever changes, this
 	// code will have to be rewritten).
 
-	if (myRank() == 0)
+	if (searchRank == 0)
 	  {
 	    totalReposSize = treeReposArray.size();
 	    if (totalReposSize > 0)
@@ -956,18 +956,19 @@ namespace pebbl {
 	// EnumCount is off, so do some simple reductions instead.
 
 	totalReposSize = repositorySize();             // The local size
-	totalReposSize = sumReduce(totalReposSize,0);  // On proc 0, the total
+        // On proc 0, the total
+	totalReposSize = searchComm.sumReduce(totalReposSize,0);
 
 	double localWorst = worstReposValue();
 	MPI_Op reduceOp = MPI_MAX;
 	if (sense == maximization)
 	  reduceOp = MPI_MIN;
-	reduce(&localWorst,&worstInRepos,1,MPI_DOUBLE,reduceOp,0);
-	if (myRank() > 0)
+	searchComm.reduce(&localWorst,&worstInRepos,1,MPI_DOUBLE,reduceOp,0);
+	if (searchRank > 0)
 	  rampUpMessages += 2;
       }
 
-    DEBUGPR(10,if(myRank() == 0) ucout << "Repository size is "
+    DEBUGPR(10,if(searchRank == 0) ucout << "Repository size is "
 	    << totalReposSize << ", with worst solution value "
 	    << worstInRepos << endl);
 	    
@@ -1034,8 +1035,8 @@ namespace pebbl {
     DEBUGPR(100,if(myReposSize > 0) ucout << "Worst member is " 
 	    << worstReposSol() << endl);
     DEBUGPR(100,ucout << "lastSolId looks like " << &lastSolId << endl);
-    reduceCast(&myReposSize,&totalReposSize,1,MPI_INT,MPI_SUM);
-    if (myRank() > 0)
+    searchComm.reduceCast(&myReposSize,&totalReposSize,1,MPI_INT,MPI_SUM);
+    if (searchRank > 0)
       solOutputMessages += 2;
 
     DEBUGPR(100,ucout << "totalReposSize=" << totalReposSize << endl);
@@ -1062,22 +1063,22 @@ namespace pebbl {
 	PackBuffer outBuf(bufSize);
 	outBuf << treeReposArray;
 	bufSize = outBuf.size();
-	broadcast(&bufSize,1,MPI_INT,reposTree->rootNode());
-	broadcast((void*) outBuf.buf(),
-		  bufSize,
-		  MPI_PACKED,
-		  reposTree->rootNode());
+	searchComm.broadcast(&bufSize,1,MPI_INT,reposTree->rootNode());
+	searchComm.broadcast((void*) outBuf.buf(),
+		             bufSize,
+		             MPI_PACKED,
+		             reposTree->rootNode());
       }
     else 
       {
 	DEBUGPR(100,ucout << "Trying to receive treeReposArray\n");
-	broadcast(&bufSize,1,MPI_INT,reposTree->rootNode());
+	searchComm.broadcast(&bufSize,1,MPI_INT,reposTree->rootNode());
 	solOutputMessages++;
 	UnPackBuffer inBuf(bufSize);
-	broadcast((void*) inBuf.buf(),
-		  bufSize,
-		  MPI_PACKED,
-		  reposTree->rootNode());
+	searchComm.broadcast((void*) inBuf.buf(),
+		             bufSize,
+		             MPI_PACKED,
+		             reposTree->rootNode());
 	inBuf.reset(bufSize);
 	inBuf >> treeReposArray;
 	solOutputMessages++;
@@ -1096,7 +1097,7 @@ namespace pebbl {
   {
     int nSols = startRepositoryScan();
     bool returningAnything = (whichProcessor == allProcessors) ||
-                             (whichProcessor == myRank());
+                             (whichProcessor == searchRank);
     if (returningAnything)
       solArray.resize(nSols);
     for (int i=0; i<nSols; i++)
@@ -1140,11 +1141,11 @@ namespace pebbl {
     //   2. Broadcast and return it (incrementing references for the local processor)
     //   3. Send it where needed and return NULL
 
-    if (sourceProcessor == myRank())
+    if (sourceProcessor == searchRank)
       {
 	solution* solPtr = solPtrArray[solPtrCursor++];
 	DEBUGPR(100,ucout << "Solution is " << solPtr << endl);
-	if (whichProcessor == myRank())
+	if (whichProcessor == searchRank)
 	  {
 	    DEBUGPR(100,ucout << "Local delivery\n");
             solPtr->incrementRefs();
@@ -1156,11 +1157,11 @@ namespace pebbl {
 	if (whichProcessor == allProcessors)
 	  {
 	    DEBUGPR(100,ucout << "Sending broadcast, size " << bufSize << endl);
-	    broadcast(&bufSize,1,MPI_INT,sourceProcessor);
-	    broadcast((void*) outBuf.buf(),
-		      bufSize,
-		      MPI_PACKED,
-		      sourceProcessor);
+	    searchComm.broadcast(&bufSize,1,MPI_INT,sourceProcessor);
+	    searchComm.broadcast((void*) outBuf.buf(),
+		                 bufSize,
+		                 MPI_PACKED,
+		                 sourceProcessor);
             solPtr->incrementRefs();
 	    return solPtr;
 	  }
@@ -1169,21 +1170,22 @@ namespace pebbl {
 	    // Wait for receiver to want the solution
 	    MPI_Status status;
 	    DEBUGPR(100,ucout << "Waiting to send...\n");
-	    recv(&status,0,MPI_INT,whichProcessor,fetchSolTag,&status);
+	    searchComm.recv(&status,0,MPI_INT,whichProcessor,fetchSolTag,&status);
 	    solOutputMessages++;
 	    DEBUGPR(100,ucout << "Sending...\n");
-	    send((void*) outBuf.buf(),
-	         bufSize,
-		 MPI_PACKED,
-		 whichProcessor,
-		 deliverSolTag);
+	    searchComm.send((void*) outBuf.buf(),
+	                    bufSize,
+	                    MPI_PACKED,
+	                    whichProcessor,
+		            deliverSolTag);
 	    return NULL;
 	  }
       }
 
     // We don't own the next solution.  If we are not getting it, just bail
 
-    if ((whichProcessor != allProcessors) && (whichProcessor != myRank()))
+    if ((whichProcessor != allProcessors) && 
+        (whichProcessor != searchRank))
       return NULL;
 
     // Receive the solution, either by broadcast or by message
@@ -1194,13 +1196,13 @@ namespace pebbl {
       {
 	int bufSize = 0;
 	DEBUGPR(100,ucout << "Receiving broadcast ...");
-	broadcast(&bufSize,1,MPI_INT,sourceProcessor);
+	searchComm.broadcast(&bufSize,1,MPI_INT,sourceProcessor);
 	solOutputMessages++;
 	DEBUGPR(100,ucout << " size " << bufSize << endl);
-	broadcast((void*) inBuf.buf(),
-		  bufSize,
-		  MPI_PACKED,
-		  sourceProcessor);
+	searchComm.broadcast((void*) inBuf.buf(),
+		             bufSize,
+		             MPI_PACKED,
+		             sourceProcessor);
 	solOutputMessages++;
 	inBuf.reset(bufSize);
       }
@@ -1209,13 +1211,13 @@ namespace pebbl {
 	MPI_Status status;
 	// Tell the owner we are ready
 	DEBUGPR(100,ucout << "Fetching...\n");
-	send(&sourceProcessor,0,MPI_INT,sourceProcessor,fetchSolTag);
-	recv((void*) inBuf.buf(),
-	     solBufSize,
-	     MPI_PACKED,
-	     sourceProcessor,
-	     deliverSolTag,
-	     &status);
+	searchComm.send(&sourceProcessor,0,MPI_INT,sourceProcessor,fetchSolTag);
+	searchComm.recv((void*) inBuf.buf(),
+	                solBufSize,
+	                MPI_PACKED,
+	                sourceProcessor,
+	                deliverSolTag,
+	                &status);
 	inBuf.reset(&status);
 	solOutputMessages++;
      }
@@ -1239,7 +1241,7 @@ namespace pebbl {
 
     int sols = startRepositoryScan();
 
-    if (iDoIO())
+    if (iDoSearchIO)
       {
 	outStreamP->precision(statusLinePrecision);
 	*outStreamP << "******** " << sols << " solution" 
@@ -1249,8 +1251,8 @@ namespace pebbl {
     for (int i=0; i<sols; i++)
       {
 	DEBUGPR(100,ucout << "Printing solution " << i+1 << endl);
-	solution* solPtr = nextRepositoryMember(myIoProc());
-	if (iDoIO())
+	solution* solPtr = nextRepositoryMember(mySearchIoProc);
+	if (iDoSearchIO)
 	  {
 	    *outStreamP << "\n\n******** Solution " << i+1 << " ********\n";
 	    solPtr->print(*outStreamP);
@@ -1265,10 +1267,10 @@ namespace pebbl {
   void parallelBranching::printReposStatistics(std::ostream& stream)
   {
     finalReposSync();
-    int totalOffer = sumReduce(solsOffered);
-    int totalAdmit = sumReduce(solsAdmitted);
-    int totalSent  = sumReduce(solsSent);
-    if (iDoIO())
+    int totalOffer = searchComm.sumReduce(solsOffered);
+    int totalAdmit = searchComm.sumReduce(solsAdmitted);
+    int totalSent  = searchComm.sumReduce(solsSent);
+    if (iDoSearchIO)
       {
 	int wasTagging = tagging_active();
 	end_tagging();

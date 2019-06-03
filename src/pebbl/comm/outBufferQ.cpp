@@ -45,7 +45,7 @@ void outBufferQueue::send(PackBuffer* buffer,int dest,int tag)
 {
   outBufferQElt* sendObj = new outBufferQElt(buffer,tag,this);
 
-  isend((void *) buffer->buf(),
+  commPtr->isend((void *) buffer->buf(),
 	buffer->size(),
 	MPI_PACKED,
 	dest,
@@ -111,7 +111,10 @@ void outBufferQueue::completeAll(int tag)
 
 
 outBufferQueue::~outBufferQueue()
-{ clear(); }
+{ 
+  clear(); 
+}
+
 
 void outBufferQueue::clear()
 {
@@ -136,7 +139,7 @@ void multiOutBufferQueue::reset(int maxSegments_,
   maxSegments=maxSegments_;
   tag=tag_;
 
-  int n = bufferQ.mySize();
+  int n = bufferQ.commSize();
   buffer = new PackBuffer*[n];
   segmentsUsed.resize(n);
   nextProc.resize(n);
@@ -153,7 +156,9 @@ void multiOutBufferQueue::reset(int maxSegments_,
 
 
 void multiOutBufferQueue::clear()
-{ bufferQ.clear(); }
+{ 
+  bufferQ.clear(); 
+}
 
 
 multiOutBufferQueue::~multiOutBufferQueue()

@@ -49,13 +49,13 @@ class outBufferQElt;     // Forward ref to auxiliary class.
 
 
 /// Manages buffer space for threads that send multiple messages.
-class outBufferQueue : public CommonIO, public mpiComm
+class outBufferQueue : public CommonIO
 {
 public:
   
   outBufferQueue(mpiComm* comm_) :
-     mpiComm(comm_)                 // Must copy an existing mpiComm object
-  { };
+     commPtr(comm_)                 // Pointer to communicator; object pointed to
+  { };                              // need not be valid at construction time
   
   virtual ~outBufferQueue();
 
@@ -92,7 +92,11 @@ public:
       startingBufferSize = uMPI::packSlop(size_);
     };
 
-private:
+  int commSize() { return commPtr->mySize(); };
+
+protected:
+
+  mpiComm* commPtr;
 
   size_t startingBufferSize;
   size_t scavengeSize;

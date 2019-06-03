@@ -129,8 +129,7 @@ virtual public branching,
   virtual public logEvent,
 #endif
 virtual public parallelPebblBase,
-virtual public parallelPebblParams,
-virtual public mpiComm
+virtual public parallelPebblParams
 {
 
   friend class parLoadObject;
@@ -362,6 +361,24 @@ public:
   virtual void setDebugLevel(int level);
   virtual void setDebugLevelWithThreads(int level);
 
+  // Communicators
+
+  mpiComm passedComm;       // Communicator passed in to constructor
+  mpiComm searchComm;       // Communicator used for search
+                            // This could be different in derived classes
+                            // using "teams"
+
+  // Set up the search communicator; default is to use the passed communicator
+
+  virtual void setupSearchComm() { searchComm.setup(passedComm); };
+
+  // Frequently accessed communicator properties
+
+  int  searchRank;
+  int  searchSize;
+  bool iDoSearchIO;
+  int  mySearchIoProc;
+
   // Ramp-up feature support
 
   int    rampUpFlag;
@@ -397,7 +414,7 @@ public:
     { 
       if (spCount() <= rampUpPoolLimit)
 	       return true;
-      return spCount() <= rampUpPoolLimitFac*mySize();
+      return spCount() <= rampUpPoolLimitFac*(searchSize);
     };
 
   // Force a longer ramp up.  This is useful when we need more careful
@@ -421,7 +438,7 @@ public:
 
   int pebblRank()
   {
-    return myRank();
+    return searchRank;
   }
 
   int veryFirstWorker()
@@ -879,7 +896,7 @@ protected:
   int owningProcessor(solution* sol)
     {
       size_type hash = sol->computeHashValue();
-      return (hash % (mySize()*enumHashSize)) / enumHashSize;
+      return (hash % (searchSize*enumHashSize)) / enumHashSize;
     };
 
   void assignId(solution* sol);
@@ -1055,7 +1072,7 @@ protected:
 
   bool valLogOutput()
     {
-      return validateLog && !(rampingUp() && (myRank() > 0));
+      return validateLog && !(rampingUp() && (searchRank > 0));
     };
 
   // Load logging stuff; overrides serial versions (but may call on them)
