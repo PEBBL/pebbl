@@ -487,7 +487,7 @@ namespace pebblMonom {
 		    throw domain_error("invalid character in file");
 		  }
 	      }
-	    assert(row.size()==_attribNum+1);
+	    assert((size_type) row.size() == (size_type) _attribNum+1);
 	    _dataStore.push_back(row);
 	    observationEntry_t obsE(_obsNum++, row);
 	    DEBUGPR(20,ucout << obsE << endl);
@@ -496,8 +496,8 @@ namespace pebblMonom {
 	      DEBUGPR(20,ucout <<" wt: " << *_wts.rbegin() << endl);
 	    }
 
-	    assert(row.size()==_attribNum+1);
-	    assert(obsE.obs.size()==_attribNum+1);
+	    assert((size_type) row.size() == (size_type) _attribNum+1);
+	    assert((size_type) obsE.obs.size() == (size_type) _attribNum+1);
 	  }
 
 	// if no weights read from file, initialize uniform weights
@@ -644,7 +644,7 @@ namespace pebblMonom {
   //maxMonomialData::setWeight
   void maxMonomialData::setWeight(const double vec[], size_type len)
   {
-    assert(len == _wts.size());
+    assert((size_type) len == (size_type) _wts.size());
     for (int i=0; i<len; i++)
       _wts[i]= vec[i];
   }
@@ -1500,7 +1500,8 @@ namespace pebblMonom {
 		  ignoreIdxs.push_back(i);
 	      }
 	    assert(global()->threeWayBranching() || 
-		   ignoreIdxs.size() + _monom.degree() == lastLitIdx+1);
+		       (size_type) (ignoreIdxs.size() + _monom.degree()) 
+		            == (size_type) lastLitIdx+1);
 	  }
 
 	DEBUGPR(40,ucout << "ignoreIdxs = " << ignoreIdxs << endl);
