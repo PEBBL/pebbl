@@ -35,9 +35,10 @@ using namespace std;
 namespace pebbl {
 
 
-mpiComm::mpiComm(MPI_Comm comm_) :
-comm(comm_)
+void mpiComm::setup(MPI_Comm comm_)
 {
+  comm = comm_;
+  
   errorCode = MPI_Comm_rank(comm,&rank);
   if (errorCode) 
      ucerr << "MPI_Comm_rank failed, code " << errorCode << endl;

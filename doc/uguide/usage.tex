@@ -1203,12 +1203,11 @@ constructor.
 \boxheader{Constructor}
 It is advised that you create a constructor with a single argument, the MPI
 communicator under which the search will be run, with a default value of
-\texttt{MPI\_COMM\_WORLD}.  This constructor should set the MPI communicator member \texttt{mpiComm} of the \texttt{parBranching} class and call the no-argument constructor for your serial application class, such as
+\texttt{MPI\_COMM\_WORLD}.  This constructor should call the no-argument constructor for your serial application class, such as
 \texttt{\emph{myBranching}}. 
 \begin{codeblock}
 \emph{myParBranching}(MPI\_Comm comm\_ = MPI\_COMM\_WORLD) : \\
-myBranching(), \\
-mpiComm(comm\_) \\
+myBranching() \\
 \{ $\cdots$ \}; 
 \end{codeblock}
 

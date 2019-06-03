@@ -33,7 +33,7 @@ namespace pebbl {
 
 void parallelBranching::printSolValue(std::ostream& stream)
 {
-  if (iDoIO())
+  if (iDoSearchIO)
     {
       int taggingWasActive = CommonIO::tagging_active();
       if (taggingWasActive)
@@ -53,9 +53,9 @@ solution* parallelBranching::getSolution(int whichProcessor)
   if (incumbentSource == MPI_ANY_SOURCE)
     return NULL;
 
-  if (myRank() == incumbentSource)
+  if (searchRank == incumbentSource)
     {
-      if (whichProcessor == myRank())
+      if (whichProcessor == searchRank)
          return incumbent->incrementRefs();
 
       PackBuffer solBuf;
@@ -64,20 +64,20 @@ solution* parallelBranching::getSolution(int whichProcessor)
       if (whichProcessor == allProcessors)
 	{
 	  int bytes = solBuf.size();
-	  broadcast(&bytes,1,MPI_INT,myRank());
-	  broadcast((void *) solBuf.buf(),
-		    bytes,
-		    MPI_PACKED,
-		myRank());
+	  searchComm.broadcast(&bytes,1,MPI_INT,searchRank);
+	  searchComm.broadcast((void *) solBuf.buf(),
+		               bytes,
+		               MPI_PACKED,
+		               searchRank);
           return incumbent->incrementRefs();
 	}
       else
         {
-	  send((void *) solBuf.buf(),
-	       solBuf.size(),
-	       MPI_PACKED,
-	       whichProcessor,
-	       printSolutionTag);
+	  searchComm.send((void *) solBuf.buf(),
+	                  solBuf.size(),
+	                  MPI_PACKED,
+	                  whichProcessor,
+	                  printSolutionTag);
           return NULL;
         }
     }
@@ -87,24 +87,24 @@ solution* parallelBranching::getSolution(int whichProcessor)
       if (whichProcessor == allProcessors)
 	{
 	  int bytes;
-	  broadcast(&bytes,1,MPI_INT,incumbentSource);
-	  broadcast((void *) solBuf.buf(),
-			  solBuf.size(),
-			  MPI_PACKED,
-			  incumbentSource);
+	  searchComm.broadcast(&bytes,1,MPI_INT,incumbentSource);
+	  searchComm.broadcast((void *) solBuf.buf(),
+			       solBuf.size(),
+			       MPI_PACKED,
+			       incumbentSource);
 	  solBuf.reset(bytes);
 	}
-      else if (whichProcessor != myRank())
+      else if (whichProcessor != searchRank)
 	return NULL;
       else
 	{
 	  MPI_Status status;
-	  recv((void *) solBuf.buf(),
-	       solBuf.size(),
-	       MPI_PACKED,
-	       incumbentSource,
-	       printSolutionTag,
-	       &status);
+	  searchComm.recv((void *) solBuf.buf(),
+	                  solBuf.size(),
+	                  MPI_PACKED,
+	                  incumbentSource,
+	                  printSolutionTag,
+	                  &status);
 	  solBuf.reset(&status);
 	}
       solOutputMessages++;
@@ -118,13 +118,13 @@ void parallelBranching::printSolution(const char* header,
 				      ostream& outStream)
 {
   DEBUGPR(120,ucout << "parallelBranching::printSolution(): "
-	  << "rank = " << myRank() 
+	  << "rank = " << searchRank 
 	  << ", incumbentValue=" << incumbentValue 
 	  << ", incumbentSource = " << incumbentSource << "\n");
 
   // If there's nothing to print, bail out...
 
-  int whichProc = myIoProc();
+  int whichProc = mySearchIoProc;
 
   if (!printSolutionSynch && (incumbentSource != MPI_ANY_SOURCE))
     whichProc = incumbentSource;
@@ -133,7 +133,7 @@ void parallelBranching::printSolution(const char* header,
 
   // Now print the solution 
 
-  if (myRank() == whichProc)
+  if (searchRank == whichProc)
     {
       int taggingWasActive = CommonIO::tagging_active();
       if (taggingWasActive)
@@ -169,7 +169,7 @@ void parallelBranching::solutionToFile()
 
   if (enumerating)
     {
-      if (iDoIO())
+      if (iDoSearchIO)
 	outStreamP = openSolutionFile();
       printRepository(outStreamP);         // Special routine for enumeration
     }
@@ -182,15 +182,15 @@ void parallelBranching::solutionToFile()
 	  (earlyOutputMinutes > 0) && 
 	  (lastSolValOutput == incumbentValue))
       flag = true;
-      broadcast((void*) &flag,1,MPI_INT,firstHub());
-      solOutputMessages += (myRank() > 0);
+      searchComm.broadcast((void*) &flag,1,MPI_INT,firstHub());
+      solOutputMessages += (searchRank > 0);
 
       if (!flag)
 	{
 	  // Otherwise, set up a stream and print to it.
 
-	  if ((printSolutionSynch && iDoIO()) ||
-	      (!printSolutionSynch && myRank() == incumbentSource))
+	  if ((printSolutionSynch && iDoSearchIO) ||
+	      (!printSolutionSynch && searchRank == incumbentSource))
 	    outStreamP = openSolutionFile();
 	  printSolution("","",*outStreamP);
 	}
@@ -220,7 +220,7 @@ ostream* parallelBranching::valLogFile()
   if (validateLog)
     {
       char name[32];
-      sprintf(name,"val%05d.log",myRank());
+      sprintf(name,"val%05d.log",searchRank);
       return new ofstream(name,restarted ? ios::app : ios::out);
     }
   else
@@ -230,8 +230,8 @@ ostream* parallelBranching::valLogFile()
 
 void parallelBranchSub::valLogPackChildPrint()
 {
-  *vout << "packchild " << pGlobal()->myRank() << ' ' << bGlobal()->probCounter
-    << ' ' << bound << ' ';
+  *vout << "packchild " << pGlobal()->searchRank 
+        << ' ' << bGlobal()->probCounter << ' ' << bound << ' ';
   valLogWriteID();
   valLogPackChildExtra();
   *vout << endl;
@@ -330,7 +330,7 @@ void parallelBranching::startLoadLogIfNeeded()
   pLastLog = new parLoadLogRecord(sense);
   lastLog  = pLastLog;
   haveLLToken = true;
-  needLLAppend = (myRank() > 0);
+  needLLAppend = (searchRank > 0);
   beginLoadLog();
 }
 
@@ -397,7 +397,7 @@ void parallelBranching::recordLoadLogData(double time)
   // log, write, and then start passing the token around the ring so
   // everybody else writes in sequence.
 
-  if ((myRank() == 0) && needToWriteLoadLog(time) && haveLLToken)
+  if ((searchRank == 0) && needToWriteLoadLog(time) && haveLLToken)
     {
       lastLLWriteTime = time;
       writeLoadLogPassToken();
@@ -416,7 +416,7 @@ void parallelBranching::loadLogSMPWrite()
   if (loadLogFile.bad())
     ucout << "*** Warning *** could not open load log file.\n";
   else
-    branching::writeLoadLog(loadLogFile,myRank());
+    branching::writeLoadLog(loadLogFile,searchRank);
 }
 
 
@@ -426,14 +426,15 @@ void parallelBranching::loadLogSMPWrite()
 void parallelBranching::writeLoadLogPassToken()
 {
   loadLogSMPWrite();
-  if (mySize() == 1)
+  if (searchSize == 1)
     return;
-  isend((void*) &haveLLToken,           // Dummy buffer
-	0,                              // No data except tag
-        MPI_BYTE,                       // Datatype really doesn't matter
-        (myRank() + 1) % mySize(),  // Next processor in ring
-        llTokenTag,
-        &llSendRequest);
+  int nextProcInRing = (searchRank + 1) % searchSize;
+  searchComm.isend((void*) &haveLLToken,        // Dummy buffer
+	           0,                           // No data except tag
+                   MPI_BYTE,                    // Datatype really doesn't matter
+                   nextProcInRing,              // Next processor in ring
+                   llTokenTag,
+                   &llSendRequest);
   haveLLToken = false;          // Don't write again until the token comes back
   messages.general.sent++;
 }
@@ -452,7 +453,7 @@ void parallelBranching::receiveLLToken()
 	ucout << "*** Warning *** incomplete LL Token send.\n";
     }
   haveLLToken = true;
-  if (myRank() > 0)               // Pass around rings stops at processor 0
+  if (searchRank > 0)               // Pass around rings stops at processor 0
     writeLoadLogPassToken();        // Otherwise, write log and pass token
   recordMessageReceived(llChainer);
 }
@@ -466,23 +467,24 @@ void parallelBranching::writeLoadLog()
   // or writing the file in chunks, which implies each processor has
   // direct file system access.
   if (loadLogSMP || (loadLogWriteSeconds > 0))
-    for (int p=0; p<mySize(); p++)          // Simple serial output to
-      {				              // same file
-	barrier();
-	if (myRank() == p)
+    for (int p=0; p<searchSize; p++)   // Simple serial output to
+      {				                // same file
+	searchComm.barrier();
+	if (searchRank == p)
 	  loadLogSMPWrite();
       }
   else           // Either no common file system or no common clock
     {		 // (or both)
 
       // Max size for buffers etc.
-      int maxLength = maxReduce((int) loadLogEntries.size(), myIoProc());
+      int maxLength = searchComm.maxReduce((int) loadLogEntries.size(), 
+                                           mySearchIoProc);
 
       MPI_Status status;
 
       //  This is what the main processor does
 
-      if (iDoIO())
+      if (iDoSearchIO)
 	{
 	  // Write own stuff, but don't let file get closed.
 	  // This cannot be called if load log is written in chunks,
@@ -491,14 +493,14 @@ void parallelBranching::writeLoadLog()
 	  if (loadLogFile.bad())
 	    ucout << "*** Warning *** could not open load log file.\n";
 	  else
-	    branching::writeLoadLog(loadLogFile,myRank());
+	    branching::writeLoadLog(loadLogFile,searchRank);
 
 	  UnPackBuffer llBuf(maxLength*parLoadLogRecord::packSize());
 
 	  // Loop over all other processors
 
-	  for (int p=0; p<mySize(); p++)
-	    if (p != myRank())
+	  for (int p=0; p<searchSize; p++)
+	    if (p != searchRank)
 	      {
 		// Determine clock offset
 
@@ -509,8 +511,8 @@ void parallelBranching::writeLoadLog()
 		  {
 		    double theirTime = 0;
 		    double startTime = WallClockSeconds();
-		    send(&theirTime,0,MPI_DOUBLE,p,llSyncOutTag);
-		    recv(&theirTime,1,MPI_DOUBLE,p,llSyncBackTag,&status);
+		    searchComm.send(&theirTime,0,MPI_DOUBLE,p,llSyncOutTag);
+		    searchComm.recv(&theirTime,1,MPI_DOUBLE,p,llSyncBackTag,&status);
 		    double roundTrip = WallClockSeconds() - startTime;
 		    if (roundTrip < shortestTurn)
 		      {
@@ -524,12 +526,12 @@ void parallelBranching::writeLoadLog()
 
 		// Suck in the data from the other processor; 
 
-		recv((void *) llBuf.buf(),
-		     llBuf.size(),
-		     MPI_PACKED,
-		     p,
-		     llDataTag,
-		     &status);
+		searchComm.recv((void *) llBuf.buf(),
+		                llBuf.size(),
+		                MPI_PACKED,
+		                p,
+		                llDataTag,
+		                &status);
 		llBuf.reset(&status);
 
 		parLoadLogRecord record(sense);
@@ -551,9 +553,11 @@ void parallelBranching::writeLoadLog()
 
 	  for (int i=0; i<loadLogClockSyncs; i++)
 	    {
-	      recv(&localTime,0,MPI_DOUBLE,myIoProc(),llSyncOutTag,&status);
+	      searchComm.recv(&localTime,0,MPI_DOUBLE,mySearchIoProc,
+                              llSyncOutTag,&status);
 	      localTime = WallClockSeconds();
-	      send(&localTime,1,MPI_DOUBLE,myIoProc(),llSyncBackTag);
+	      searchComm.send(&localTime,1,MPI_DOUBLE,mySearchIoProc,
+                              llSyncBackTag);
 	    }
 
 	  // Send data
@@ -567,10 +571,10 @@ void parallelBranching::writeLoadLog()
 	      delete record;
 	    }
 
-	  send((void *) llBuf.buf(),
+	  searchComm.send((void *) llBuf.buf(),
 	       llBuf.size(),
 	       MPI_PACKED,
-	       myIoProc(),
+	       mySearchIoProc,
 	       llDataTag);
 	}
     }
@@ -613,15 +617,15 @@ void parLoadLogRecord::writeToStream(ostream& os,
 
 void parallelBranching::printConfiguration(ostream& stream)
 {
-  if (!iDoIO())
+  if (!iDoSearchIO)
     return;
   CommonIO::end_tagging();
   stream << "\nPEBBL Configuration:\n";
   hyphens(stream,19) << '\n';
-  int pWidth = digitsNeededFor(mySize());
+  int pWidth = digitsNeededFor(searchSize);
   stream.width(pWidth);
   stream << numHubs() << " cluster" << plural(numHubs());
-  int mod  = mySize() % cluster.typicalSize;
+  int mod  = searchSize % cluster.typicalSize;
   if (mod)
     stream << ": " << numHubs() - 1;
   stream << " of size " << cluster.typicalSize;
@@ -629,8 +633,9 @@ void parallelBranching::printConfiguration(ostream& stream)
     stream << ", 1 of size " << mod;
   stream << '\n';
   stream.width(pWidth);
-  stream << mySize() << " processor" << plural(mySize()) << '\n';
-  int pureHubs    = mySize() - totalWorkers();
+  stream << searchSize << " processor" 
+         << plural(searchSize) << '\n';
+  int pureHubs    = searchSize - totalWorkers();
   int workerHubs  = numHubs() - pureHubs;
   int pureWorkers = totalWorkers() - workerHubs;
   configLine(stream,pWidth,pureWorkers,"pure worker");
@@ -658,7 +663,7 @@ void parallelBranching::configLine(ostream& stream,
   stream << plural(number);
   stream.width(padding);
   stream << "(";
-  printPercent(stream,number,mySize()) << ")\n";
+  printPercent(stream,number,searchSize) << ")\n";
 }
 
 
@@ -666,17 +671,18 @@ void parallelBranching::printSPStatistics(ostream& stream)
 {
   CommonIO::end_tagging();
   int combinedTable[numStates];
-  reduce(subCount,combinedTable,numStates,MPI_INT,MPI_SUM,myIoProc());
+  searchComm.reduce(subCount,combinedTable,numStates,
+                    MPI_INT,MPI_SUM,mySearchIoProc);
   spTotal = combinedTable[boundable];
-  int totalUnderHubControl = sumReduce(hubHandledCount);
-  int totalDelivered       = sumReduce(spDeliverCount);
-  int totalReleased        = sumReduce(spReleaseCount);
-  int totalRebalanced      = sumReduce(rebalanceSPCount);
+  int totalUnderHubControl = searchComm.sumReduce(hubHandledCount);
+  int totalDelivered       = searchComm.sumReduce(spDeliverCount);
+  int totalReleased        = searchComm.sumReduce(spReleaseCount);
+  int totalRebalanced      = searchComm.sumReduce(rebalanceSPCount);
   int totalLoadBalanced    = 0;
   if (numHubs() > 1)
-    totalLoadBalanced = sumReduce(loadBalSPCount);
+    totalLoadBalanced = searchComm.sumReduce(loadBalSPCount);
 
-  if (iDoIO())
+  if (iDoSearchIO)
     {
       const char* hubControlString   = "Tokens at Hubs";
       const char* scatterString      = "Scattered to Hubs";
@@ -778,16 +784,16 @@ void parallelBranching::printTimings(ostream& stream)
 {
   if (printSpTimes)
     { 
-      for (int i=0; i<mySize(); i++)
+      for (int i=0; i<searchSize; i++)
 	{
-	  if (i == myRank())
+	  if (i == searchRank)
 	    {
 	      printSpTimeStats(stream);
-	      if (i == mySize() - 1)
+	      if (i == searchSize - 1)
 		stream << endl;
 	      stream << Flush;
 	    }
-	  barrier();
+	  searchComm.barrier();
 	}
     }
 
@@ -797,7 +803,7 @@ void parallelBranching::printTimings(ostream& stream)
   stream.setf(ios::fixed,ios::floatfield);
 
   timingPrintNameWidth = strlen("Thread/Function");
-  if (mySize() > 1) 
+  if (searchSize > 1) 
     {
       int tmp = strlen("Problem Broadcast");
       timingPrintNameWidth = max(timingPrintNameWidth,tmp);
@@ -825,7 +831,7 @@ void parallelBranching::printTimings(ostream& stream)
     {
       thread = l1->data();
       overhead += thread->overheadTime();
-      if (sumReduce(thread->active) > 0)
+      if (searchComm.sumReduce(thread->active) > 0)
 	{
 	  int l = strlen(thread->name);
 	  if (l > timingPrintNameWidth)
@@ -844,31 +850,31 @@ void parallelBranching::printTimings(ostream& stream)
   searchWCTime +=   broadcastWCTime + preprocessWCTime 
                   + rampUpWCTime + solOutputWCTime;
 
-  totalCPU = sumReduce(searchTime);
-  maxCPU   = maxReduce(searchTime);
-  totalWC  = sumReduce(searchWCTime);
-  maxWC    = maxReduce(searchWCTime);
+  totalCPU = searchComm.sumReduce(searchTime);
+  maxCPU   = searchComm.maxReduce(searchTime);
+  totalWC  = searchComm.sumReduce(searchWCTime);
+  maxWC    = searchComm.maxReduce(searchWCTime);
 
-  totalMessages = sumReduce(messagesReceivedThisProcessor);
+  totalMessages = searchComm.sumReduce(messagesReceivedThisProcessor);
 
   timingPrintTimeWidth    = max(7,digitsNeededFor(maxCPU) + 2);
   timingPrintWCTimeWidth  = max(7,digitsNeededFor(maxWC) + 2);
-  timingPrintPNWidth      = max(6,digitsNeededFor(mySize()));
+  timingPrintPNWidth      = max(6,digitsNeededFor(searchSize));
   timingPrintMessageWidth = max(8,digitsNeededFor(totalMessages));
 
-  if (iDoIO())
+  if (iDoSearchIO)
     {
       // CAP: Some of these streamwidth settings appear to be redundant, but I'm
       // just following the model from before to be safe.
       stream << "Average search time (CPU)        ";
       stream.width(timingPrintTimeWidth);
-      stream << totalCPU/mySize() << " seconds.\n";
+      stream << totalCPU/searchSize << " seconds.\n";
       stream << "Maximum search time (CPU)        ";
       stream.width(timingPrintTimeWidth);
       stream << maxCPU << " seconds.\n";
       stream << "Average search time (Wall clock) ";
       stream.width(timingPrintWCTimeWidth);
-      stream << totalWC/mySize() << " seconds.\n";
+      stream << totalWC/searchSize << " seconds.\n";
       stream << "Maximum search time (Wall clock) ";
       stream.width(timingPrintWCTimeWidth);
       stream << maxWC << " seconds.\n";
@@ -902,11 +908,11 @@ void parallelBranching::printTimings(ostream& stream)
     }
 
   if (combineTimingsMax)
-    totalCPU = mySize()*maxCPU;
+    totalCPU = searchSize*maxCPU;
 
   timingPrintData(stream,
 		  "Problem Broadcast",
-		  mySize() > 1,
+		  searchSize > 1,
 		  broadcastTime,
 		  broadcastMessageCount);
 
@@ -956,7 +962,7 @@ void parallelBranching::printTimings(ostream& stream)
 		  idleProcTime,
 		  0);
   
-  if (iDoIO())
+  if (iDoSearchIO)
     timingPrintText(stream,'-',' ');
 
   timingPrintData(stream,
@@ -965,7 +971,7 @@ void parallelBranching::printTimings(ostream& stream)
 		  searchTime,
 		  messagesReceivedThisProcessor);
 
-  if (iDoIO()) 
+  if (iDoSearchIO) 
     {
       if (checkpointsEnabled)
 	{
@@ -1050,18 +1056,18 @@ void parallelBranching::timingPrintData(ostream& stream,
 					double time,
 					double messageCount)
 {
-  int count = sumReduce(present);
-  double timeSum = sumReduce(time);
-  double timeSumSq = sumReduce(time*time);
+  int count = searchComm.sumReduce(present);
+  double timeSum = searchComm.sumReduce(time);
+  double timeSumSq = searchComm.sumReduce(time*time);
   double baseLine;
   if (combineTimingsMax)
     baseLine = count*maxCPU;
   else
-    baseLine = sumReduce(present*searchTime);
+    baseLine = searchComm.sumReduce(present*searchTime);
 
-  double messageSum = sumReduce(messageCount);
+  double messageSum = searchComm.sumReduce(messageCount);
 
-  if (!iDoIO() || (count == 0))
+  if (!iDoSearchIO || (count == 0))
     return;
 
   double mean     = timeSum/count;
@@ -1108,8 +1114,8 @@ void parallelBranching::postRampUpAbort(double aggBound)
 {
   // Figure out time and print some statistics
 
-  double maxRampTime = maxReduce(rampUpTime);
-  if (iDoIO())
+  double maxRampTime = searchComm.maxReduce(rampUpTime);
+  if (iDoSearchIO)
     {
       CommonIO::end_tagging();
       ucout << "Aborting after ramp-up phase:\n\n";
@@ -1197,7 +1203,7 @@ void parallelBranching::initEventLog()
 //       outputCacheBuf[outputCacheSize - 1] = '\0';
 //     }
 //   char name[32];
-//   sprintf(name,"debug%05d.txt",myRank());
+//   sprintf(name,"debug%05d.txt",searchRank);
 //   ofstream dump(name,ios::out);
 //   dump << outputCacheBuf;
 // }

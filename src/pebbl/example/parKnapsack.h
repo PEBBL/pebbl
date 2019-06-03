@@ -92,7 +92,6 @@ public:
   parallelBranchSub* blankParallelSub();
 
   parallelBinaryKnapsack(MPI_Comm comm_ = MPI_COMM_WORLD) : 
-    mpiComm(comm_),
     binaryKnapsack(),
     incumbQueueTargetSize(100),
     incumbQueueMaxSize(1000),
