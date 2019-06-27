@@ -22,10 +22,22 @@ using namespace std;
 typedef void parallelBinaryKnapsack;
 #endif
 
+// These aren't defined yet
+typedef void teamBinaryKnapsack;
+typedef void parallelTeamBinaryKnapsack;
+
+/*
+int main(int argc, char* argv[])
+{
+  return driver<binaryKnapsack,parallelBinaryKnapsack>(argc, argv);
+}
+*/
 
 int main(int argc, char* argv[])
 {
-  return driver<binaryKnapsack,parallelBinaryKnapsack>(argc,argv);
+#ifdef ACRO_HAVE_MPI
+  return driver<binaryKnapsack, parallelBinaryKnapsack, teamBinaryKnapsack, parallelTeamBinaryKnapsack>(argc, argv, MPI_COMM_WORLD);
+#else
+  return driver<binaryKnapsack, parallelBinaryKnapsack, teamBinaryKnapsack, parallelTeamBinaryKnapsack>(argc, argv, 0);
+#endif
 }
-
-
