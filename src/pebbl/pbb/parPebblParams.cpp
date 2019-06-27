@@ -70,6 +70,13 @@ parallelPebblParams::parallelPebblParams()
 
 /// PARALLEL SEARCH
 
+  teamSize=1;  
+  create_categorized_parameter("teamSize",teamSize,
+		"<int>","1",
+		"Specify the number of processors used to bound or\n\t"
+		"separate problems and make children in parallel",
+		"Parallel Search");
+
   maxLoadBalRate=false;
   create_categorized_parameter("maxLoadBalRate",maxLoadBalRate,
 		"<bool>","false",

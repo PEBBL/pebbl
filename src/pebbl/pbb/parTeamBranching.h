@@ -21,17 +21,14 @@ namespace pebbl {
                                 public virtual parallelBranching
   {
     protected:
-      
-      // Communicator including all processors
-      mpiComm worldComm;
 
       // Communicator to hold the teamComm during operations like ramp up
-      mpiComm boundComm; 
+      mpiComm backupComm; 
 
     public:
       
       // Splits a world comm into team comms and a search comm according to the parameters passed to pebbl
-      void splitCommunicator(mpiComm worldComm, int teamSize, int clusterSize, int hubsDontWorkSize);
+      void splitCommunicator(mpiComm worldComm, int teamSize, int clusterSize, int hubsDontWorkSize, mpiComm *search, mpiComm *team);
 
       // Overrides the search function of parBranching
       virtual double search(); 
@@ -39,8 +36,18 @@ namespace pebbl {
       // Override ramp up search to use the global communicator during ramp up
       void rampUpSearch();
 
-      bool setup(int& argc, char**& argv, mpiComm worldComm = MPI_WORLDCOMM);
-  }
+      // Override the setupSeachComm method called in parallelBranching::setup()
+      // to now split the communicators and initialize the searchComm and the boundComm
+      void setupSearchComm();
+
+      parallelTeamBranching(){
+        // TODO
+      }
+
+      ~parallelTeamBranching(){
+        // TODO
+      }
+  };
 }
 
 #endif

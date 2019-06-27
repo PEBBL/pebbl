@@ -7,7 +7,7 @@
 #include <pebbl_config.h>
 
 #include <pebbl/bb/branching.h>
-//#include <pebbl/pbb/teamBranching.h>
+#include <pebbl/pbb/teamBranching.h>
 #include <pebbl/utilib/exception_mngr.h>
 
 
@@ -34,24 +34,25 @@ bool teamBranching::alertTeam(parallelOp op) {
   if(!iAmHead()){
     return false;
   }
-  teamComm.broadcast(&op, 1, MPI_INT, teamComm.myRank())
+  teamComm.broadcast(&op, 1, MPI_INT, teamComm.myRank());
   return true;
 }
 
 void teamBranching::awaitWork() {
+  parallelOp opCode;
   bool done = false;
   while(!done){
     teamComm.broadcast(&opCode, 1, MPI_INT, getHeadRank());
     switch(opCode) {
       case boundOp: 
         double controlParam;
-        boundComputation(&controlParam);
+        minionBound();
         break;
       case separateOp:
-        splitComputation();
+        minionSplit();
         break;
       case makeChildOp:
-        makeChild();
+        minionMakeChild();
         break;
       case exitOp:
         done = true;
@@ -75,7 +76,7 @@ int teamBranching::getHeadRank() {
 }
 
 bool teamBranching::setup(int& argc, char**& argv, mpiComm teamComm) {
-  this.teamComm = teamComm;
+  this->teamComm = teamComm;
   branching::setup(argc, argv);
 }
 
@@ -105,7 +106,7 @@ double teamBranching::search() {
   }
   else {
     awaitWork();
-    return nan()
+    return nan("");
   }
 }
 

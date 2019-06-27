@@ -27,30 +27,52 @@ using namespace std;
 
 namespace pebbl {
 
-  // not sure how to deal with this. Might have to make it static to deal with the need 
-  // to set the seach communicator on instantiation
-void parallelTeamBranching::splitCommunicator(mpiComm worldComm, int teamSize, int clusterSize, int hubsDontWorkSize){
+// Method used to properly allocate processors into teams, taking into account
+// differences between working and non working hubs
+void parallelTeamBranching::splitCommunicator(mpiComm argComm, 
+                                              int teamSize,
+                                              int clusterSize,
+                                              int hubsDontWorkSize,
+                                              mpiComm *search,
+                                              mpiComm *bound){
+  // TODO
   return;
+  
 }
 
 double parallelTeamBranching::search(){
   setTeam(teamComm);
   if(iAmHead()){
-    return parallelSearchFramework(NULL);
+    double objVal = parallelSearchFramework(NULL);
+    alertTeam(exitOp);
+    return objVal;
   }
   else {
     awaitWork();
+    return nan("");
   }
-  return 0;
 }
 
 void parallelTeamBranching::rampUpSearch(){
-  setTeam(worldComm);
+  setTeam(passedComm);
   parallelBranching::rampUpSearch();
 }
 
-bool parallelTeamBranching::setup(int& argc, char**& argv, mpiComm worldComm = MPI_WORLDCOMM){
-  return true;
+void parallelTeamBranching::setupSearchComm(){
+  // Free communicators we make in case setup is called more than once
+  if(searchComm.myComm() != MPI_COMM_NULL){
+    searchComm.free();
+  }
+  // freeing backupComm here makes sure that we don't free passedComm, since
+  // teamComm = passedComm when we are in rampUp
+  if(backupComm.myComm() != MPI_COMM_NULL){
+    backupComm.free();
+  }
+  splitCommunicator(passedComm, teamSize, clusterSize, hubsDontWorkSize, &searchComm, &teamComm);
+  backupComm = teamComm;
 }
+  
+}
+  
 
 #endif

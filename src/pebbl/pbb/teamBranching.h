@@ -5,6 +5,7 @@
 // Will Loughlin and Rohith Rokkam
 
 
+#include <pebbl/comm/mpiComm.h>
 
  
 #ifndef pebbl_teamBranching_h
@@ -27,7 +28,7 @@ namespace pebbl {
       // Counter for mpi messages sent in team Communication
       int teamMessageCount;
 
-      enum parallelOp = { boundOp, separateOp, makeChildOp, exitOp }
+      enum parallelOp { boundOp, separateOp, makeChildOp, exitOp };
 
       // Sets teamComm and calls teamOrganize
       void setTeam(mpiComm comm);
@@ -45,10 +46,20 @@ namespace pebbl {
       // Called from setTeam().
       virtual void teamOrganize() = 0;
 
+      // Pure virtual method. Called from awaitWork() when a minion needs to work on bounding
+      virtual void minionBound() = 0;
+
+      // Pure virtual method. Called from awaitWork() when a minion needs to work on separating
+      virtual void minionSplit() = 0;
+
+      // Pure virtual method. Called from awaitWork() when a minion needs to work on making children
+      virtual void minionMakeChild() = 0;
+
     public:
 
       // Constructor for teamBranching
-      branching() {
+      teamBranching()
+      {
         teamComm = mpiComm();
         teamMessageCount = 0;
       }
@@ -57,7 +68,7 @@ namespace pebbl {
       bool iAmHead();
 
       // True if this processor is a minion in a team
-      bool iamMinion();
+      bool iAmMinion();
 
       // Returns the rank of this team's head
       // Currently this is always 0
@@ -75,10 +86,13 @@ namespace pebbl {
       // Wrapper for alertTeam(makeChildOp)
       bool alertMakeChild();
 
+      // Wrapper for alertTeam(exitOp)
+      bool alertExit();
+      
       // Overrides the search function of branching in order to send the minion processors
       // into the waiting for work loop.
       virtual double search();
-  }
+  };
 }
 
 #endif
