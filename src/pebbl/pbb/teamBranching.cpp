@@ -96,16 +96,17 @@ bool teamBranching::alertExit() {
   return alertTeam(exitOp);
 }
 
-double search() {
+double teamBranching::search() {
   setTeam(teamComm);
   if(iAmHead()){
-    return searchFramework(NULL);
+    double objVal = searchFramework(NULL);
+    alertTeam(exitOp);
+    return objVal;
   }
   else {
     awaitWork();
+    return nan()
   }
-  // this is unused in the solve method of branching
-  return 0;
 }
 
 }
