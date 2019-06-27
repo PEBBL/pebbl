@@ -77,16 +77,12 @@ parallel_exec_test(int argc, char **argv, int nproc)
     if(strncmp(argv[i],"--forceTeam",11) == 0)
       hadForceTeam = true;
     if(strncmp(argv[i],"--teamSize",10) == 0)
-      // Using atoi here -- if the teamSize parameter is followed by a
-      // garbage argument, then the ParameterSet will pick it up during
-      // instance.setup() and throw an exception. So in that case, 
-      // the return value of atoi() doesn't matter.
-
-      // Concerns: What if atoi returns -1 (our dummy value) by chance?
-      // Or that we pick a mode without parallel search, and the program
-      // complains about parallel search parameters before it complains
-      // about teamSize.
-      teamSize = std::atoi(argv[i]+11);
+      // nb. If the string is invalid, strtol returns 0. Then we pick
+      // parallelTeamMode. (if teamSize=0 caused a choice
+      // of serialMode, say, then the parameter processing might give an
+      // error about the presence of some non-serial parameter before it
+      // gets a chance to complain about teamSize).
+      teamSize = std::strtol(argv[i]+11, (char **)NULL, 10);
   }
 
   if(hadForceParallel && hadForceTeam) {
