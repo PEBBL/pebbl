@@ -53,3 +53,4 @@ bool parallelTeamBranching::setup(int& argc, char**& argv, mpiComm worldComm = M
   return true;
 }
 
+#endif

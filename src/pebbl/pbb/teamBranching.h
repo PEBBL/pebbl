@@ -1,4 +1,4 @@
-// teamBranching.cpp
+// teamBranching.h
 //
 // Parallel computation class code for PEBBL.
 //
@@ -56,5 +56,5 @@ namespace pebbl {
 }
 
 #endif
-      
+#endif
     
