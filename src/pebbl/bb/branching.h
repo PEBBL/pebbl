@@ -673,8 +673,8 @@ class solution : public solutionIdentifier
 
   virtual solution* blankClone() { return new solution(this); };
 
-  void pack(PackBuffer& outBuf);
-  virtual void packContents(PackBuffer& outBuf) { };
+  void pack(PackBuffer& outBuf) const;
+  virtual void packContents(PackBuffer& outBuf) const { };
 
   void unpack(UnPackBuffer& inBuf);
   virtual void unpackContents(UnPackBuffer& inBuf) { };

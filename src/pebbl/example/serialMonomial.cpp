@@ -2206,9 +2206,9 @@ namespace pebblMonom {
 	    maxMonomSub * tmp = new maxMonomSubKWay();
 	    if (!tmp)
 	      throw domain_error("maxMonomSub ptr null after allocation");
-	    ((maxMonomSubKWay *)tmp)->maxMonomSubAsChildOf(this, 
-							   outOfMonomList, 
-							   insepWt);
+	    ((maxMonomSubKWay *)tmp)->mmkWaySubAsChildOf(this, 
+							 outOfMonomList, 
+							 insepWt);
 	    if  (global()->canFathom(tmp->bound) || tmp->state == dead)
 	      delete tmp;
 	    else
@@ -2237,9 +2237,9 @@ namespace pebblMonom {
             vector<size_type> childOutOfMonom(outOfMonomList.begin(), it);
             assert (childOutOfMonom.empty() || it != outOfMonomList.begin());
 
-            ((maxMonomSubKWay *)tmp)->maxMonomSubAsChildOf(this, 2*(*it), 
-							   childOutOfMonom, 
-							   compInsep);
+            ((maxMonomSubKWay *)tmp)->mmkWaySubAsChildOf(this, 2*(*it), 
+							 childOutOfMonom, 
+							 compInsep);
 
 	    if (global()->canFathom(tmp->bound) || tmp->state == dead)
               {
@@ -2253,9 +2253,9 @@ namespace pebblMonom {
             tmp = new maxMonomSubKWay();
             if (!tmp)
               throw domain_error("Cannot allocate maxMonomSub");
-            ((maxMonomSubKWay *)tmp)->maxMonomSubAsChildOf(this, 2*(*it)+1, 
-							   childOutOfMonom, 
-							   Insep);
+            ((maxMonomSubKWay *)tmp)->mmkWaySubAsChildOf(this, 2*(*it)+1, 
+							 childOutOfMonom, 
+							 Insep);
             if (global()->canFathom(tmp->bound) || tmp->state == dead)
               {
                 delete tmp;
@@ -2320,17 +2320,17 @@ namespace pebblMonom {
   }
 
   //maxMonomSubKWay::
-  //  maxMonomSubAsChildOf(maxMonomSub* parent,vector<size_type> outOfMonomList)
+  //  mmkWaySubAsChildOf(maxMonomSub* parent,vector<size_type> outOfMonomList)
 
   void maxMonomSubKWay::
-  maxMonomSubAsChildOf(maxMonomSubKWay* parent, 
-		       const vector<size_type> & outOfMonomList, 
-		       double insepWt)
+  mmkWaySubAsChildOf(maxMonomSubKWay* parent, 
+		     const vector<size_type> & outOfMonomList, 
+		     double insepWt)
   {
     try 
       {
 	globalPtr = parent->globalPtr;
-	DEBUGPR(10,ucout << "maxMonomSubKWay:::maxMonomSubAsChildOf() "
+	DEBUGPR(10,ucout << "maxMonomSubKWay:::mmkWaySubAsChildOf() "
 		"with outOfMonomList  invoked, list size: " 
 		<< outOfMonomList.size() << endl);
 	_monom = parent->getMonomialObj();
@@ -2365,7 +2365,7 @@ namespace pebblMonom {
 		    << ' '  << _monom << '\n');
 	  }
 
-	DEBUGPR(10,ucout << "maxMonomSubKWay::maxMonomSubAsChildOf(), "
+	DEBUGPR(10,ucout << "maxMonomSubKWay::mmkWaySubAsChildOf(), "
 		"with outOfMonomList,  bound computed for: " 
 		<< getMonomialObj() << " bound: " << bound 
 		<< " _posCovg:" << _posCovg << " _negCovg:" 
@@ -2374,7 +2374,7 @@ namespace pebblMonom {
     catch(exception & e)
       {
 	cerr << e.what() << "child: 1st of 2k+1" 
-	     << " passed to maxMonomSub::maxMonomSubAsChildOf, for monom: " 
+	     << " passed to maxMonomSub::mmkWaySubAsChildOf, for monom: " 
 	     << parent->getMonomialObj() << endl;
 	abort();
       }
@@ -2383,16 +2383,16 @@ namespace pebblMonom {
 	abort();
       }
 
-    DEBUGPR(20,ucout << "Out of maxMonomSub:::maxMonomSubAsChildOf() "
+    DEBUGPR(20,ucout << "Out of maxMonomSub:::mmkWaySubAsChildOf() "
 	    "with outOfMonomList" << endl);
   }
 
-  // maxMonomSubKWay::maxMonomSubAsChildOf
+  // maxMonomSubKWay::mmkWaySubAsChildOf
   void maxMonomSubKWay::
-  maxMonomSubAsChildOf(maxMonomSubKWay* parent,
-		       int whichChild, 
-		       const vector<size_type> & outOfMonomList, 
-		       double insepWt)
+  mmkWaySubAsChildOf(maxMonomSubKWay* parent,
+		     int whichChild, 
+		     const vector<size_type> & outOfMonomList, 
+		     double insepWt)
   {
     globalPtr = parent->globalPtr;
 
@@ -2445,7 +2445,7 @@ namespace pebblMonom {
           }
         else
           {
-            DEBUGPR(20,ucout << "maxMonomSub:::maxMonomSubAsChildOf() "
+            DEBUGPR(20,ucout << "mmkWaySubAsChildOf() "
 		    "before set_intersection lastSetIdx: " 
 		    << lastSetIdx << endl);
             set_intersection(parent->getPosCovgIdx().begin(),
@@ -2503,7 +2503,7 @@ namespace pebblMonom {
 		    << ' '  << _monom << '\n');
           }
 
-        DEBUGPR(10,ucout << "maxMonomSubKWay::maxMonomSubAsChildOf(), "
+        DEBUGPR(10,ucout << "maxMonomSubKWay::mmkWaySubAsChildOf(), "
 		"bound computed for: " << getMonomialObj() << " bound: " 
 		<< bound << ", solution val: " << getObjectiveVal() 
 		<< " _posCovg:" << _posCovg << " _negCovg:" 
@@ -2512,7 +2512,7 @@ namespace pebblMonom {
     catch(exception & e)
       {
         cerr << e.what() << " child: " << whichChild 
-	     << " passed to maxMonomSub::maxMonomSubAsChildOf, for monom: " 
+	     << " passed to maxMonomSub::mmkWaySubAsChildOf, for monom: " 
 	     << parent->getMonomialObj() << endl;
         abort();
       }
@@ -2521,7 +2521,7 @@ namespace pebblMonom {
         cerr << "unknown exception caught" << endl;
         abort();
       }
-    DEBUGPR(20,ucout << "Out of maxMonomSub:::maxMonomSubAsChildOf()" << endl);
+    DEBUGPR(20,ucout << "Out of mmkWaySubAsChildOf()" << endl);
   }
 
 
@@ -2623,7 +2623,7 @@ namespace pebblMonom {
 
 #ifdef ACRO_HAVE_MPI
 
-  void maxMonomSolution::packContents(PackBuffer & outBuf)
+  void maxMonomSolution::packContents(PackBuffer & outBuf) const
   {
     _monom.pack(outBuf);
   }
