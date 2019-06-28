@@ -106,7 +106,7 @@ parallel_exec_test(int argc, char **argv, int nproc)
     return parallelTeamMode;
 }
 
-template <class B> bool runParallel(int argc,char** argv, MPI_Comm comm)
+template <class B> bool runParallel(int argc,char** argv, MPI_Comm comm=MPI_COMM_WORLD)
 {
   B instance(comm);
   utilib::exception_mngr::set_stack_trace(false);
@@ -143,13 +143,13 @@ int driver(int argc, char **argv)
 
     switch(mode) {
       case parallelMode:
-        runParallel<PB>(argc, argv, comm);
+        runParallel<PB>(argc, argv);
         break;
       case teamMode:
-        runParallel<TB>(argc, argv, comm);
+        runParallel<TB>(argc, argv);
         break;
       case parallelTeamMode:
-        runParallel<PTB>(argc, argv, comm);
+        runParallel<PTB>(argc, argv);
         break;
     }
 
