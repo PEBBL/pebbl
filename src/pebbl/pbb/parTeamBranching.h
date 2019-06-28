@@ -69,7 +69,7 @@ parallel_exec_test(int argc, char **argv, int nproc)
   for(int i=1; i<argc; i++) {
     if(strncmp(argv[i],"--help",6) == 0)
       // This will give help info for parameters in all modes.
-      return PEBBL_mode::parallelTeamMode;
+      return parallelTeamMode;
     if(strncmp(argv[i],"--forceParallel",15) == 0)
       hadForceParallel = true;
     if(strncmp(argv[i],"--forceTeam",11) == 0)
@@ -84,47 +84,81 @@ parallel_exec_test(int argc, char **argv, int nproc)
   }
 
   if(hadForceParallel && hadForceTeam) {
-    return PEBBL_mode::parallelTeamMode;
+    return parallelTeamMode;
   } else if (hadForceParallel) {
-    return PEBBL_mode::parallelMode;
+    return parallelMode;
   } else if (hadForceTeam) {
-    return PEBBL_mode::teamMode;
+    return teamMode;
   }
 
   // If we reach this point, no force options have been given.
   if(nproc == 1)
-    return PEBBL_mode::serialMode;
+    return serialMode;
   if(teamSize == -1)
-    return PEBBL_mode::parallelMode;
+    return parallelMode;
   if(teamSize >= nproc)
-    return PEBBL_mode::teamMode;
+    return teamMode;
   else
-    return PEBBL_mode::parallelTeamMode;
+    return parallelTeamMode;
 }
 
+template <class B> bool runParallel(int argc,char** argv, MPI_Comm comm)
+{
+  B instance(comm);
+  utilib::exception_mngr::set_stack_trace(false);
+  bool flag = instance.setup(argc,argv);
+  if (flag)
+    {
+      utilib::exception_mngr::set_stack_trace(true); 
+      instance.reset();
+      instance.printConfiguration();
+      instance.solve();
+    }
+  return flag;
+}
 
 template<class B, class PB, class TB, class PTB>
 int driver(int argc, char **argv, MPI_Comm comm)
 {
-  int nproc;
-  MPI_Comm_size(comm, &nproc); // swap this out for uMPI::init.
-  PEBBL_mode mode = parallel_exec_test(argc, argv, nproc);
-  std::cout << mode; // debugging
-//  switch(mode)
-//  {
-//    case serialMode:
-//      break;
-//    case parallelMode:
-//      break;
-//    case teamMode:
-//      break;
-//    case parallelTeamMode:
-//      break;
-//  }
-  //
+  bool flag = true;
+
+  try {
+    uMPI::init(&argc, &argv, comm);
+    int nproc = uMPI::size;
+
+    PEBBL_mode mode = parallel_exec_test(argc, argv, nproc);
+
+    if(mode == serialMode) {
+      flag = runSerial<B>(argc, argv);
+      uMPI::done();
+      return !flag;
+    }
+
+    CommonIO::begin();
+    CommonIO::setIOFlush(1);
+
+    switch(mode) {
+      case parallelMode:
+        runParallel<PB>(argc, argv, comm);
+        break;
+      case teamMode:
+        runParallel<TB>(argc, argv, comm);
+        break;
+      case parallelTeamMode:
+        runParallel<PTB>(argc, argv, comm);
+        break;
+      default:
+        // scream
+    }
+
+    CommonIO::end();
+    uMPI::done();
+  }
+  UTILIB_STD_CATCH(CommonIO::end(); uMPI::done();)
+  return !flag;
 }
 
-}
+}  // namespace pebbl
 
 #endif
 #endif
