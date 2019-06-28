@@ -5,7 +5,7 @@
 // Will Loughlin and Rohith Rokkam
 
 #include <cstdlib>
-
+#include <pebbl/pbb/teamBranching.h>
  
 #ifndef pebbl_parTeamBranching_h
 #define pebbl_parTeamBranching_h
@@ -69,7 +69,7 @@ parallel_exec_test(int argc, char **argv, int nproc)
   for(int i=1; i<argc; i++) {
     if(strncmp(argv[i],"--help",6) == 0)
       // This will give help info for parameters in all modes.
-      return PEBBL_mode.parallelTeamMode;
+      return PEBBL_mode::parallelTeamMode;
     if(strncmp(argv[i],"--forceParallel",15) == 0)
       hadForceParallel = true;
     if(strncmp(argv[i],"--forceTeam",11) == 0)
@@ -84,22 +84,22 @@ parallel_exec_test(int argc, char **argv, int nproc)
   }
 
   if(hadForceParallel && hadForceTeam) {
-    return PEBBL_mode.parallelTeamMode;
+    return PEBBL_mode::parallelTeamMode;
   } else if (hadForceParallel) {
-    return PEBBL_mode.parallelMode;
+    return PEBBL_mode::parallelMode;
   } else if (hadForceTeam) {
-    return PEBBL_mode.teamMode;
+    return PEBBL_mode::teamMode;
   }
 
   // If we reach this point, no force options have been given.
   if(nproc == 1)
-    return PEBBL_mode.serialMode;
+    return PEBBL_mode::serialMode;
   if(teamSize == -1)
-    return PEBBL_mode.parallelMode;
+    return PEBBL_mode::parallelMode;
   if(teamSize >= nproc)
-    return PEBBL_mode.teamMode;
+    return PEBBL_mode::teamMode;
   else
-    return PEBBL_mode.parallelTeamMode;
+    return PEBBL_mode::parallelTeamMode;
 }
 
 
