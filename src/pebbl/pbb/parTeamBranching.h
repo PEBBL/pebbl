@@ -149,6 +149,7 @@ int driver(int argc, char **argv, MPI_Comm comm)
         break;
       default:
         // scream
+	break;
     }
 
     CommonIO::end();

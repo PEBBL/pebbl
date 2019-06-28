@@ -23,8 +23,8 @@ typedef void parallelBinaryKnapsack;
 #endif
 
 // These aren't defined yet
-typedef void teamBinaryKnapsack;
-typedef void parallelTeamBinaryKnapsack;
+typedef parallelBinaryKnapsack parallelTeamBinaryKnapsack;
+typedef parallelBinaryKnapsack teamBinaryKnapsack;
 
 /*
 int main(int argc, char* argv[])
