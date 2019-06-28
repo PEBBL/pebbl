@@ -16,7 +16,7 @@
 namespace pebbl {
 
 // Enum for the possible parallelism modes PEBBL can run in
-enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode}
+enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode};
 
 
 // Class that will implement methods used by the application for
@@ -108,7 +108,8 @@ parallel_exec_test(int argc, char **argv, int nproc)
 template<class B, class PB, class TB, class PTB>
 int driver(int argc, char **argv, MPI_Comm comm)
 {
-  int nproc = MPI_Comm_size(comm);
+  int nproc;
+  MPI_Comm_size(comm, &nproc); // swap this out for uMPI::init.
   PEBBL_mode mode = parallel_exec_test(argc, argv, nproc);
   std::cout << mode; // debugging
 //  switch(mode)
