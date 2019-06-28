@@ -107,7 +107,7 @@ int parallelTeamBranching::splitCommunicator(mpiComm argComm,
 }
 
 double parallelTeamBranching::search(){
-  setTeam(backupComm);
+  setTeam(teamComm);
   if(iAmHead()){
     double objVal = parallelSearchFramework(NULL);
     alertTeam(exitOp);
@@ -120,19 +120,12 @@ double parallelTeamBranching::search(){
 }
 
 void parallelTeamBranching::rampUpSearch(){
+  mpiComm savedComm = teamComm;
   setTeam(passedComm);
   parallelBranching::rampUpSearch();
+  setTeam(savedComm);
 }
 
-void parallelTeamBranching::setupSearchComm(){
-  // Free communicators we make in case setup is called more than once
-  searchComm.free();
-  // freeing backupComm here makes sure that we don't free passedComm, since
-  // teamComm = passedComm when we are in rampUp
-  backupComm.free();
-
-  splitCommunicator(passedComm, teamSize, clusterSize, hubsDontWorkSize, &searchComm, &backupComm);
-}
   
 }
   

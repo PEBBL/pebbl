@@ -24,11 +24,6 @@ enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode};
   class parallelTeamBranching : public virtual teamBranching,
                                 public virtual parallelBranching
   {
-    protected:
-
-      // Communicator to hold the teamComm during operations like ramp up
-      mpiComm backupComm; 
-
     public:
       
       // Splits a world comm into team comms and a search comm according to the parameters passed to pebbl
@@ -43,19 +38,22 @@ enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode};
 
       // Override the setupSeachComm method called in parallelBranching::setup()
       // to now split the communicators and initialize the searchComm and the boundComm
-      void setupSearchComm();
+      void setupSearchComm(){
+        // Free communicators we make in case setup is called more than once
+        searchComm.free();
+        teamComm.free();
+        splitCommunicator(passedComm, teamSize, clusterSize, hubsDontWorkSize, &searchComm, &teamComm);
+      }
 
       parallelTeamBranching(MPI_Comm _comm) :
-        parallelBranching(_comm),
-        backupComm()
+        parallelBranching(_comm)
       {
       }
 
       ~parallelTeamBranching(){
         // Free the communicators we create in split communicator
         searchComm.free();
-        // backupComm is garunteed to be the second communicator we create in splitCommunicator
-        backupComm.free();
+        teamComm.free();
       }
   };
 

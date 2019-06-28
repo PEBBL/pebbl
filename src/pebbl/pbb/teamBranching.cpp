@@ -25,18 +25,6 @@ using namespace std;
 
 namespace pebbl {
 
-void teamBranching::setTeam(mpiComm comm) {
-  teamComm = comm;
-  teamOrganize();
-}
-
-bool teamBranching::alertTeam(parallelOp op) {
-  if(!iAmHead()){
-    return false;
-  }
-  teamComm.broadcast(&op, 1, MPI_INT, teamComm.myRank());
-  return true;
-}
 
 void teamBranching::awaitWork() {
   parallelOp opCode;
@@ -63,38 +51,9 @@ void teamBranching::awaitWork() {
   }
 }
 
-bool teamBranching::iAmHead() {
-  return teamComm.myRank() == getHeadRank();
-}
-
-bool teamBranching::iAmMinion() {
-  return !iAmHead();
-}
-
-int teamBranching::getHeadRank() {
-  return 0;
-}
-
 bool teamBranching::setup(int& argc, char**& argv, mpiComm teamComm) {
   this->teamComm = teamComm;
   branching::setup(argc, argv);
-}
-
-
-bool teamBranching::alertBound() {
-  return alertTeam(boundOp);
-}
-
-bool teamBranching::alertSeparate() {
-  return alertTeam(separateOp);
-}
-
-bool teamBranching::alertMakeChild() {
-  return alertTeam(makeChildOp);
-}
-
-bool teamBranching::alertExit() {
-  return alertTeam(exitOp);
 }
 
 double teamBranching::search() {
