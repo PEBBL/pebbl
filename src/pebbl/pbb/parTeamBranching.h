@@ -52,8 +52,6 @@ enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode};
         // TODO
       }
   };
-}
-
 
 // RR: This method is "kludgey".
 // We need to determine the mode of parallelism before we process the rest of
@@ -126,7 +124,9 @@ int driver(int argc, char **argv, MPI_Comm comm)
   //
 }
 
+}
 
 #endif
 #endif
 
+// Need to define the driver in the case ACRO_HAVE_MPI is not defined.
