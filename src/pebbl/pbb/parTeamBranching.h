@@ -122,12 +122,12 @@ template <class B> bool runParallel(int argc,char** argv, MPI_Comm comm)
 }
 
 template<class B, class PB, class TB, class PTB>
-int driver(int argc, char **argv, MPI_Comm comm)
+int driver(int argc, char **argv)
 {
   bool flag = true;
 
   try {
-    uMPI::init(&argc, &argv, comm);
+    uMPI::init(&argc, &argv, MPI_COMM_WORLD);
     int nproc = uMPI::size;
 
     PEBBL_mode mode = parallel_exec_test(argc, argv, nproc);
@@ -151,9 +151,6 @@ int driver(int argc, char **argv, MPI_Comm comm)
       case parallelTeamMode:
         runParallel<PTB>(argc, argv, comm);
         break;
-      default:
-        // scream
-	break;
     }
 
     CommonIO::end();
