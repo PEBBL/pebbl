@@ -53,7 +53,7 @@ int PMrand(int* state);
  */
 int PMrand(int* state)
 {
-register int hvlue, lvlue, testv;
+int hvlue, lvlue, testv;
 int nextn = *state;
 
 hvlue = nextn / MOBYMP;

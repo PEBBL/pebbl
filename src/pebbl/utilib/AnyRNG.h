@@ -268,11 +268,19 @@ public:
 
 	    /// Write this object
             void write(std::ostream& ostr) const
-              { ostr << *held; }
+              { 
+              	// JE 6/27/2019 removed this because clang barfs on it
+              	// ostr << *held; 
+              	std::cerr << "holder::write no longer implemented\n";
+              }
 
 	    /// Read this object
             void read(std::istream& istr)
-              { istr >> *held; }
+              { 
+              	// JE 6/27/2019 removed this because clang barfs on it
+              	// istr >> *held; 
+              	std::cerr << "holder::read no longer implemented\n";
+              }
 
             /// Return the value as a void pointer
 	    const void* voidptr() const

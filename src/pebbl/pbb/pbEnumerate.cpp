@@ -32,6 +32,32 @@ using namespace utilib;
 
 namespace pebbl {
 
+  // Utility routine to pack and array of solutionIdentifiers into a 
+  // PackBuffer.  This used to implemented through templating of 
+  // some existing << operators, but that does not work with the clang
+  // compiler due to some namespace issues
+
+  void parallelBranching::packReposArray(BasicArray<solutionIdentifier>& array, 
+                                         PackBuffer& buffer)
+  {
+    size_type len = array.size();
+    buffer << len;
+    for(size_type i=0; i<len; i++)
+      array[i].pack(buffer);
+  };
+
+  // Similar routine for unpacking
+
+    void parallelBranching::unpackReposArray(BasicArray<solutionIdentifier>& array, 
+                                             UnPackBuffer& buffer)
+    { 
+      size_type len = 0;
+      buffer >> len;
+      array.resize(len);
+      for(size_type i=0; i<len; i++)
+        array[i].unpack(buffer);
+    };
+
 
   // This routine stamps a solution as belonging to this processor,
   // and gives it a serial number.
@@ -426,10 +452,10 @@ namespace pebbl {
       {
 	DEBUGPR(100,ucout << "Sending array to " << reposTree->parent()
 		<< endl);
-	PackBuffer* outBuf = reposArrayQ.getFree();
-	*outBuf << (int) reposArraySignal;
-	*outBuf << treeReposArray;
-	reposArrayQ.send(outBuf,reposTree->parent(),repositoryTag);
+	PackBuffer* outBufPtr = reposArrayQ.getFree();
+	*outBufPtr << (int) reposArraySignal;
+        packReposArray(treeReposArray,*outBufPtr); 
+	reposArrayQ.send(outBufPtr,reposTree->parent(),repositoryTag);
 	recordMessageSent(currentThread);
       }
 
@@ -590,7 +616,7 @@ namespace pebbl {
     int whichChild = reposTree->whichChild(sender);
     DEBUGPR(50,ucout << "New repository array from " << sender
 	    << " = child " << whichChild << endl);
-    inBuf >> childReposArray[whichChild];
+    unpackReposArray(childReposArray[whichChild],inBuf);
   }
 
 
@@ -734,7 +760,7 @@ namespace pebbl {
     if (!reposTree->isRoot())
       {
 	PackBuffer outBuf;
-	outBuf << treeReposArray;
+        packReposArray(treeReposArray,outBuf);
 	searchComm.send((void*) outBuf.buf(),
 	                outBuf.curr(),
 	                MPI_PACKED,
@@ -1061,7 +1087,7 @@ namespace pebbl {
       {
 	DEBUGPR(100,ucout << "Sending treeReposArray\n");
 	PackBuffer outBuf(bufSize);
-	outBuf << treeReposArray;
+        packReposArray(treeReposArray,outBuf);
 	bufSize = outBuf.size();
 	searchComm.broadcast(&bufSize,1,MPI_INT,reposTree->rootNode());
 	searchComm.broadcast((void*) outBuf.buf(),
@@ -1080,8 +1106,8 @@ namespace pebbl {
 		             MPI_PACKED,
 		             reposTree->rootNode());
 	inBuf.reset(bufSize);
-	inBuf >> treeReposArray;
-	solOutputMessages++;
+        unpackReposArray(treeReposArray,inBuf);
+ 	solOutputMessages++;
       }
 
     DEBUGPR(150,for(int i=0; i<totalReposSize; i++)

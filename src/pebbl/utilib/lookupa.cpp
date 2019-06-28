@@ -22,7 +22,7 @@ namespace utilib {
 
 typedef unsigned long int  ub4; /* unsigned 4-byte quantities */
 typedef unsigned      char ub1; /* unsigned 1-byte quantities */
-ub4 bjlookup( register ub1* k, register ub4 length, register ub4 level);
+ub4 bjlookup( ub1* k, ub4 length, ub4 level);
 
 
 /*
@@ -90,9 +90,9 @@ acceptable.  Do NOT use for cryptographic purposes.
 --------------------------------------------------------------------
 */
 
-ub4 bjlookup( register ub1* k, register ub4 length, register ub4 level)
+ub4 bjlookup( ub1* k, ub4 length, ub4 level)
 {
-   register ub4 a,b,c,len;
+   ub4 a,b,c,len;
 
    /* Set up the internal state */
    len = length;
@@ -178,7 +178,7 @@ is trying to cause collisions.  Do NOT use for cryptography.
 #ifdef UTILIB_YES_CHECKSUM
 static void  checksum(ub1* k, ub4 len, ub4* state)
 {
-   register ub4 a,b,c,d,e,f,g,h,length;
+   ub4 a,b,c,d,e,f,g,h,length;
 
    /* Use the length and level; add in the golden ratio. */
    length = len;
