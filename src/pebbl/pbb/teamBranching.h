@@ -57,10 +57,16 @@ namespace pebbl {
 
     public:
 
-      // Constructor for teamBranching
-      teamBranching()
+      // Constructors for teamBranching
+      teamBranching() :
+        teamComm()
       {
-        teamComm = mpiComm();
+        teamMessageCount = 0;
+      }
+      
+      teamBranching(MPI_Comm _comm) :
+        teamComm(_comm) 
+      {
         teamMessageCount = 0;
       }
 
