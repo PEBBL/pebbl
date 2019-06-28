@@ -138,7 +138,7 @@ void parBinKnapSub::quickIncumbentHeuristic()
   binKnapSolution* wsol = workingSol();
   wsol->completeGreedy();
   if (wsol->value > incumbentValue())
-    wsol->foundSolution(synchronous);
+    wsol->foundKnapsackSolution(synchronous);
 }
 
 
@@ -156,7 +156,7 @@ void parallelBinaryKnapsack::parallelIncumbentHeuristic(double* controlParam)
       s->mutate();
       if (s->value > incumbentValue)
 	{
-	  s->foundSolution(notSynchronous);
+	  s->foundKnapsackSolution(notSynchronous);
 	  insertInIncQueue(s);  // If we get a new incumbent, keep it around.
 	}
       else if (incQueueSize < incumbQueueTargetSize)
