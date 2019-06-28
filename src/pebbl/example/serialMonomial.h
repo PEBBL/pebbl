@@ -323,8 +323,8 @@ namespace pebblMonom {
 
     void possibleSwap(size_type i1,size_type i2)
     {
-      register double roundedBound1 = branch[i1].roundedBound;
-      register double roundedBound2 = branch[i2].roundedBound;
+      double roundedBound1 = branch[i1].roundedBound;
+      double roundedBound2 = branch[i2].roundedBound;
       if (roundedBound1 < roundedBound2)
 	{
 	  branchItem tempItem(branch[i1]);

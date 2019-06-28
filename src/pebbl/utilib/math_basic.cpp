@@ -41,7 +41,7 @@ unsigned int gcd(unsigned int a, unsigned int b)
 {
   while (b != 0)
     {
-      register unsigned int temp = b;
+      unsigned int temp = b;
       b = a % b;
       a = temp;
     }

@@ -548,8 +548,8 @@ catch (std::invalid_argument& ) {
 //
 inline Parameter& ParameterSet::get_parameter_object(const std::string& name)
 {
-Parameter dummy;
-Parameter& tmp = dummy;
+Parameter* dummy = 0;
+Parameter& tmp = *dummy;
 
 try {
   tmp = find_parameter(name);
@@ -563,7 +563,6 @@ catch (std::exception& e) {
                   "ParameterSet::get_parameter - unexpected exception");
     }
 
-// Logically, this line is never reached. But compilers can't figure that out.
 return tmp;
 }
 
