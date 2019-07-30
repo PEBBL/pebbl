@@ -52,58 +52,97 @@ int parallelTeamBranching::splitCommunicator(mpiComm argComm,
 	int clustersWanted = worldSize / fullClusterSize;
 	int forceSeparateSize = 1 + (hubsDontWorkSize - 1) * teamSize;
 
-  // Initialize the cluster
-	worldCluster.reset(worldRank, worldSize, clustersWanted, fullClusterSize, forceSeparateSize);
+//	worldCluster.reset(worldRank, worldSize, fullClusterSize, clustersWanted, forceSeparateSize);
+// Copied math from the cluster object
+  int typicalSize = (int) ceil(((double) worldSize)/std::max(clustersWanted,1));
+  if (typicalSize > fullClusterSize)
+    typicalSize = fullClusterSize;
+  if (typicalSize < 1)
+    typicalSize = 1;
 
-	// create an intermediate communicator that excludes pure hubs
-	int inBoundingGroup = worldCluster.isFollower(worldRank);
-	MPI_Comm rawIntComm;
-	if (errorCode = MPI_Comm_split(argComm.myComm(), inBoundingGroup, worldRank, &rawIntComm)) {
-    ucerr << "MPI_Comm_split failed, code " << errorCode << endl;
-		return errorCode;
-	}
+  int numClusters = (int) ceil(((double) worldSize)/typicalSize);
 
-  mpiComm intComm(rawIntComm);
+  int clusterNumber   = worldRank/typicalSize;
+  int leader          = clusterNumber*typicalSize;
+  int myClusterSize     = std::min(typicalSize,worldSize - leader);
+  int lastClusterSize = worldSize - (numClusters - 1)*typicalSize;
+
+  int separateFunctions  = (myClusterSize     >= forceSeparateSize);
+  int typicallySeparated = (typicalSize     >= forceSeparateSize);
+  int lastSeparated      = (lastClusterSize >= forceSeparateSize);
+
+  int positionInCluster    = worldRank - leader;
+  int iAmLeader            = (positionInCluster == 0);
+  int iAmFollower          = !iAmLeader || !separateFunctions;
+
+  int numPureLeaders       = (numClusters - 1)*typicallySeparated + lastSeparated;
+
+  MPI_Group worldGroup;
+  MPI_Comm_group(argComm.myComm(), &worldGroup);
+// end copied math from the cluster object
 
 
-	// form bounding groups out of intermediate processor
-  MPI_Comm rawTeamComm;
-	if (inBoundingGroup)
-	{
-		int groupNum = intComm.myRank() / teamSize;
-		if (errorCode = MPI_Comm_split(intComm.myComm(), groupNum, worldRank, &rawTeamComm)) {
-      ucerr << "MPI_Comm_split failed, code " << errorCode << endl;
-      intComm.free();
-		  return errorCode;
-		}
-    *team = mpiComm(rawTeamComm);
-	}
-  // For pure hubs not in a team, the teamComm is set to null
+  // create group for the team communicator
+  int range[1][3];
+  MPI_Group teamGroup = MPI_GROUP_NULL;
+  // Only followers need a team Comm
+  if(iAmFollower) {
+    // separateFunctions indicates whether our cluster has a pure hub or not. In the case of a pure hub
+    // we must exclude the head of the cluster from the group
+    int firstIncluded = leader + separateFunctions;
+    int teamNumber = (positionInCluster - separateFunctions)/teamSize;
+    int teamLeader = firstIncluded + teamNumber*teamSize;
+    // range = [[teamLeader, teamLeader + teamSize - 1, 1]]
+    range[0][0] = teamLeader;
+    range[0][1] = teamLeader + teamSize - 1;
+    range[0][2] = 1;
+    MPI_Group_range_incl(worldGroup, 1, range, &teamGroup);
+  }
+
+  // create group for the search communicator
+  MPI_Group searchGroup = MPI_GROUP_NULL;
+  if(typicallySeparated){
+    MPI_Group pureHubGroup = MPI_GROUP_NULL;
+    MPI_Group workerGroup = MPI_GROUP_NULL; // This group will contain all processors with a team i.e. non-pure hubs
+    MPI_Group headWorkerGroup = MPI_GROUP_NULL; // Group with all head workers
+    int lastPureHub = (numClusters - 1)*myClusterSize - (myClusterSize * !lastSeparated); // beginning of second to last cluster if last cluster does not have a pure hub
+    // range = [[0, lastPureHub, myClusterSize]]
+    range[0][0] = 0;
+    range[0][1] = lastPureHub;
+    range[0][2] = myClusterSize;
+    MPI_Group_range_incl(worldGroup, 1, range, &pureHubGroup);
+    MPI_Group_difference(worldGroup, pureHubGroup, &workerGroup);
+    // range = [[0, worldSize - numPureLeaders - 1, teamSize]]
+    range[0][0] = 0;
+    range[0][1] = worldSize - numPureLeaders - 1;
+    range[0][2] = teamSize;
+    MPI_Group_range_incl(workerGroup, 1, range, &headWorkerGroup);
+    MPI_Group_union(headWorkerGroup, pureHubGroup, &searchGroup);
+    MPI_Group_free(&pureHubGroup);
+    MPI_Group_free(&workerGroup);
+    MPI_Group_free(&headWorkerGroup);
+  }
   else {
-    *team = mpiComm();
+    // Every processor is in a team so we just group by team size
+    //range = [[0, worldSize - 1, teamSize]]
+    range[0][0] = 0;
+    range[0][1] = worldSize - 1;
+    range[0][2] = teamSize;
+    MPI_Group_range_incl(worldGroup, 1, range, &searchGroup);
   }
 
 
-	// Determine pebbl head processors and put them in the search communicator
-  MPI_Comm rawSearchComm;
-	int isWorker = (intComm.myRank() % teamSize == 0);
-	int isMinion = !worldCluster.isLeader(worldRank) && !isWorker;
-	if (errorCode = MPI_Comm_split(argComm.myComm(), !isMinion, worldRank, &rawSearchComm)) {
-      ucerr << "MPI_Comm_split failed, code " << errorCode << endl;
-      intComm.free();
-      return errorCode;
+  MPI_Comm teamComm = MPI_COMM_NULL;
+  if(teamGroup != MPI_GROUP_NULL){
+    MPI_Comm_create_group(argComm.myComm(), teamGroup, 0, &teamComm);
   }
-  *search = mpiComm(rawSearchComm);
-  // Free the search comm and set it to null for minions
-	if (isMinion)
-	{
-    search->free();
-	}
+  *team = mpiComm(teamComm);
 
-  // Free the intermediate communicator
-  intComm.free();
-
-  return 0;
+  MPI_Comm searchComm = MPI_COMM_NULL;
+  if(teamGroup != MPI_GROUP_NULL){
+    MPI_Comm_create_group(argComm.myComm(), searchGroup, 0, &searchComm);
+  }
+  *search = mpiComm(searchComm);
 }
 
 double parallelTeamBranching::search(){
