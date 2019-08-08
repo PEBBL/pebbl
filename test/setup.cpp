@@ -71,7 +71,7 @@ void setupCommunicator(MPI_Comm argComm,
     int teamLeader = firstIncluded + teamNumber*teamSize;
     // range = [[teamLeader, teamLeader + teamSize - 1, 1]]
     range[0][0] = teamLeader;
-    range[0][1] = teamLeader + teamSize - 1;
+    range[0][1] = std::min(teamLeader + teamSize, worldSize) - 1;
     range[0][2] = 1;
 
       teststream << "Team Range: " << range[0][0] << ", " << range[0][1] << ", " << range[0][2]<<std::endl;
@@ -143,8 +143,9 @@ void setupCommunicator(MPI_Comm argComm,
   }
 
   
-//      std::cout << teststream.str();
+      //std::cout << teststream.str();
 
+  MPI_Barrier(MPI_COMM_WORLD);
   if(teamGroup != MPI_GROUP_NULL){
     MPI_Comm_create_group(argComm, teamGroup, 0, &teamComm);
   }

@@ -92,7 +92,7 @@ void parallelTeamBranching::splitCommunicator(mpiComm argComm,
     int teamLeader = firstIncluded + teamNumber*teamSize;
     // range = [[teamLeader, teamLeader + teamSize - 1, 1]]
     range[0][0] = teamLeader;
-    range[0][1] = teamLeader + teamSize - 1;
+    range[0][1] = std::min(teamLeader + teamSize, worldSize) - 1;
     range[0][2] = 1;
     MPI_Group_range_incl(worldGroup, 1, range, &teamGroup);
   }
