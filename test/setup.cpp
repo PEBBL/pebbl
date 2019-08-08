@@ -4,9 +4,7 @@
 #include <sstream>
 #include <iostream>
 
-using namespace std;
-
-int setupCommunicator(MPI_Comm argComm, 
+void setupCommunicator(MPI_Comm argComm,
                       int teamSize,
                       int clusterSize,
                       int hubsDontWorkSize){
@@ -17,7 +15,7 @@ int setupCommunicator(MPI_Comm argComm,
 	int worldRank, worldSize, errorCode;
   MPI_Comm_rank(argComm, &worldRank);
   MPI_Comm_size(argComm, &worldSize);
-	
+
 	// calculate the desired size of a cluster including bounding processors
 	bool hubsWork = hubsDontWorkSize > clusterSize;
 
@@ -30,13 +28,13 @@ int setupCommunicator(MPI_Comm argComm,
 
 //	worldCluster.reset(worldRank, worldSize, fullClusterSize, clustersWanted, forceSeparateSize);
 // Copied math from the cluster object
-  int typicalSize = (int) std::ceil(((double) worldSize)/std::max(clustersWanted,1));
+  int typicalSize = (int) ceil(((double) worldSize)/std::max(clustersWanted,1));
   if (typicalSize > fullClusterSize)
     typicalSize = fullClusterSize;
   if (typicalSize < 1)
     typicalSize = 1;
 
-  int numClusters = (int) std::ceil(((double) worldSize)/typicalSize);
+  int numClusters = (int) ceil(((double) worldSize)/typicalSize);
 
   int clusterNumber   = worldRank/typicalSize;
   int leader          = clusterNumber*typicalSize;
@@ -162,11 +160,12 @@ int setupCommunicator(MPI_Comm argComm,
   }
   MPI_Barrier(MPI_COMM_WORLD);
 
+
   // printouts for debugging
   std::stringstream stream;
   stream << worldRank << " " << headRank << " " << boundRank << 
 	  " " << iAmFollower << " " << iAmLeader << std::endl;
-  std::cout << stream.str();
+//  std::cout << stream.str();
   for (int i = 0; i < worldSize; i++) {
     if (i == worldRank)
       std::cout << stream.str();
@@ -182,7 +181,7 @@ int main (int argc, char **argv)
 
   if (argc < 4)
   {
-    std::cout << "USAGE: hubsDontWorkSize clusterSize boundingGroupSize numClusters" << std::endl;
+    std::cout << "USAGE: hubsDontWorkSize clusterSize boundingGroupSize" << std::endl;
     return 1;
   }
   

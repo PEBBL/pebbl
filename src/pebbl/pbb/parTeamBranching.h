@@ -28,7 +28,7 @@ enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode};
       
       // Splits a world comm into team comms and a search comm according to the parameters passed to pebbl
       // returns 0 on success, or an errorcode if an mpi call fails
-      int splitCommunicator(mpiComm worldComm, int teamSize, int clusterSize, int hubsDontWorkSize, mpiComm *search, mpiComm *team);
+      void splitCommunicator(mpiComm worldComm, int teamSize, int clusterSize, int hubsDontWorkSize, mpiComm *search, mpiComm *team);
 
       // Overrides the search function of parBranching
       virtual double search(); 
@@ -150,6 +150,9 @@ int driver(int argc, char **argv)
         break;
       case parallelTeamMode:
         runParallel<PTB>(argc, argv);
+        break;
+      case serialMode:
+        // Already handled above. This case will never be reached.
         break;
     }
 

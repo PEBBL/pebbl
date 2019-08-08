@@ -30,7 +30,7 @@ namespace pebbl {
 // Method used to properly allocate processors into teams, taking into account
 // differences between working and non working hubs
 // returns 0 on success, or an errorcode if an mpi call fails
-int parallelTeamBranching::splitCommunicator(mpiComm argComm, 
+void parallelTeamBranching::splitCommunicator(mpiComm argComm,
                                               int teamSize,
                                               int clusterSize,
                                               int hubsDontWorkSize,

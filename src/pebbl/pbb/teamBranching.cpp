@@ -53,7 +53,7 @@ void teamBranching::awaitWork() {
 
 bool teamBranching::setup(int& argc, char**& argv, mpiComm teamComm) {
   this->teamComm = teamComm;
-  branching::setup(argc, argv);
+  return branching::setup(argc, argv);
 }
 
 double teamBranching::search() {
