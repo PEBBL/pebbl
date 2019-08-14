@@ -6,7 +6,6 @@
 
 
 #include <pebbl/comm/mpiComm.h>
-
  
 #ifndef pebbl_teamBranching_h
 #define pebbl_teamBranching_h
@@ -117,6 +116,7 @@ namespace pebbl {
       bool alertExit() {
         return alertTeam(exitOp);
       }
+
 
       // Overrides the search function of branching in order to send the minion processors
       // into the waiting for work loop.

@@ -45,6 +45,15 @@ enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode};
         splitCommunicator(passedComm, teamSize, clusterSize, hubsDontWorkSize, &searchComm, &teamComm);
       }
 
+      void printConfiguration(std::ostream& stream){
+        parallelBranching::printConfiguration(stream);
+        if (iDoSearchIO){
+          CommonIO::end_tagging();
+          stream << "Searching using teams of size: " << teamSize << ".\n\n";
+          CommonIO::begin_tagging();
+        }
+      }
+
       parallelTeamBranching(MPI_Comm _comm) :
         parallelBranching(_comm)
       {
