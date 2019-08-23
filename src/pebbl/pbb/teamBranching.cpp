@@ -7,6 +7,7 @@
 #include <pebbl_config.h>
 
 #include <pebbl/bb/branching.h>
+#include <pebbl/pbb/parPebblParams.h>
 #include <pebbl/pbb/teamBranching.h>
 #include <pebbl/utilib/exception_mngr.h>
 
@@ -51,9 +52,36 @@ void teamBranching::awaitWork() {
   }
 }
 
-bool teamBranching::setup(int& argc, char**& argv, mpiComm teamComm) {
-  this->teamComm = teamComm;
-  return branching::setup(argc, argv);
+bool teamBranching::setup(int& argc, char**& argv) {
+  // This is the branching::setup code with printout disabled for minion processors
+  resetTimers();
+
+  if (!processParameters(argc,argv,min_num_required_args))
+    return false;
+  if (iAmHead()) {
+    if (plist.size() == 0) {
+      ucout << "Using default values for all solver options" << std::endl;
+    }
+    else {
+      ucout << "User-specified solver options: " << std::endl;
+      plist.write_parameters(ucout);
+      ucout << std::endl;
+    }
+  }
+  set_parameters(plist,false);
+  if ((argc > 0) && !checkParameters(argv[0]))
+    return false;
+  if (!setupProblem(argc,argv))
+    return false;
+  if (plist.unused() > 0) {
+    if (iAmHead()) {
+      ucout << "\nERROR: unused parameters: " << std::endl;
+      plist.write_unused_parameters(ucout);
+      ucout << utilib::Flush;
+    }
+    return false;
+  }
+  return true;
 }
 
 double teamBranching::search() {

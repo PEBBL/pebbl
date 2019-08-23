@@ -21,11 +21,15 @@ enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode};
 
 // Class that will implement methods used by the application for
 // parallel search with computation
-  class parallelTeamBranching : public virtual teamBranching,
-                                public virtual parallelBranching
+  class parallelTeamBranching : virtual public teamBranching,
+                                virtual public parallelBranching
   {
     public:
       
+      bool setup(int& argc, char**& argv){
+        return parallelBranching::setup(argc, argv);
+      }
+
       // Splits a world comm into team comms and a search comm according to the parameters passed to pebbl
       // returns 0 on success, or an errorcode if an mpi call fails
       void splitCommunicator(mpiComm worldComm, int teamSize, int clusterSize, int hubsDontWorkSize, mpiComm *search, mpiComm *team);
@@ -45,13 +49,49 @@ enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode};
         splitCommunicator(passedComm, teamSize, clusterSize, hubsDontWorkSize, &searchComm, &teamComm);
       }
 
-      void printConfiguration(std::ostream& stream){
+      // Override the reset method as minion processors cannot reset
+      void reset(bool VBFlag=true) {
+        if (iAmHead()) {
+          parallelBranching::reset(VBFlag);
+        }
+        else {
+          branching::reset(VBFlag);
+        }
+      }
+
+      // Override the solutionToFile method as only search processors participate
+      virtual void solutionToFile() {
+        if (iAmHead()) {
+          parallelBranching::solutionToFile();
+        }
+      }
+
+      // Override the printSPStatistics method as only search processors participate
+      virtual void printSPStatistics() {
+        if (iAmHead()) {
+          parallelBranching::printSPStatistics();
+        }
+      }
+
+      void printConfiguration(std::ostream& stream = ucout){
         parallelBranching::printConfiguration(stream);
         if (iDoSearchIO){
           CommonIO::end_tagging();
           stream << "Searching using teams of size: " << teamSize << ".\n\n";
           CommonIO::begin_tagging();
         }
+      }
+
+      
+      // Disambiguate printing methods shared by parallelBranching and teamBranching
+      virtual void printSolValue(std::ostream& stream){
+        parallelBranching::printSolValue(stream);
+      }
+
+      virtual void printSolution(const char* header,
+				      const char* footer,
+				      std::ostream& outStream){
+        parallelBranching::printSolution(header, footer, outStream);
       }
 
       parallelTeamBranching(MPI_Comm _comm) :

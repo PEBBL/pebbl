@@ -17,7 +17,8 @@ namespace pebbl {
 
 // Class that will implement methods used by the application for
 // parallel computation
-  class teamBranching : public virtual branching 
+  class teamBranching : virtual public branching,
+                        virtual public parallelPebblParams
   {
     protected: 
 
@@ -94,8 +95,8 @@ namespace pebbl {
         return 0;
       }
 
-      // Sets teamComm to the passed in commuicator before calling the setup() for branching
-      bool setup(int& argc, char**& argv, mpiComm teamComm = MPI_COMM_WORLD);
+      // Overrides branching::setup to only print from the head processor
+      bool setup(int& argc, char**& argv);
 
       // Wrapper for alertTeam(boundOp)
       bool alertBound() {
@@ -117,6 +118,35 @@ namespace pebbl {
         return alertTeam(exitOp);
       }
 
+      void printConfiguration(std::ostream& stream = ucout){
+        if(iAmHead()){
+          CommonIO::end_tagging();
+          stream << "Searching with a team of size: " << teamComm.mySize() << "\n\n";
+          CommonIO::begin_tagging();
+        }
+      }
+
+      // Override the following printout functions to prevent minion processors
+      // from attempting to print at the end of the search
+      virtual void printSolValue(std::ostream& stream){
+        if(iAmHead()){
+          branching::printSolValue(stream);
+        }
+      }
+
+      virtual void printSolution(const char* header,
+				      const char* footer,
+				      std::ostream& outStream){
+        if(iAmHead()){
+          branching::printSolution(header, footer, outStream);
+        }
+      }
+
+      virtual void printAllStatistics(std::ostream& stream = std::cout){
+        if(iAmHead()){
+          branching::printAllStatistics(stream);
+        }
+      }
 
       // Overrides the search function of branching in order to send the minion processors
       // into the waiting for work loop.

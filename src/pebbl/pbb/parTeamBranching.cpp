@@ -100,8 +100,9 @@ void parallelTeamBranching::splitCommunicator(mpiComm argComm,
   // Determine which processesors are part of the search
   int teamGroupRank = -1;
   if(teamGroup != MPI_GROUP_NULL){
-    teamGroupRank = MPI_Group_rank(teamGroup, &teamGroupRank);
+    MPI_Group_rank(teamGroup, &teamGroupRank);
   }
+
 
   // create group for the search communicator
   MPI_Group searchGroup = MPI_GROUP_NULL;
@@ -138,14 +139,20 @@ void parallelTeamBranching::splitCommunicator(mpiComm argComm,
   MPI_Comm teamComm = MPI_COMM_NULL;
   if(teamGroup != MPI_GROUP_NULL){
     MPI_Comm_create_group(argComm.myComm(), teamGroup, 0, &teamComm);
+    *team = mpiComm(teamComm);
   }
-  *team = mpiComm(teamComm);
+  else {
+    *team = mpiComm();
+  }
 
   MPI_Comm searchComm = MPI_COMM_NULL;
-  if(teamGroup != MPI_GROUP_NULL){
+  if(searchGroup != MPI_GROUP_NULL){
     MPI_Comm_create_group(argComm.myComm(), searchGroup, 0, &searchComm);
+    *search = mpiComm(searchComm);
   }
-  *search = mpiComm(searchComm);
+  else {
+    *search = mpiComm();
+  }
 }
 
 double parallelTeamBranching::search(){

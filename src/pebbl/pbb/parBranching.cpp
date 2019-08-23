@@ -738,7 +738,8 @@ void parallelBranching::solve()
   double run_start = CPUSeconds();
   double run_WC_start = WallClockSeconds();
 
-  parallelBranching::search();
+//  parallelBranching::search();
+  search();
 
   searchTime = CPUSeconds() - run_start;
   searchWCTime = WallClockSeconds() - run_WC_start;
@@ -751,9 +752,10 @@ void parallelBranching::solve()
   if (printFullSolution)
     parallelBranching::printSolution("","\n",ucout);
 
-  parallelBranching::solutionToFile();
+//  parallelBranching::solutionToFile();
+  solutionToFile();
 
-  parallelBranching::printAllStatistics();
+  printAllStatistics();
   ucout << endl;
 
   // Further use of this object might not require a broadcast
@@ -1180,7 +1182,8 @@ bool parallelBranching::setup(int& argc, char**& argv)
 
   // Broadcast the read-in success flag to everbody
 
-  passedComm.broadcast(&flag,1,MPI_INT,mySearchIoProc);
+  passedComm.broadcast(&flag,1,MPI_INT,passedComm.myIoProc());
+
 
   // If things worked, broadcast the problem to everybody
 
@@ -1207,32 +1210,32 @@ void parallelBranching::broadcastProblem()
       packAll(outBuf);
       int probSize = outBuf.size();        // Figure out length.
       DEBUGPR(70,ucout << "Broadcast size is " << probSize << " bytes.\n");
-      searchComm.broadcast(&probSize,          // Broadcast length.
+      passedComm.broadcast(&probSize,          // Broadcast length.
 		           1,
 		           MPI_INT,
-		           mySearchIoProc);
-      searchComm.broadcast((void*) outBuf.buf(), // Now broadcast buffer itself.
+		           passedComm.myIoProc());
+      passedComm.broadcast((void*) outBuf.buf(), // Now broadcast buffer itself.
 		           probSize,
 		           MPI_PACKED,
-		           mySearchIoProc);
+		           passedComm.myIoProc());
     }
 
   else   // On the other processors, we receive the same information...
 
     {
       int probSize;                          // Get length of buffer
-      searchComm.broadcast(&probSize,        // we're going to get.
+      passedComm.broadcast(&probSize,        // we're going to get.
 		           1,
 		           MPI_INT,
-		           mySearchIoProc);
+		           passedComm.myIoProc());
       DEBUGPR(70,ucout << "Received broadcast size is " << probSize << 
 	      " bytes.\n");
       UnPackBuffer inBuf(probSize);               // Create a big enough
       inBuf.reset(probSize);                      // temporary buffer.
-      searchComm.broadcast((void *) inBuf.buf(),  // Get the data...
+      passedComm.broadcast((void *) inBuf.buf(),  // Get the data...
 		           probSize,
 		           MPI_PACKED,
-		           mySearchIoProc);
+		           passedComm.myIoProc());
       DEBUGPR(100,ucout << "Broadcast received.\n");
       unpackAll(inBuf);                      // ... and unpack it.
       DEBUGPR(100,ucout << "Unpack seems successful.\n");
