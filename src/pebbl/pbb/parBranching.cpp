@@ -738,7 +738,6 @@ void parallelBranching::solve()
   double run_start = CPUSeconds();
   double run_WC_start = WallClockSeconds();
 
-//  parallelBranching::search();
   search();
 
   searchTime = CPUSeconds() - run_start;
@@ -752,7 +751,6 @@ void parallelBranching::solve()
   if (printFullSolution)
     parallelBranching::printSolution("","\n",ucout);
 
-//  parallelBranching::solutionToFile();
   solutionToFile();
 
   printAllStatistics();

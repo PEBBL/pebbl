@@ -1,9 +1,0 @@
-
-Compile setup.cpp with:
-
-mpicc -o split setup.cpp -lm -lstdc++
-
-
-Then run setup.py as follows:
-
-./setup.py numProcs teamSize clusterSize hubsDontWorkSize
