@@ -145,6 +145,9 @@ public:
   ///
   int printSpTimes;
 
+  ///
+  bool forceTeam;
+
 };
 
 } // namespace pebbl
