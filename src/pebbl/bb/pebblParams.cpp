@@ -32,6 +32,7 @@ extern size_t randomSeed;
 pebblParams::pebblParams()
   : statusPrintCount(100000),
     statusPrintSeconds(10.0),
+		forceTeam(false),
     depthFirst(false),
     breadthFirst(false),
     initialDive(false),
@@ -184,6 +185,10 @@ pebblParams::pebblParams()
 		"Debugging",
 		ParameterNonnegative<double>());
 
+	create_categorized_parameter("forceTeam",forceTeam,
+	  "<bool>","false",
+		"Force the use of teamwork on subproblems for debugging",
+		"Debugging");
 
 /// SEARCH
 
