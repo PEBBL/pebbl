@@ -6,7 +6,6 @@
 
 
 #include <pebbl/comm/mpiComm.h>
-
  
 #ifndef pebbl_teamBranching_h
 #define pebbl_teamBranching_h
@@ -18,7 +17,8 @@ namespace pebbl {
 
 // Class that will implement methods used by the application for
 // parallel computation
-  class teamBranching : public virtual branching 
+  class teamBranching : virtual public branching,
+                        virtual public parallelPebblParams
   {
     protected: 
 
@@ -31,12 +31,21 @@ namespace pebbl {
       enum parallelOp { boundOp, separateOp, makeChildOp, exitOp };
 
       // Sets teamComm and calls teamOrganize
-      void setTeam(mpiComm comm);
+      void setTeam(mpiComm comm) {
+        teamComm = comm;
+        teamOrganize();
+      }
 
       // If this processor is the head of a team, alertTeam will send an MPI broadcast
       // to all processors in the team containing the op that needs to be performed.
       // Does nothing if the processor is not a head.
-      bool alertTeam(parallelOp op);
+      bool alertTeam(parallelOp op) {
+        if(!iAmHead()){
+          return false;
+        }
+        teamComm.broadcast(&op, 1, MPI_INT, teamComm.myRank());
+        return true;
+      }
 
       // Method called by minion processors in the search method. Processors in await work
       // will wait to be notified by the head before entering the correct parallel method.
@@ -71,30 +80,74 @@ namespace pebbl {
       }
 
       // True if this processor is the head of a team
-      bool iAmHead();
+      bool iAmHead() {
+        return teamComm.myRank() == getHeadRank();
+      }
 
       // True if this processor is a minion in a team
-      bool iAmMinion();
+      bool iAmMinion() {
+        return !iAmHead();
+      }
 
       // Returns the rank of this team's head
       // Currently this is always 0
-      int getHeadRank();
+      int getHeadRank() {
+        return 0;
+      }
 
-      // Sets teamComm to the passed in commuicator before calling the setup() for branching
-      bool setup(int& argc, char**& argv, mpiComm teamComm = MPI_COMM_WORLD);
+      // Overrides branching::setup to only print from the head processor
+      bool setup(int& argc, char**& argv);
 
       // Wrapper for alertTeam(boundOp)
-      bool alertBound();
+      bool alertBound() {
+        return alertTeam(boundOp);
+      }
 
       // Wrapper for alertTeam(separateOp)
-      bool alertSeparate();
+      bool alertSeparate() {
+        return alertTeam(separateOp);
+      }
 
       // Wrapper for alertTeam(makeChildOp)
-      bool alertMakeChild();
+      bool alertMakeChild() {
+        return alertTeam(makeChildOp);
+      }
 
       // Wrapper for alertTeam(exitOp)
-      bool alertExit();
-      
+      bool alertExit() {
+        return alertTeam(exitOp);
+      }
+
+      void printConfiguration(std::ostream& stream = ucout){
+        if(iAmHead()){
+          CommonIO::end_tagging();
+          stream << "Searching with a team of size: " << teamComm.mySize() << "\n\n";
+          CommonIO::begin_tagging();
+        }
+      }
+
+      // Override the following printout functions to prevent minion processors
+      // from attempting to print at the end of the search
+      virtual void printSolValue(std::ostream& stream){
+        if(iAmHead()){
+          branching::printSolValue(stream);
+        }
+      }
+
+      virtual void printSolution(const char* header,
+				      const char* footer,
+				      std::ostream& outStream){
+        if(iAmHead()){
+          branching::printSolution(header, footer, outStream);
+        }
+      }
+
+      virtual void printAllStatistics(std::ostream& stream = std::cout){
+        if(iAmHead()){
+          branching::printAllStatistics(stream);
+        }
+      }
+
       // Overrides the search function of branching in order to send the minion processors
       // into the waiting for work loop.
       virtual double search();

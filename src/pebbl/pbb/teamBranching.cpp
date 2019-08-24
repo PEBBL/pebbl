@@ -7,6 +7,7 @@
 #include <pebbl_config.h>
 
 #include <pebbl/bb/branching.h>
+#include <pebbl/pbb/parPebblParams.h>
 #include <pebbl/pbb/teamBranching.h>
 #include <pebbl/utilib/exception_mngr.h>
 
@@ -25,18 +26,6 @@ using namespace std;
 
 namespace pebbl {
 
-void teamBranching::setTeam(mpiComm comm) {
-  teamComm = comm;
-  teamOrganize();
-}
-
-bool teamBranching::alertTeam(parallelOp op) {
-  if(!iAmHead()){
-    return false;
-  }
-  teamComm.broadcast(&op, 1, MPI_INT, teamComm.myRank());
-  return true;
-}
 
 void teamBranching::awaitWork() {
   parallelOp opCode;
@@ -63,38 +52,36 @@ void teamBranching::awaitWork() {
   }
 }
 
-bool teamBranching::iAmHead() {
-  return teamComm.myRank() == getHeadRank();
-}
+bool teamBranching::setup(int& argc, char**& argv) {
+  // This is the branching::setup code with printout disabled for minion processors
+  resetTimers();
 
-bool teamBranching::iAmMinion() {
-  return !iAmHead();
-}
-
-int teamBranching::getHeadRank() {
-  return 0;
-}
-
-bool teamBranching::setup(int& argc, char**& argv, mpiComm teamComm) {
-  this->teamComm = teamComm;
-  branching::setup(argc, argv);
-}
-
-
-bool teamBranching::alertBound() {
-  return alertTeam(boundOp);
-}
-
-bool teamBranching::alertSeparate() {
-  return alertTeam(separateOp);
-}
-
-bool teamBranching::alertMakeChild() {
-  return alertTeam(makeChildOp);
-}
-
-bool teamBranching::alertExit() {
-  return alertTeam(exitOp);
+  if (!processParameters(argc,argv,min_num_required_args))
+    return false;
+  if (iAmHead()) {
+    if (plist.size() == 0) {
+      ucout << "Using default values for all solver options" << std::endl;
+    }
+    else {
+      ucout << "User-specified solver options: " << std::endl;
+      plist.write_parameters(ucout);
+      ucout << std::endl;
+    }
+  }
+  set_parameters(plist,false);
+  if ((argc > 0) && !checkParameters(argv[0]))
+    return false;
+  if (!setupProblem(argc,argv))
+    return false;
+  if (plist.unused() > 0) {
+    if (iAmHead()) {
+      ucout << "\nERROR: unused parameters: " << std::endl;
+      plist.write_unused_parameters(ucout);
+      ucout << utilib::Flush;
+    }
+    return false;
+  }
+  return true;
 }
 
 double teamBranching::search() {

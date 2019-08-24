@@ -174,7 +174,7 @@ public:
 
   void printConfiguration(std::ostream& stream = ucout);
 
-  void printSPStatistics(std::ostream& stream = ucout);
+  virtual void printSPStatistics(std::ostream& stream = ucout);
   void printTimings(std::ostream& stream = ucout);
 
   // To do a parallel search.
@@ -277,7 +277,7 @@ public:
   // Puts solution in a file, but only on one processor
   // Replaces the version in branching::
 
-  void solutionToFile();
+  virtual void solutionToFile();
 
   // Parallel incumbent heuristic stuff.  By default, there is no
   // heuristic, but a virtual slot is provided for one.

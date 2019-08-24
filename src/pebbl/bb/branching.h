@@ -1696,6 +1696,12 @@ template <class B,class PB> int driver(int argc, char** argv)
   return driver<B>(argc,argv);
 }
 
+template<class B, class PB, class TB, class PTB>
+int driver(int argc, char **argv)
+{
+  return driver<B>(argc,argv);
+}
+
 #endif
 
 

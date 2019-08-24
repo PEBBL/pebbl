@@ -11,6 +11,7 @@
 
 #include <pebbl_config.h>
 #include <pebbl/example/parKnapsack.h>
+#include <pebbl/pbb/parTeamBranching.h>
 
 using namespace pebbl;
 using namespace std;
@@ -26,18 +27,7 @@ typedef void parallelBinaryKnapsack;
 typedef parallelBinaryKnapsack parallelTeamBinaryKnapsack;
 typedef parallelBinaryKnapsack teamBinaryKnapsack;
 
-/*
 int main(int argc, char* argv[])
 {
-  return driver<binaryKnapsack,parallelBinaryKnapsack>(argc, argv);
-}
-*/
-
-int main(int argc, char* argv[])
-{
-#ifdef ACRO_HAVE_MPI
-  return driver<binaryKnapsack, parallelBinaryKnapsack, teamBinaryKnapsack, parallelTeamBinaryKnapsack>(argc, argv, MPI_COMM_WORLD);
-#else
-  return driver<binaryKnapsack, parallelBinaryKnapsack, teamBinaryKnapsack, parallelTeamBinaryKnapsack>(argc, argv, 0);
-#endif
+  return driver<binaryKnapsack, parallelBinaryKnapsack, teamBinaryKnapsack, parallelTeamBinaryKnapsack>(argc, argv);
 }

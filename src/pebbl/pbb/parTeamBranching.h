@@ -21,19 +21,18 @@ enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode};
 
 // Class that will implement methods used by the application for
 // parallel search with computation
-  class parallelTeamBranching : public virtual teamBranching,
-                                public virtual parallelBranching
+  class parallelTeamBranching : virtual public teamBranching,
+                                virtual public parallelBranching
   {
-    protected:
-
-      // Communicator to hold the teamComm during operations like ramp up
-      mpiComm backupComm; 
-
     public:
       
+      bool setup(int& argc, char**& argv){
+        return parallelBranching::setup(argc, argv);
+      }
+
       // Splits a world comm into team comms and a search comm according to the parameters passed to pebbl
       // returns 0 on success, or an errorcode if an mpi call fails
-      int splitCommunicator(mpiComm worldComm, int teamSize, int clusterSize, int hubsDontWorkSize, mpiComm *search, mpiComm *team);
+      void splitCommunicator(mpiComm worldComm, int teamSize, int clusterSize, int hubsDontWorkSize, mpiComm *search, mpiComm *team);
 
       // Overrides the search function of parBranching
       virtual double search(); 
@@ -43,19 +42,67 @@ enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode};
 
       // Override the setupSeachComm method called in parallelBranching::setup()
       // to now split the communicators and initialize the searchComm and the boundComm
-      void setupSearchComm();
+      void setupSearchComm(){
+        // Free communicators we make in case setup is called more than once
+        searchComm.free();
+        teamComm.free();
+        splitCommunicator(passedComm, teamSize, clusterSize, hubsDontWorkSize, &searchComm, &teamComm);
+      }
+
+      // Override the reset method as minion processors cannot reset
+      void reset(bool VBFlag=true) {
+        if (iAmHead()) {
+          parallelBranching::reset(VBFlag);
+        }
+        else {
+          branching::reset(VBFlag);
+        }
+      }
+
+      // Override the solutionToFile method as only search processors participate
+      virtual void solutionToFile() {
+        if (iAmHead()) {
+          parallelBranching::solutionToFile();
+        }
+      }
+
+      // Override the printSPStatistics method as only search processors participate
+      virtual void printSPStatistics() {
+        if (iAmHead()) {
+          parallelBranching::printSPStatistics();
+        }
+      }
+
+      void printConfiguration(std::ostream& stream = ucout){
+        parallelBranching::printConfiguration(stream);
+        if (iDoSearchIO){
+          CommonIO::end_tagging();
+          stream << "Searching using teams of size: " << teamSize << ".\n\n";
+          CommonIO::begin_tagging();
+        }
+      }
+
+      
+      // Disambiguate printing methods shared by parallelBranching and teamBranching
+      virtual void printSolValue(std::ostream& stream){
+        parallelBranching::printSolValue(stream);
+      }
+
+      virtual void printSolution(const char* header,
+				      const char* footer,
+				      std::ostream& outStream){
+        parallelBranching::printSolution(header, footer, outStream);
+      }
 
       parallelTeamBranching(MPI_Comm _comm) :
-        parallelBranching(_comm),
-        backupComm()
+        parallelBranching(_comm)
       {
       }
 
       ~parallelTeamBranching(){
         // Free the communicators we create in split communicator
         searchComm.free();
-        // backupComm is garunteed to be the second communicator we create in splitCommunicator
-        backupComm.free();
+        teamComm.free();
       }
   };
 
@@ -108,7 +155,7 @@ parallel_exec_test(int argc, char **argv, int nproc)
     return parallelTeamMode;
 }
 
-template <class B> bool runParallel(int argc,char** argv, MPI_Comm comm)
+template <class B> bool runParallel(int argc,char** argv, MPI_Comm comm=MPI_COMM_WORLD)
 {
   B instance(comm);
   utilib::exception_mngr::set_stack_trace(false);
@@ -124,12 +171,12 @@ template <class B> bool runParallel(int argc,char** argv, MPI_Comm comm)
 }
 
 template<class B, class PB, class TB, class PTB>
-int driver(int argc, char **argv, MPI_Comm comm)
+int driver(int argc, char **argv)
 {
   bool flag = true;
 
   try {
-    uMPI::init(&argc, &argv, comm);
+    uMPI::init(&argc, &argv, MPI_COMM_WORLD);
     int nproc = uMPI::size;
 
     PEBBL_mode mode = parallel_exec_test(argc, argv, nproc);
@@ -145,17 +192,17 @@ int driver(int argc, char **argv, MPI_Comm comm)
 
     switch(mode) {
       case parallelMode:
-        runParallel<PB>(argc, argv, comm);
+        runParallel<PB>(argc, argv);
         break;
       case teamMode:
-        runParallel<TB>(argc, argv, comm);
+        runParallel<TB>(argc, argv);
         break;
       case parallelTeamMode:
-        runParallel<PTB>(argc, argv, comm);
+        runParallel<PTB>(argc, argv);
         break;
-      default:
-        // scream
-	break;
+      case serialMode:
+        // Already handled above. This case will never be reached.
+        break;
     }
 
     CommonIO::end();
