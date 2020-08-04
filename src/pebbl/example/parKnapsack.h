@@ -64,7 +64,7 @@ private:
 
 class parBinKnapSub;                  // Forward reference
 
-class parallelBinaryKnapsack : public parallelBranching, public binaryKnapsack
+class parallelBinaryKnapsack : public virtual parallelBranching, public virtual binaryKnapsack
 {
 protected:
 
