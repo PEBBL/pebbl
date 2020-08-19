@@ -323,8 +323,8 @@ namespace pebblMonom {
 
     void possibleSwap(size_type i1,size_type i2)
     {
-      register double roundedBound1 = branch[i1].roundedBound;
-      register double roundedBound2 = branch[i2].roundedBound;
+      double roundedBound1 = branch[i1].roundedBound;
+      double roundedBound2 = branch[i2].roundedBound;
       if (roundedBound1 < roundedBound2)
 	{
 	  branchItem tempItem(branch[i1]);
@@ -606,7 +606,7 @@ namespace pebblMonom {
     size_type highestIdx() const {return _monom.highestIdx();}
 
 #ifdef ACRO_HAVE_MPI
-    void packContents(PackBuffer & outBuf);
+    void packContents(PackBuffer & outBuf) const;
 
     void unpackContents(UnPackBuffer & inBuf);
 
@@ -669,7 +669,7 @@ namespace pebblMonom {
 
     // JE added suppliedBound argument for a case that arises when the
     // bound of the child is already known and we don't want to waste
-    // time recomputing it.  The value -1.0 means that the bound is
+    // time recomputing it.  The value -2.0 means that the bound is
     // unknown and has to be computed.
 
     virtual void maxMonomSubAsChildOf(maxMonomSub* parent,
@@ -835,13 +835,13 @@ namespace pebblMonom {
   public:
   maxMonomSubKWay() : maxMonomSub() {};
     void boundComputation(double* controlParam);
-    void maxMonomSubAsChildOf(maxMonomSubKWay* parent,
-			      int whichChild, 
-			      const vector<size_type> & outOfMonomList, 
-			      double insepWt);
-    void maxMonomSubAsChildOf(maxMonomSubKWay* parent, 
-			      const vector<size_type> & outOfMonomList, 
-			      double insepWt);
+    void mmkWaySubAsChildOf(maxMonomSubKWay* parent,
+			    int whichChild, 
+			    const vector<size_type> & outOfMonomList, 
+			    double insepWt);
+    void mmkWaySubAsChildOf(maxMonomSubKWay* parent, 
+			    const vector<size_type> & outOfMonomList, 
+			    double insepWt);
     void maxMonomSubFromData(maxMonomialData* master);
   };
 

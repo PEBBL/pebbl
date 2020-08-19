@@ -32,7 +32,7 @@ typedef unsigned long int  ub4;
 /// unsigned 1-byte quantities 
 typedef unsigned      char ub1;
 /// The Bob Jenkins hash function
-ub4 bjlookup( register ub1* k, register ub4 length, register ub4 level);
+ub4 bjlookup(ub1* k, ub4 length, ub4 level);
 
 /// Hash a long int
 inline unsigned long int hash_bj(const long int& val, unsigned long int level=0)

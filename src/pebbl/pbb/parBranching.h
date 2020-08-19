@@ -912,6 +912,11 @@ protected:
   void solForwardAction(UnPackBuffer& inBuf,int sender);
   void solAckAction(int sender);
 
+  // These two added in June 2019 to support compilation with clang
+  // Clang cannot do template-based packing of objects outside the utilib namespace
+  void packReposArray(BasicArray<solutionIdentifier>& array, PackBuffer& buffer);
+  void unpackReposArray(BasicArray<solutionIdentifier>& array, UnPackBuffer& buffer);
+
   void reposArraySend();
   void reposArrayMerge();
   void reposTreeRootAction();

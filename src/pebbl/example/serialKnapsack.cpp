@@ -666,13 +666,13 @@ void binKnapSolution::heuristic()
 {
   completeGreedy();
   if (value > global->incumbentValue) 
-    foundSolution(synchronous);
+    foundKnapsackSolution(synchronous);
   while(gRandom() <= global->randomSearchPersistence)
     {
       backTrack(chooseBackTrackItem());
       completeRandom();
       if (value > global->incumbentValue) 
-	foundSolution(notSynchronous);
+	foundKnapsackSolution(notSynchronous);
     }
   DEBUGPRX(210,global,"Heuristic: shared= " << genItem.shared_mem() << '\n');
 }
@@ -801,7 +801,7 @@ void binKnapSub::printMemDetails()
 
 #ifdef ACRO_HAVE_MPI
 
-void binKnapSolution::packContents(PackBuffer& outBuf)
+void binKnapSolution::packContents(PackBuffer& outBuf) const
 {
   outBuf << initialSequence;
   outBuf << genItems;

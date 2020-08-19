@@ -370,8 +370,8 @@ AbstractHeap<T,KEY,Compare>::~AbstractHeap()
 template <class T, class KEY, class Compare>
 void AbstractHeap<T,KEY,Compare>::swap(int a,int b) 
 {
-register T* t1 = tree[a];
-register T* t2 = tree[b];
+T* t1 = tree[a];
+T* t2 = tree[b];
 tree[a] = t2;
 tree[b] = t1;
 element(t1)=b;

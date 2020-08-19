@@ -199,7 +199,7 @@ public binKnapBase, public solution
 
 #ifdef ACRO_HAVE_MPI
 
-  void packContents(PackBuffer& outBuf);
+  void packContents(PackBuffer& outBuf) const;
   void unpackContents(UnPackBuffer& inBuf);
   int  maxContentsBufSize();
 
@@ -237,7 +237,7 @@ public binKnapBase, public solution
 
   void copy(binKnapSolution* toCopy);
 
-  void foundSolution(syncType sync = notSynchronous);
+  void foundKnapsackSolution(syncType sync = notSynchronous);
 
   binKnapSolution(binaryKnapsack* global_);
 
@@ -356,7 +356,7 @@ inline CharString& binKnapSolution::itemName(int i)
   return global->item[i].name; 
 }
 
-inline void binKnapSolution::foundSolution(syncType sync) 
+inline void binKnapSolution::foundKnapsackSolution(syncType sync) 
 { 
   global->foundSolution(new binKnapSolution(this),sync); 
 }
@@ -428,9 +428,9 @@ public:
   
   bool candidateSolution() { return (splitItem == terminal); };
 
-  void foundSolution(syncType sync = notSynchronous) 
+  void foundKnapsackSolution(syncType sync = notSynchronous) 
     { 
-      workingSol()->foundSolution(sync); 
+      workingSol()->foundKnapsackSolution(sync); 
     };
 
   void makeCurrentEffect();

@@ -2745,7 +2745,7 @@ void loadLogRecord::writeToStream(ostream& os,
 
 #ifdef ACRO_HAVE_MPI
 
-void solution::pack(PackBuffer& outBuf)
+void solution::pack(PackBuffer& outBuf) const
 {
   outBuf << typeId;
   solutionIdentifier::pack(outBuf);

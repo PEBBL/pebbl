@@ -29,6 +29,8 @@
 // the "right" thing.
 
 
+#include <cmath>
+
 #include <pebbl_config.h>
 #include <pebbl/utilib/math_basic.h>
 #include <pebbl/utilib/ParameterList.h>
@@ -320,9 +322,12 @@ void readLog::execute(int argc,char** argv)
       while(!log.eof())
 	{
 	  char verb[256];
-	  double bound, branchValue;
-	  int nChildren, branchVariable;
-	  int branch_tmp, depth;
+	  double bound       = nan("");   // Initializations to make clang happy
+          double branchValue = nan("");
+	  int nChildren      = -1; 
+          int branchVariable = -1;
+	  int branch_tmp     = -1;
+          int depth          = -1;
 
 #if defined(NO_STRING_STREAM)
 	  char line[2048];

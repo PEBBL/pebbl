@@ -18,10 +18,14 @@
 #ifndef utilib_BasicArray_h
 #define utilib_BasicArray_h
 
+
 #include <pebbl_config.h>
 #include <pebbl/utilib/std_headers.h>
 #include <pebbl/utilib/ArrayBase.h>
 #include <pebbl/utilib/Any.h>
+#include <pebbl/utilib/PackBuf.h>
+
+
 
 namespace utilib {
 
@@ -29,9 +33,9 @@ template <class T>
 class BasicArray;
 
 
-#ifdef UTILIB_HAVE_NAMESPACES
-using std::min;
-#endif
+  #ifdef UTILIB_HAVE_NAMESPACES
+  using std::min;
+  #endif
 
 
  /// An iterator base class that defines data types used to 
