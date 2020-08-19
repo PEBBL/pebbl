@@ -290,9 +290,10 @@ return os;
 template <class TYPE>
 std::istream& operator>>(std::istream& is, std::vector<TYPE>& vec)
 {
+   EXCEPTION_TEST( !is, std::runtime_error, 
+                   "operator>> - cannot read vector size from istream");
    size_t tmp;
    is >> tmp;
-   EXCEPTION_TEST( !is, std::runtime_error, "operator>> - istream problem.");
 
    vec.resize(tmp);
    if (vec.size() > 0) {
@@ -302,7 +303,7 @@ std::istream& operator>>(std::istream& is, std::vector<TYPE>& vec)
       typename std::vector<TYPE>::iterator last = vec.end();
       while (curr != last) {
          EXCEPTION_TEST( !is, std::runtime_error, 
-                         "operator>> - istream problem.");
+                         "operator>> - cannot read vector element from istream");
          is >> *curr;
          ++curr;
       }
@@ -315,9 +316,10 @@ std::istream& operator>>(std::istream& is, std::vector<TYPE>& vec)
 template <class TYPE>
 utilib::UnPackBuffer& operator>>(utilib::UnPackBuffer& is, std::vector<TYPE>& vec)
 {
+   EXCEPTION_TEST( !is, std::runtime_error, 
+                   "operator>> - cannot read vector size from UnPackBuffer");
    size_t tmp;
    is >> tmp;
-   EXCEPTION_TEST( !is, std::runtime_error, "operator>> - unpack problem.");
 
    vec.resize(tmp);
    if (vec.size() > 0) {
@@ -325,7 +327,7 @@ utilib::UnPackBuffer& operator>>(utilib::UnPackBuffer& is, std::vector<TYPE>& ve
       typename std::vector<TYPE>::iterator last = vec.end();
       while (curr != last) {
          EXCEPTION_TEST( !is, std::runtime_error, 
-                         "operator>> - unpack problem.");
+                         "operator>> - cannot read vector element from UnPackBuffer");
          is >> *curr;
          ++curr;
       }
@@ -334,20 +336,21 @@ utilib::UnPackBuffer& operator>>(utilib::UnPackBuffer& is, std::vector<TYPE>& ve
 }
 
 
-/// Read a vector from an input stream
+/// Read a list from an input stream
 template <class TYPE>
 std::istream& operator>>(std::istream& is, std::list<TYPE>& vec)
 {
+   EXCEPTION_TEST( !is, std::runtime_error, 
+                   "operator>> - cannot read list size from istream");
    size_t tmp;
    is >> tmp;
-   EXCEPTION_TEST( !is, std::runtime_error, "operator>> - istream problem.");
 
    vec.clear();
       char c;
       is >> c;
       for (size_t i=0; i<tmp; i++) {
          EXCEPTION_TEST( !is, std::runtime_error, 
-                         "operator>> - istream problem.");
+                         "operator>> - cannot read list element from istream");
          TYPE item;
          is >> item;
          vec.push_back(item);
@@ -355,18 +358,19 @@ std::istream& operator>>(std::istream& is, std::list<TYPE>& vec)
    return is;
 }
 
-/// Read a vector from an UnPackBuffer
+/// Read a list from an UnPackBuffer
 template <class TYPE>
 utilib::UnPackBuffer& operator>>(utilib::UnPackBuffer& is, std::list<TYPE>& data)
 {
+   EXCEPTION_TEST( !is, std::runtime_error, 
+                   "operator>> - cannot read list size from UnPackBuffer");
    size_t tmp;
    is >> tmp;
-   EXCEPTION_TEST( !is, std::runtime_error, "operator>> - unpack problem.");
 
    data.clear();
    for (size_t i=0; i<tmp; i++) {
          EXCEPTION_TEST( !is, std::runtime_error, 
-                         "operator>> - unpack problem.");
+                         "operator>> - cannot read list element from UnPackBuffer");
          TYPE item;
          is >> item;
          data.push_back(item);
@@ -378,16 +382,17 @@ utilib::UnPackBuffer& operator>>(utilib::UnPackBuffer& is, std::list<TYPE>& data
 template <class TYPE>
 std::istream& operator>>(std::istream& is, std::set<TYPE>& vec)
 {
+   EXCEPTION_TEST( !is, std::runtime_error, 
+                  "operator>> - cannot read set size from istream");
    size_t tmp;
    is >> tmp;
-   EXCEPTION_TEST( !is, std::runtime_error, "operator>> - istream problem.");
 
    vec.clear();
    char c;
    is >> c;
    for (size_t i=0; i<tmp; i++) {
      EXCEPTION_TEST( !is, std::runtime_error, 
-                         "operator>> - istream problem.");
+                     "operator>> - cannot read set element from istream");
      TYPE item;
      is >> item;
      vec.insert(item);
@@ -399,14 +404,15 @@ std::istream& operator>>(std::istream& is, std::set<TYPE>& vec)
 template <class TYPE>
 utilib::UnPackBuffer& operator>>(utilib::UnPackBuffer& is, std::set<TYPE>& data)
 {
+   EXCEPTION_TEST( !is, std::runtime_error, 
+                   "operator>> - cannot read set size from UnPackBuffer");
    size_t tmp;
    is >> tmp;
-   EXCEPTION_TEST( !is, std::runtime_error, "operator>> - unpack problem.");
 
    data.clear();
    for (size_t i=0; i<tmp; i++) {
          EXCEPTION_TEST( !is, std::runtime_error, 
-                         "operator>> - unpack problem.");
+                         "operator>> - cannot read set element from UnPackBuffer");
          TYPE item;
          is >> item;
          data.insert(item);
@@ -418,16 +424,17 @@ utilib::UnPackBuffer& operator>>(utilib::UnPackBuffer& is, std::set<TYPE>& data)
 template <class KEY, class VALUE>
 std::istream& operator>>(std::istream& is, std::map<KEY,VALUE>& data)
 {
+   EXCEPTION_TEST( !is, std::runtime_error, 
+                   "operator>> - cannot read map size from istream");
    size_t tmp;
    is >> tmp;
-   EXCEPTION_TEST( !is, std::runtime_error, "operator>> - istream problem.");
 
    data.clear();
    char c;
    is >> c;
    for (size_t i=0; i<tmp; i++) {
      EXCEPTION_TEST( !is, std::runtime_error, 
-                         "operator>> - istream problem.");
+                         "operator>> - cannot read map element from istream");
      KEY item;
      is >> item;
      is >> data[item];
@@ -439,14 +446,15 @@ std::istream& operator>>(std::istream& is, std::map<KEY,VALUE>& data)
 template <class KEY, class VALUE>
 utilib::UnPackBuffer& operator>>(utilib::UnPackBuffer& is, std::map<KEY,VALUE>& data)
 {
+   EXCEPTION_TEST( !is, std::runtime_error, 
+                   "operator>> - cannot read map size from UnPackBuffer");
    size_t tmp;
    is >> tmp;
-   EXCEPTION_TEST( !is, std::runtime_error, "operator>> - unpack problem.");
 
    data.clear();
    for (size_t i=0; i<tmp; i++) {
       EXCEPTION_TEST( !is, std::runtime_error, 
-                         "operator>> - unpack problem.");
+                      "operator>> - cannot read map element from UnPackBuffer");
       KEY item;
       is >> item;
       is >> data[item];
