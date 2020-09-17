@@ -1116,7 +1116,7 @@ parallelBranchSub* parallelBranching::makeParRoot()
 
 bool parallelBranching::setup(int& argc, char**& argv)
 {
-  int flag = false;
+  bool flag = false;
 
   // The original communicator I/O processor reads the problem as in serial.
   // The others just initialize timers and set up parameters.
@@ -1180,15 +1180,14 @@ bool parallelBranching::setup(int& argc, char**& argv)
 
   // Broadcast the read-in success flag to everbody
 
-  passedComm.broadcast(&flag,1,MPI_INT,passedComm.myIoProc());
-
+  passedComm.broadcast(&flag,1,MPI_C_BOOL,passedComm.myIoProc());
 
   // If things worked, broadcast the problem to everybody
 
   if (flag)
     broadcastProblem();
 
-  return (bool) flag;
+  return flag;
 }
 
 
