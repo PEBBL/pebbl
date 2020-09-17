@@ -426,9 +426,23 @@ public:
     return (probCounter < minRampUpSubprobsCreated);
     }
 
-  // Clean up any data structures, etc, used only for ramp up
+  // For derived PEBBL core classes (that is, parallelTeamBranching) to get
+  // ready for ramp-up.  Defaults to being a stub.
 
-  virtual void rampUpCleanUp() {};
+  virtual void rampUpInternalSetup() { };
+
+  // For derived applications of any kind to get ready for ramp-up (also a stub by default)
+
+  virtual void rampUpSetup() { };
+
+  // For derived PEBBL core classes (that is, parallelTeamBranching) to clean up
+  // after setup.  Defaults to a stub.
+
+  virtual void rampUpInternalCleanUp() { };
+
+  // For applications to clean up after ramp-up.
+
+  virtual void rampUpCleanUp() { };
 
   // Clean abort and print some statistics after ramp-up.
 

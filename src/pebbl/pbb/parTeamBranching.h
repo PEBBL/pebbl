@@ -1,8 +1,9 @@
-// parTeamBranching.cpp
+// parTeamBranching.h
 //
-// Parallel search and computation class code for PEBBL.
+// Two-level parallel search and computation class code for PEBBL.
+// Designed to permit parallelism within subproblems and in the search.
 //
-// Will Loughlin and Rohith Rokkam
+// Will Loughlin and Rohith Rokkam, later work by Jonathan Eckstein
 
 #include <cstdlib>
 #include <pebbl/pbb/teamBranching.h>
@@ -32,13 +33,22 @@ enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode};
 
       // Splits a world comm into team comms and a search comm according to the parameters passed to pebbl
       // returns 0 on success, or an errorcode if an mpi call fails
-      void splitCommunicator(mpiComm worldComm, int teamSize, int clusterSize, int hubsDontWorkSize, mpiComm *search, mpiComm *team);
+      void splitCommunicator(mpiComm worldComm, int teamSize, 
+                             int clusterSize, int hubsDontWorkSize, 
+                             mpiComm *search, mpiComm *team);
 
       // Overrides the search function of parBranching
       virtual double search(); 
 
-      // Override ramp up search to use the global communicator during ramp up
-      void rampUpSearch();
+      // Override the minion dispatch function of teamBranching to recognize the
+      // "start of ramp-up" and "end of ramp-up" commands
+
+      bool minionDispatch(parallelOp opCode);
+
+      // Tweak the ramp-up search routine to issue those commands
+
+      void rampUpInternalSetup()   { alertTeam(rampUpStartOp); };
+      void rampUpInternalCleanUp() { alertTeam(rampUpEndOp);   };
 
       // Override the setupSeachComm method called in parallelBranching::setup()
       // to now split the communicators and initialize the searchComm and the boundComm
@@ -46,11 +56,15 @@ enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode};
         // Free communicators we make in case setup is called more than once
         searchComm.free();
         teamComm.free();
-        splitCommunicator(passedComm, teamSize, clusterSize, hubsDontWorkSize, &searchComm, &teamComm);
+        splitCommunicator(passedComm, teamSize, clusterSize, hubsDontWorkSize, 
+                          &searchComm, &teamComm);
       }
 
-      // Override the reset method as minion processors cannot reset
+      // Minions only do a serial-style reset, while heads do a parallel reset
+      // Will and Rohith set this up, hopefully it is OK
+      
       void reset(bool VBFlag=true) {
+        teamMessageCount = 0;
         if (iAmHead()) {
           parallelBranching::reset(VBFlag);
         }

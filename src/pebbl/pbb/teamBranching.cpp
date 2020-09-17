@@ -1,8 +1,10 @@
 // teamBranching.cpp
 //
-// Parallel computation class code for PEBBL.
+// Teams-only parallel computation class code for PEBBL.
+// Used when the only parallelism is within subproblems, and also as a base
+// class for two-way parallelism
 //
-// Will Loughlin and Rohith Rokkam
+// Will Loughlin and Rohith Rokkam; later modifications by Jonathan Eckstein
 
 #include <pebbl_config.h>
 
@@ -27,30 +29,42 @@ using namespace std;
 namespace pebbl {
 
 
+// Minions run this to receive commands from the heads and then act on them
+
 void teamBranching::awaitWork() {
   parallelOp opCode;
   bool done = false;
   while(!done){
     teamComm.broadcast(&opCode, 1, MPI_INT, getHeadRank());
-    switch(opCode) {
-      case boundOp: 
-        double controlParam;
-        minionBound();
-        break;
-      case separateOp:
-        minionSplit();
-        break;
-      case makeChildOp:
-        minionMakeChild();
-        break;
-      case exitOp:
-        done = true;
-        break;
-      default:
-        EXCEPTION_MNGR(std::runtime_error, "Await work recieved bad opCode: " << opCode);
-    }
+    DEBUGPR(1,ucout << "Received team opCode " << opCode << std::endl);
+    done = minionDispatch(opCode);
   }
 }
+
+
+// Figures out what to do with the minion commands
+// Returns true when it's time to exit
+bool teamBranching::minionDispatch(teamBranching::parallelOp opCode)
+{
+  switch(opCode) 
+  {
+    case boundOp: 
+      minionBound();
+      break;
+    case separateOp:
+      minionSplit();
+      break; 
+    case makeChildOp:
+      minionMakeChild();
+      break;
+    case exitOp:
+      return true;
+    default:
+      EXCEPTION_MNGR(std::runtime_error, "awaitWork recieved bad opCode: " << opCode);
+  }
+  return false;
+}
+
 
 bool teamBranching::setup(int& argc, char**& argv) {
   // This is the branching::setup code with printout disabled for minion processors

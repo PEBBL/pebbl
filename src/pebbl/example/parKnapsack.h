@@ -101,17 +101,17 @@ public:
     incQueueSize(0)
     {
       ParameterSet::create_categorized_parameter("incumbQueueTargetSize",
-				     incumbQueueTargetSize,
-				     "<int>","100",
+                                     incumbQueueTargetSize,
+                                     "<int>","100",
                                      "Parallel knapsack heuristic control",
-				     "Knapsack",
-				     utilib::ParameterPositive<int>());
+                                     "Knapsack",
+                                     utilib::ParameterPositive<int>());
       ParameterSet::create_categorized_parameter("incumbQueueMaxSize",
                                      incumbQueueMaxSize,
-				     "<int>","1000",
+                                     "<int>","1000",
                                      "Parallel knapsack heuristic control",
-				     "Knapsack",
-				     utilib::ParameterPositive<int>());
+                                     "Knapsack",
+                                     utilib::ParameterPositive<int>());
       branchingInit(maximization, relTolerance, absTolerance); 
     };
   
@@ -128,8 +128,8 @@ public:
   // This will create a standard solution printout routine.
 
   void printSolution(const char* header = "",
-		     const char* footer = "",
-		     std::ostream& outStream = ucout)
+                     const char* footer = "",
+                     std::ostream& outStream = ucout)
     {
       parallelBranching::printSolution(header,footer,outStream);
     }
@@ -160,9 +160,9 @@ public:
   ThreadObj::ThreadState incumbentHeuristicState()
     {
       if (incQueueSize == 0)
-	return ThreadObj::ThreadBlocked;
+        return ThreadObj::ThreadBlocked;
       else
-	return ThreadObj::ThreadReady;
+        return ThreadObj::ThreadReady;
     };
 
   void feedToIncumbentThread(binKnapSolution* soln);
@@ -217,8 +217,6 @@ public:
  protected:
 
   void valLogDestroyPrint() { parallelBranchSub::valLogDestroyPrint(); };
-
- private:
 
   parallelBinaryKnapsack* globalPtr;
 

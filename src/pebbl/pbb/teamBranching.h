@@ -1,8 +1,10 @@
 // teamBranching.h
 //
-// Parallel computation class code for PEBBL.
+// Teams-only parallel computation class code for PEBBL.
+// Used when the only parallelism is within subproblems, and also as a base
+// class for two-way parallelism
 //
-// Will Loughlin and Rohith Rokkam
+// Will Loughlin and Rohith Rokkam; later modifications by Jonathan Eckstein
 
 
 #include <pebbl/comm/mpiComm.h>
@@ -20,15 +22,26 @@ namespace pebbl {
   class teamBranching : virtual public branching,
                         virtual public parallelPebblParams
   {
-    protected: 
+    public: 
 
       // Communicator used by a bounding group for computation
       mpiComm teamComm; 
 
-      // Counter for mpi messages sent in team Communication
+      // Counter for MPI messages sent in team Communication
       int teamMessageCount;
 
-      enum parallelOp { boundOp, separateOp, makeChildOp, exitOp };
+      enum parallelOp { boundOp, 
+                        separateOp, 
+                        makeChildOp, 
+                        exitOp,
+                        rampUpStartOp,    // The last two are used only in the 
+                        rampUpEndOp };    // derived paralleTeamBranching class
+
+      /// Initialize base classes and reset the state of the solver
+      virtual void reset()
+      {
+         teamMessageCount = 0;
+      };
 
       // Sets teamComm and calls teamOrganize
       void setTeam(mpiComm comm) {
@@ -43,6 +56,7 @@ namespace pebbl {
         if(!iAmHead()){
           return false;
         }
+        DEBUGPR(1,ucout << "Sending team opCode " << op << std::endl);
         teamComm.broadcast(&op, 1, MPI_INT, teamComm.myRank());
         return true;
       }
@@ -51,20 +65,31 @@ namespace pebbl {
       // will wait to be notified by the head before entering the correct parallel method.
       void awaitWork();
 
+      // Internal routine used by awaitWork.  Returns true when there's nothing
+      // more to do
+      virtual bool minionDispatch(parallelOp opCode);
+
       // Pure virtual method used to by the application to initialize a team of processors.
       // Called from setTeam().
       virtual void teamOrganize() = 0;
 
       // Pure virtual method. Called from awaitWork() when a minion needs to work on bounding
-      virtual void minionBound() = 0;
+      virtual void minionBound() 
+      {
+        unimplementedWarning("minionBound", "alertBound"); 
+      };
 
       // Pure virtual method. Called from awaitWork() when a minion needs to work on separating
-      virtual void minionSplit() = 0;
+      virtual void minionSplit()
+      {
+        unimplementedWarning("minionSplit", "alertSeparate"); 
+      };
 
       // Pure virtual method. Called from awaitWork() when a minion needs to work on making children
-      virtual void minionMakeChild() = 0;
-
-    public:
+      virtual void minionMakeChild()
+      {
+        unimplementedWarning("minionMakeChild", "alertMakeChild"); 
+      };
 
       // Constructors for teamBranching
       teamBranching() :
@@ -151,6 +176,19 @@ namespace pebbl {
       // Overrides the search function of branching in order to send the minion processors
       // into the waiting for work loop.
       virtual double search();
+
+  protected:
+
+      void unimplementedWarning(const string& methodName, 
+                                const string& probableCaller)
+      {
+        string warningMessage = "WARNING:  The " + methodName + " method was called "
+                                + " for an application that does not implement it.\n"
+                                + "If you call " + probableCaller 
+                                + ", then you should implement " + methodName + ".";
+        ucout << warningMessage;
+        ucerr << warningMessage;
+      }
   };
 }
 

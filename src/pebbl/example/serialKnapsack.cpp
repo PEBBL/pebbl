@@ -412,6 +412,7 @@ void binKnapSub::boundComputation(double* controlParam)
 {
   *controlParam = 1;
 
+  DEBUGPR(20,"In binKnapSub::boundComputation\n");
   DEBUGPR(200,dumpLists());
 
   itemListCursor forceIn(numIn,&inList);

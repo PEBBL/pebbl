@@ -1312,6 +1312,9 @@ void parallelBranching::rampUpSearch()
   rampUpFlag = true;
   DEBUGPR(1,ucout << "Starting ramp-up phase\n");
 
+  rampUpInternalSetup();         // Hook for parallelTeamBranching derived class
+  rampUpSetup();                 // For applications to get ready if they need to
+
   foundSolution(initialGuess(),synchronous);
   rampUpIncumbentSync();
 
@@ -1334,7 +1337,8 @@ void parallelBranching::rampUpSearch()
 
   DEBUGPR(1,ucout << "Synchronous ramp-up loop complete.\n");
 
-  rampUpCleanUp();  // Derived codes can do any clean up they need to
+  rampUpInternalCleanUp();     // Hook for parallelTeamBranching
+  rampUpCleanUp();             // For applications to clean up if they need to
 
   if (haveCurrentSP())
     unloadCurrentSPtoPool();

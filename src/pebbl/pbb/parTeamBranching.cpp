@@ -44,8 +44,7 @@ void parallelTeamBranching::splitCommunicator(mpiComm argComm,
 	bool hubsWork = hubsDontWorkSize > clusterSize;
 
   // Size of a cluster including minion processors
-	int fullClusterSize = !hubsWork +
-		(clusterSize - !hubsWork) * teamSize;
+	int fullClusterSize = !hubsWork + (clusterSize - !hubsWork) * teamSize;
 
 	int clustersWanted = worldSize / fullClusterSize;
 	int forceSeparateSize = 1 + (hubsDontWorkSize - 1) * teamSize;
@@ -62,34 +61,33 @@ void parallelTeamBranching::splitCommunicator(mpiComm argComm,
 
   int clusterNumber   = worldRank/typicalSize;
   int leader          = clusterNumber*typicalSize;
-  int myClusterSize     = std::min(typicalSize,worldSize - leader);
+  int myClusterSize   = std::min(typicalSize,worldSize - leader);
   int lastClusterSize = worldSize - (numClusters - 1)*typicalSize;
 
-  int separateFunctions  = (myClusterSize     >= forceSeparateSize);
+  int separateFunctions  = (myClusterSize   >= forceSeparateSize);
   int typicallySeparated = (typicalSize     >= forceSeparateSize);
   int lastSeparated      = (lastClusterSize >= forceSeparateSize);
 
-  int positionInCluster    = worldRank - leader;
-  int iAmLeader            = (positionInCluster == 0);
-  int iAmFollower          = !iAmLeader || !separateFunctions;
+  int positionInCluster  = worldRank - leader;
+  int iAmLeader          = (positionInCluster == 0);
+  int iAmFollower        = !iAmLeader || !separateFunctions;
 
-  int numPureLeaders       = (numClusters - 1)*typicallySeparated + lastSeparated;
+  int numPureLeaders = (numClusters - 1)*typicallySeparated + lastSeparated;
+// end copied math from the cluster object
 
   MPI_Group worldGroup;
   MPI_Comm_group(argComm.myComm(), &worldGroup);
-// end copied math from the cluster object
-
 
   // create group for the team communicator
   int range[1][3];
   MPI_Group teamGroup = MPI_GROUP_NULL;
   // Only followers need a team Comm
   if(iAmFollower) {
-    // separateFunctions indicates whether our cluster has a pure hub or not. In the case of a pure hub
-    // we must exclude the head of the cluster from the group
+    // separateFunctions indicates whether our cluster has a pure hub or not. 
+    // In the case of a pure hub, we must exclude the head of the cluster from the group
     int firstIncluded = leader + separateFunctions;
-    int teamNumber = (positionInCluster - separateFunctions)/teamSize;
-    int teamLeader = firstIncluded + teamNumber*teamSize;
+    int teamNumber    = (positionInCluster - separateFunctions)/teamSize;
+    int teamLeader    = firstIncluded + teamNumber*teamSize;
     // range = [[teamLeader, teamLeader + teamSize - 1, 1]]
     range[0][0] = teamLeader;
     range[0][1] = std::min(teamLeader + teamSize, worldSize) - 1;
@@ -102,7 +100,6 @@ void parallelTeamBranching::splitCommunicator(mpiComm argComm,
   if(teamGroup != MPI_GROUP_NULL){
     MPI_Group_rank(teamGroup, &teamGroupRank);
   }
-
 
   // create group for the search communicator
   MPI_Group searchGroup = MPI_GROUP_NULL;
@@ -127,14 +124,13 @@ void parallelTeamBranching::splitCommunicator(mpiComm argComm,
     }
     else {
       // Every processor is in a team so we just group by team size
-      //range = [[0, worldSize - 1, teamSize]]
+      // range = [[0, worldSize - 1, teamSize]]
       range[0][0] = 0;
       range[0][1] = worldSize - 1;
       range[0][2] = teamSize;
       MPI_Group_range_incl(worldGroup, 1, range, &searchGroup);
     }
   }
-
 
   MPI_Comm teamComm = MPI_COMM_NULL;
   if(teamGroup != MPI_GROUP_NULL){
@@ -168,11 +164,24 @@ double parallelTeamBranching::search(){
   }
 }
 
-void parallelTeamBranching::rampUpSearch(){
-  mpiComm savedComm = teamComm;
-  setTeam(passedComm);
-  parallelBranching::rampUpSearch();
-  setTeam(savedComm);
+
+bool parallelTeamBranching::minionDispatch(parallelOp opCode)
+{
+  switch(opCode)
+  {
+    // Handle the two commands that should only occur in the parallel teams settings
+    case rampUpStartOp:
+      rampUpFlag = true;
+      rampUpSetup();
+      return false;             // Not done with minion loop
+    case rampUpEndOp:
+      rampUpCleanUp();
+      rampUpFlag = false;
+      return false;             // Not done with minion loop
+  }
+  // If it's one of the ones that occurs in the just-teams setting too, use 
+  // the just-teams dispatch code
+  return teamBranching::minionDispatch(opCode);
 }
 
   
