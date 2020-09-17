@@ -248,7 +248,7 @@ class parallelTeamBinaryKnapsack :
     }
 
     bool setup(int& argc, char**& argv){
-      parallelTeamBranching::setup(argc, argv);
+      return parallelTeamBranching::setup(argc, argv);
     }
 
     virtual void printSolution(const char* header,
