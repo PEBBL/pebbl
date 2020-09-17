@@ -104,6 +104,7 @@ public:
     ioFlag(ptr->ioFlag)
     { };
   
+
   /// Executes a synchronous barrier command.
   void barrier()
     {
@@ -281,8 +282,21 @@ public:
         UTILIB_LOG_RECV(status);
     }
 
-    // The remaining functions in mpiUtil didn't require knowledge of a communicator
-    // so we can still use mpiUtil for them.
+  /// Free the communicator associated with this comm object and replace it with
+  /// the null communicator
+  void free()
+  {
+    if(comm != MPI_COMM_NULL){
+      MPI_Comm toFree = comm;
+      comm = MPI_COMM_NULL;
+      rank = -1;
+      size = -1;
+      ioProc = -1;
+      ioFlag = false;
+      MPI_Comm_free(&toFree);
+    }
+  }
+
 
 
 };

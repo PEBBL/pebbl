@@ -174,7 +174,7 @@ public:
 
   void printConfiguration(std::ostream& stream = ucout);
 
-  void printSPStatistics(std::ostream& stream = ucout);
+  virtual void printSPStatistics(std::ostream& stream = ucout);
   void printTimings(std::ostream& stream = ucout);
 
   // To do a parallel search.
@@ -182,7 +182,7 @@ public:
   virtual double
     parallelSearchFramework(parSPHandler* handler_ = NULL);
 
-  double search() { return parallelSearchFramework(NULL); };
+  virtual double search() { return parallelSearchFramework(NULL); };
 
   // To resolve ambiguities in diamond inheritance structure.
 
@@ -277,7 +277,7 @@ public:
   // Puts solution in a file, but only on one processor
   // Replaces the version in branching::
 
-  void solutionToFile();
+  virtual void solutionToFile();
 
   // Parallel incumbent heuristic stuff.  By default, there is no
   // heuristic, but a virtual slot is provided for one.
@@ -395,7 +395,7 @@ public:
 
   // Does the ramp up; returns total subproblems that result
 
-  void rampUpSearch();  
+  virtual void rampUpSearch();  
 
   // Makes sure all processors agree on value and location of incumbent.
 

@@ -23,6 +23,7 @@
 #include <pebbl/example/serialKnapsack.h>
 #ifdef ACRO_HAVE_MPI
 #include <pebbl/pbb/parBranching.h>
+#include <pebbl/pbb/parTeamBranching.h> // for new driver
 
 namespace pebbl {
 
@@ -63,7 +64,7 @@ private:
 
 class parBinKnapSub;                  // Forward reference
 
-class parallelBinaryKnapsack : public parallelBranching, public binaryKnapsack
+class parallelBinaryKnapsack : public virtual parallelBranching, public virtual binaryKnapsack
 {
 protected:
 
