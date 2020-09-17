@@ -1,0 +1,206 @@
+Defining a PEBBL application with team but not tree parallelism
+===============================================================
+
+You will need two classes, one derived from teamBranching (for
+problem-instance-wide data) and operations, and one for subproblems (we'll
+call this the "team-aware" subproblem class).
+
+Your teamBranching-derived class should derive from, using "virtual public",
+   o  The branching-derived class of the serial version of your application, 
+      if you have one
+   o  teamBranching
+
+If you have a serial application, your subproblem class should derive from the
+serial applications subproblem class, using "virtual public".  Otherwise it
+may simply derive from branchSub.  You should have a "forward" declaration
+(just a declaration of the existence of the class, not a definition) of this
+class before your branching class.  
+
+Instances of your team-aware subproblem class will need a pointer back the
+teamBranching-derived problem class (called tkGlobal in the example).  You
+need to be careful to set this pointer when creating new instances of this
+class in memory.
+
+The mpiComm object teamBranching::teamComm holds the communicator for the
+local processor's team.
+
+The method teamBranching::iAmHead() returns true on MPI processes that head up
+teams, and false on the minions.
+
+The method teamBranching::iAmMinion() is just the opposite of iAmHead(), true
+on minions and false on the head processor.
+
+The method teamBranching::getHeadRank() returns the rank of the head within
+the team.  This rank is always 0 in the current implementation.
+
+The counter teamBranching::teamMessageCount may be used to count the number of
+messages received by each processor.  The teamBranching::reset() method zeroes
+this counter but does not call any other reset methods.
+
+The constructor for your teamBranching-derived class, should take an mpiComm
+object "comm_" as an argument and call invoke the constructor
+teamBranching(comm_).
+
+The teamBranching-derived class should have a reset() method that invokes the
+reset methods of both base classes.
+
+Your branching class must define a teamOrganize() method.  It will be called
+once teamComm is established.  This method should be used to make sure that
+all processors in the team have any problem data etc. they will need during
+the search.
+
+If you employ parallel bounding, 
+
+	1.  Define a method minionBound() in your branching class.  It will be
+	    called on all minions whenever a bounding operation is
+	    initiated.  It should receive any necessary information describing the
+	    subproblem from the team head, and then cooperate in computing the
+	    bound.
+
+	2.  Have your application subproblem class' boundComputation() routine
+	    call alertBound() in your application branching class, then send any
+	    necessary subproblem information to rest of the team, then cooperate
+	    in computing the bound.  The bound value is returned on the head
+	    processor only.
+
+If you employ parallelism when separating subproblems,
+
+	1.  Define a method minionSplit() in your branching class.  It will be
+	    called on all minions whenever a subproblem separation operation is
+	    initiated.  It should receive any necessary information describing the
+	    subproblem from the team head, and then cooperate in separating the
+	    subproblem.
+
+	2.  Have your application subproblem class' splitComputation() routine
+	    call alertSeparate() in your application branching class, then send
+	    any necessary subproblem information to rest of the team, then
+	    cooperate in computing the bound.  The number of children is returned
+	    on the head processor only.
+
+If you employ parallelism when creating child subproblems,
+
+	1.  Define a method minionMakeChild() in your branching class.  It will be
+	    called on all minions whenever a make-child operation is initiated.
+	    It should receive any necessary information describing the subproblem
+	    from the team head, and then cooperate in creating the child.
+
+	2.  Have your application subproblem class' splitComputation() routine
+	    call alertMakeChild() in your application branching class, then send any
+	    necessary subproblem information to rest of the team, then cooperate
+	    in computing creating the child.
+
+Whether or not you use parallelism in creating child subproblems, your
+subproblem class should override your serial one to create children that are
+team-aware.  Otherwise, only the root problem of the search will be
+team-aware, and the minions will be unused for all subproblem operations after
+the root.
+
+In your teamBranching-derived class, make sure to override the method
+blankSub() so that it makes a team-aware blank subproblem.  
+
+
+Defining a Two-Way Parallel PEBBL Application
+=============================================
+
+You will need two classes, one derived from parallelTeamBranching, and one for
+subproblems.  We'll call this subproblem class "your "parallel-team-aware".
+
+Your branching class should be derived, using "virtual public", from the following
+
+  o  Your parallelBranching-derived application class, if you have one
+  o  parallelTeamBranching
+  o  Your teamBranching-derived application class, if you have one.
+
+If you have version of the application that uses parallel search but not
+teams, then your subproblem class should derive from it (using "virtual
+public").  Otherwise it should derive (using "virtual public") from
+parallelBranchSub.  If desired, it may also derive (using "virtual public")
+from your team-aware subproblem class.
+
+In the parallelTeamBranching-derived class, the member teamComm is the
+communicator for the team.  The member passedComm is the communicator within
+which PEBBL is running (often MPI_COMM_WORLD, but not necessarily), and the
+communicator searchComm consists only of the team heads.
+
+You should override the method blankParallelSub() to create an empty
+instance of your parallel-team-aware subproblem class.
+
+You should derive a teamOrganize() method, for the same purpose as for
+team-only parallelism.  It will be called in all processors at the outset of
+the search process.  If you have a team-parallelism-only version of
+teamOrganize(), it is possible to just invoke that method.
+
+The constructor for your parallelTeamBranching-derived class should take a
+mpiComm object "comm_" as an argument; this is the communicator within which
+the entire computation will run, often equal to MPI_COMM_WORLD.  This
+communicator should be passed to constructors of the base classes.
+
+The parallelTeamBranching-derived class should have a reset() method that
+invokes the reset methods of parallelTeamBranching and its application base
+classes.  Like the reset method for a search-parallelism-only application, it
+should register a solution object (this process is described in existing PEBBL
+user guide).
+
+The parallelTeamBranching-derived class should have a "setup" method with
+arguments (int& argc and char**& argv).  This method should invoke
+parallelTeamBranching::setup with the same arguments.
+
+If you employ parallel bounding, 
+
+	1.  Define a method minionBound() in your parallelTeamBranching-derived
+	    class.  It will be called on each minion in a team when a bounding
+	    operation is initiated.  It should receive any necessary information
+	    describing the subproblem from the team head, and then cooperate in
+	    computing the bound.
+
+	2.  Have your application subproblem class' boundComputation() routine
+	    call alertBound() in your application branching class, then send any
+	    necessary subproblem information to rest of the team, then cooperate
+	    in computing the bound.  The bound value is returned on the head
+	    processor only.
+
+If you employ parallelism when separating subproblems,
+
+	1.  Define a method minionSplit() in your branching class.  It will be
+	    called on all minions in a team when a subproblem separation operation
+	    is initiated.  It should receive any necessary information describing
+	    the subproblem from the team head, and then cooperate in separating
+	    the subproblem.
+
+	2.  Have your application subproblem class' splitComputation() routine
+	    call alertSeparate() in your application branching class, then send
+	    any necessary subproblem information to rest of the team, then
+	    cooperate in computing the bound.  The number of children is returned
+	    on the head processor only.
+
+If you employ parallelism when creating child subproblems,
+
+	1.  Define a method minionMakeChild() in your branching class.  It will be
+	    called on all minions in a team when a make-child operation is
+	    initiated.  It should receive any necessary information describing the
+	    subproblem from the team head, and then cooperate in creating the child.
+
+	2.  Have your application subproblem class' splitComputation() routine
+	    call alertMakeChild() in your application branching class, then send any
+	    necessary subproblem information to rest of the team, then cooperate
+	    in computing creating the child.
+
+You may define a method rampUpSetup() in your parallelTeamBranching-derived
+class.  This method will be called on all processors when ramp-up starts.  If,
+for example you wanted to use a different processor organization for
+calculating bounds etc. during ramp-up, this method gives you a chance to do
+any necessary setup operations.
+
+The usual parallelBranching predicate rampingUp() will be true when the
+ramp-up phase is happening, and otherwise false.
+
+You may define a method rampUpCleanUp() in your parallelTeamBranching-derived
+class.  This method will be called on all processors when ramp-up ends.
+
+For disambiguation reasons with in the inheritance hierarchy, you need to
+define a printSolution method (arguments const char* header, const char*
+footer, std::ostream& outStream).  This method should write a human-readable
+version of the incumbent (*incumbent) solution to outStream.  It is acceptable
+to just invoke the printSolution method of the search-parallelism-only base
+class, if you have one.
+
