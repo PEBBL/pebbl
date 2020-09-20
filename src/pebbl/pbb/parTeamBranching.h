@@ -7,6 +7,7 @@
 
 #include <cstdlib>
 #include <pebbl/pbb/teamBranching.h>
+#include <pebbl/pbb/parBranching.h>
  
 #ifndef pebbl_parTeamBranching_h
 #define pebbl_parTeamBranching_h
@@ -108,7 +109,7 @@ enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode};
         parallelBranching::printSolution(header, footer, outStream);
       }
 
-      parallelTeamBranching(MPI_Comm _comm) :
+      parallelTeamBranching(MPI_Comm _comm = MPI_COMM_WORLD) :
         parallelBranching(_comm)
       {
       }
