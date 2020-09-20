@@ -92,7 +92,7 @@ enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode};
         parallelBranching::printConfiguration(stream);
         if (iDoSearchIO){
           CommonIO::end_tagging();
-          stream << "Searching using teams of size: " << teamSize << ".\n\n";
+          stream << "Searching using teams of size " << teamSize << "\n\n";
           CommonIO::begin_tagging();
         }
       }

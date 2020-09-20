@@ -146,7 +146,7 @@ namespace pebbl {
       void printConfiguration(std::ostream& stream = ucout){
         if(iAmHead()){
           CommonIO::end_tagging();
-          stream << "Searching with a team of size: " << teamComm.mySize() << "\n\n";
+          stream << "Searching with a team of size " << teamComm.mySize() << "\n\n";
           CommonIO::begin_tagging();
         }
       }
