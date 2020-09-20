@@ -176,6 +176,13 @@ namespace pebbl {
       // Overrides the search function of branching in order to send the minion processors
       // into the waiting for work loop.
       virtual double search();
+  
+      // Solution to file is the same as in serial, but only on the head processor
+      void solutionToFile()
+      {
+        if (iAmHead())
+          branching::solutionToFile();
+      }
 
   protected:
 

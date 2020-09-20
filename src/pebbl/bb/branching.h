@@ -876,7 +876,7 @@ public:
   virtual std::ostream* openSolutionFile();
   virtual void closeSolutionFile(std::ostream* fileStream);
 
-  void solutionToFile();
+  virtual void solutionToFile();
 
   virtual void serialPrintSolution(const char* header = "",
 				   const char* footer = "",
