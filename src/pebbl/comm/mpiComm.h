@@ -71,6 +71,9 @@ public:
   /// Returns \c TRUE if current rank can do IO
   bool iDoIO() { return ioFlag; };
 
+  /// Return TRUE if this is a null commObject
+  bool isNull() { return comm == MPI_COMM_NULL; };
+
   /// Return a pointer to the current mpiComm object
   mpiComm* mpiCommObj() { return this; };
 
@@ -82,6 +85,15 @@ public:
 
   /// Set up to be like another mpiComm object
   void setup(mpiComm& otherComm) { setup(otherComm.myComm()); };
+
+  /// Set up from another mpiComm object and a group within it
+  void setup(mpiComm& parent, MPI_Group group)
+  {
+    MPI_Comm newComm = MPI_COMM_NULL;
+    if (group != MPI_GROUP_NULL)
+       MPI_Comm_create_group(parent.myComm(), group, 0, &newComm);
+    setup(newComm);
+  }
 
   /// Empty constructor -- sets the communicator to be null/invalid
   mpiComm() :
@@ -103,6 +115,12 @@ public:
     ioProc(ptr->ioProc),
     ioFlag(ptr->ioFlag)
     { };
+
+  /// Constructor taking a group and a parent communicator
+  mpiComm(mpiComm& parent, MPI_Group& group) 
+  {
+    setup(parent, group);
+  }
   
 
   /// Executes a synchronous barrier command.
@@ -297,7 +315,14 @@ public:
     }
   }
 
+  // Routine to set up MPI ranges
 
+  inline static void setRange(int range[1][3], int first, int last, int stride)
+  {
+    range[0][0] = first;
+    range[0][1] = last;
+    range[0][2] = stride;
+  }
 
 };
 

@@ -38,6 +38,15 @@ namespace pebbl {
 void mpiComm::setup(MPI_Comm comm_)
 {
   comm = comm_;
+
+  if (comm_ == MPI_COMM_NULL)
+  {
+    rank = -1;
+    size = 0;
+    ioProc = -1;
+    ioFlag = 0;
+    return;
+  }
   
   errorCode = MPI_Comm_rank(comm,&rank);
   if (errorCode) 
@@ -90,7 +99,7 @@ ioProc = 0;
 
 #endif
 
-  ioFlag = (rank == ioProc);
+ioFlag = (rank == ioProc);
 
 };
 
