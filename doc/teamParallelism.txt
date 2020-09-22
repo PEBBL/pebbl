@@ -137,9 +137,8 @@ communicator should be passed to constructors of the base classes.
 
 The parallelTeamBranching-derived class should have a reset() method that
 invokes the reset methods of parallelTeamBranching and its application base
-classes.  Like the reset method for a search-parallelism-only application, it
-should register a solution object (this process is described in existing PEBBL
-user guide).
+classes.  On head processors, it should register a solution object (this
+process is described in existing PEBBL user guide).
 
 The parallelTeamBranching-derived class should have a "setup" method with
 arguments (int& argc and char**& argv).  This method should invoke
