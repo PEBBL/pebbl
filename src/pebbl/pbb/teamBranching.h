@@ -105,12 +105,12 @@ namespace pebbl {
       }
 
       // True if this processor is the head of a team
-      bool iAmHead() {
+      virtual bool iAmHead() {
         return teamComm.myRank() == getHeadRank();
       }
 
       // True if this processor is a minion in a team
-      bool iAmMinion() {
+      virtual bool iAmMinion() {
         return !iAmHead();
       }
 

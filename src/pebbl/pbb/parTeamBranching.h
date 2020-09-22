@@ -32,11 +32,9 @@ enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode};
         return parallelBranching::setup(argc, argv);
       }
 
-      // Splits a world comm into team comms and a search comm according to the parameters passed to pebbl
-      // returns 0 on success, or an errorcode if an mpi call fails
-      void splitCommunicator(mpiComm worldComm, int teamSize, 
-                             int clusterSize, int hubsDontWorkSize, 
-                             mpiComm *search, mpiComm *team);
+      // Splits a world comm into team comms and a search comm according to 
+      // the parameters passed to PEBBL
+      void splitCommunicator();
 
       // Overrides the search function of parBranching
       virtual double search(); 
@@ -57,8 +55,7 @@ enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode};
         // Free communicators we make in case setup is called more than once
         searchComm.free();
         teamComm.free();
-        splitCommunicator(passedComm, teamSize, clusterSize, hubsDontWorkSize, 
-                          &searchComm, &teamComm);
+        splitCommunicator();
       }
 
       // Minions only do a serial-style reset, while heads do a parallel reset
@@ -96,7 +93,6 @@ enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode};
           CommonIO::begin_tagging();
         }
       }
-
       
       // Disambiguate printing methods shared by parallelBranching and teamBranching
       virtual void printSolValue(std::ostream& stream){
@@ -110,8 +106,30 @@ enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode};
       }
 
       parallelTeamBranching(MPI_Comm _comm = MPI_COMM_WORLD) :
-        parallelBranching(_comm)
+        parallelBranching(_comm),
+        idleFlag(false)
+      { }
+
+
+      bool iAmIdle() { return idleFlag; }
+
+      bool iAmHead()
       {
+        return (!iAmIdle()) && (teamComm.myRank() == getHeadRank()); 
+      }
+
+      bool iAmMinion()
+      {
+        return (!iAmIdle()) && !(teamComm.myRank() == getHeadRank());
+      }
+
+      // Only heads participate in problem broadcast.  Communication to the minions
+      // is in teamOrganize().
+      
+      void broadcastProblem() 
+      {
+        if (iAmHead())
+          parallelBranching::broadcastProblem();
       }
 
       ~parallelTeamBranching(){
@@ -119,6 +137,11 @@ enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode};
         searchComm.free();
         teamComm.free();
       }
+
+  protected:
+
+    bool idleFlag;
+
   };
 
 // RR: This method is "kludgey".
