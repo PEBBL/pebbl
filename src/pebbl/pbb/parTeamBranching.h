@@ -85,14 +85,8 @@ enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode};
         }
       }
 
-      void printConfiguration(std::ostream& stream = ucout){
-        parallelBranching::printConfiguration(stream);
-        if (iDoSearchIO){
-          CommonIO::end_tagging();
-          stream << "Searching using teams of size " << teamSize << "\n\n";
-          CommonIO::begin_tagging();
-        }
-      }
+      // This is now in the cpp file
+      void printConfiguration(std::ostream& stream = ucout);
       
       // Disambiguate printing methods shared by parallelBranching and teamBranching
       virtual void printSolValue(std::ostream& stream){
@@ -107,7 +101,8 @@ enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode};
 
       parallelTeamBranching(MPI_Comm _comm = MPI_COMM_WORLD) :
         parallelBranching(_comm),
-        idleFlag(false)
+        idleFlag(false),
+        unusedProcs(0)
       { }
 
 
@@ -132,7 +127,13 @@ enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode};
           parallelBranching::broadcastProblem();
       }
 
-      ~parallelTeamBranching(){
+      int fullClusterSize(bool separated, int clusterSize)
+      {
+        return separated + (clusterSize - separated) * teamSize;
+      }
+
+      ~parallelTeamBranching()
+      {
         // Free the communicators we create in split communicator
         searchComm.free();
         teamComm.free();
@@ -141,6 +142,13 @@ enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode};
   protected:
 
     bool idleFlag;
+    int  unusedProcs;
+
+    void printTeamClusterConfig(std::ostream& stream,
+                                int           howMany, 
+                                int           numHeads,
+                                bool          separated,
+                                int           pWidth);
 
   };
 

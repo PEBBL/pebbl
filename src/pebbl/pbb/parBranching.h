@@ -174,6 +174,9 @@ public:
 
   void printConfiguration(std::ostream& stream = ucout);
 
+  void printHubsAndWorkers(std::ostream& stream, int pWidth, int worldSize);
+  void printTimeSlice(std::ostream& stream);
+
   virtual void printSPStatistics(std::ostream& stream = ucout);
   void printTimings(std::ostream& stream = ucout);
 
@@ -1121,7 +1124,12 @@ protected:
 
   // To help in printing out configuration and timing information.
 
-  void configLine(std::ostream& stream,int pWidth,int number, const char* kind);
+  void configLine(std::ostream& stream,
+                  int           pWidth,
+                  int           number, 
+                  const char*   kind,
+                  int           percentDenom,
+                  bool          usePlural=true);
 
   void timingPrintText(std::ostream& stream,
 		       char  percentTotalFill = '-',

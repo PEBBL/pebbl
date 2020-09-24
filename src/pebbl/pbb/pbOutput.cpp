@@ -632,38 +632,54 @@ void parallelBranching::printConfiguration(ostream& stream)
   if (mod)
     stream << ", 1 of size " << mod;
   stream << '\n';
-  stream.width(pWidth);
-  stream << searchSize << " processor" 
-         << plural(searchSize) << '\n';
-  int pureHubs    = searchSize - totalWorkers();
-  int workerHubs  = numHubs() - pureHubs;
-  int pureWorkers = totalWorkers() - workerHubs;
-  configLine(stream,pWidth,pureWorkers,"pure worker");
-  configLine(stream,pWidth,pureHubs,   "pure hub");
-  configLine(stream,pWidth,workerHubs, "worker-hub");
-  stream << "\nTarget timeslice: " << timeSlice << " second";
-  if (timeSlice != 1)
-    stream << 's';
-  stream << ".\n\n";
+  printHubsAndWorkers(stream,pWidth,searchSize);
+  printTimeSlice(stream);
   CommonIO::begin_tagging();
 }
 
 
-void parallelBranching::configLine(ostream& stream,
-				   int      pWidth,
-				   int      number,
-				   const char*    kind)
+void parallelBranching::printHubsAndWorkers(ostream& stream, int pWidth, int worldSize)
+{
+  stream.width(pWidth);
+  stream << worldSize << " processor" 
+         << plural(worldSize) << '\n';
+  int pureHubs    = searchSize - totalWorkers();
+  int workerHubs  = numHubs() - pureHubs;
+  int pureWorkers = totalWorkers() - workerHubs;
+  configLine(stream,pWidth,pureWorkers,"pure worker",worldSize);
+  configLine(stream,pWidth,pureHubs,   "pure hub",worldSize);
+  configLine(stream,pWidth,workerHubs, "worker-hub",worldSize);
+}
+
+
+void parallelBranching::printTimeSlice(ostream& stream)
+{
+    stream << "\nTarget timeslice: " << timeSlice << " second";
+    if (timeSlice != 1)
+      stream << 's';
+    stream << ".\n\n";
+    CommonIO::begin_tagging();
+}
+
+
+void parallelBranching::configLine(ostream&   stream,
+				                          int         pWidth,
+				                          int         number,
+				                          const char* kind,
+                                  int         percentDenom,
+                                  bool        usePlural)
 {
   if (number == 0)
     return;
-  int padding = 13 - strlen(kind);
+  int padding = 13 + !usePlural - strlen(kind);
   stream.width(pWidth);
   stream << number << ' ' << kind;
   stream.width(1);
-  stream << plural(number);
+  if (usePlural)
+    stream << plural(number);
   stream.width(padding);
   stream << "(";
-  printPercent(stream,number,searchSize) << ")\n";
+  printPercent(stream,number,percentDenom) << ")\n";
 }
 
 

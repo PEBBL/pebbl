@@ -11,6 +11,7 @@
 #include <pebbl/pbb/teamBranching.h>
 #include <pebbl/pbb/parTeamBranching.h>
 #include <pebbl/utilib/exception_mngr.h>
+#include <pebbl/utilib/nicePrint.h>
 
 
 
@@ -43,33 +44,33 @@ namespace pebbl {
     bool hubsWork = hubsDontWorkSize > clusterSize;
 
     // Size of a cluster including minion processors
-    int fullClusterSize = !hubsWork + (clusterSize - !hubsWork) * teamSize;
+    int fcSize = fullClusterSize(!hubsWork, clusterSize);
 
-    int clustersWanted = worldSize / fullClusterSize;
+    int clustersWanted = worldSize / fcSize;
     int forceSeparateSize = 1 + (hubsDontWorkSize - 1) * teamSize;
 
     clusterObj fc;                                    // "fc" stands for "full cluster"
-    fc.reset(worldRank, worldSize, fullClusterSize, 
+    fc.reset(worldRank, worldSize, fcSize, 
              clustersWanted, forceSeparateSize);
 
     // Figure out if there are any processors that cannot be used
 
-    int throwAway 
+    unusedProcs 
        = (fc.lastClusterSize - (fc.lastClusterSize >= forceSeparateSize)) % teamSize;
-    DEBUGPR(10, ucout << throwAway << " processors are idled\n");
-    int usedSize = worldSize - throwAway;
+    DEBUGPR(10, ucout << unusedProcs << " processors are idled\n");
+    int usedSize = worldSize - unusedProcs;
     DEBUGPR(10, ucout << usedSize << " processors in use\n");
 
     // Thrown-away processors cannot be used -- sad!
 
-    idleFlag = worldRank >= (worldSize - throwAway);
+    idleFlag = worldRank >= (worldSize - unusedProcs);
     DEBUGPR(10, ucout << "idleFlag = " << idleFlag << endl);
 
     // Recompute clustering with idled processors removed
     if (!idleFlag)
     {
-      clustersWanted = usedSize / fullClusterSize;
-      fc.reset(worldRank, usedSize, fullClusterSize, 
+      clustersWanted = usedSize / fcSize;
+      fc.reset(worldRank, usedSize, fcSize, 
                clustersWanted, forceSeparateSize);
     }
 
@@ -81,11 +82,11 @@ namespace pebbl {
     int range[1][3];
 
     // usedGroup is all the ranks we're dealing with, except those that are idled
-    // in the Group_range_excl call, throwAway > 0 is 0 if we don't have to throw 
+    // in the Group_range_excl call, unusedProcs > 0 is 0 if we don't have to throw 
     // anything away, in which case we just copy the group
     MPI_Group usedGroup;
-    mpiComm::setRange(range,worldSize - throwAway, worldSize - 1, 1); 
-    MPI_Group_range_excl(worldGroup,throwAway > 0,range,&usedGroup);
+    mpiComm::setRange(range,worldSize - unusedProcs, worldSize - 1, 1); 
+    MPI_Group_range_excl(worldGroup,unusedProcs > 0,range,&usedGroup);
 
     // create group for the team communicator
     MPI_Group teamGroup = MPI_GROUP_NULL;
@@ -216,6 +217,63 @@ namespace pebbl {
     // If it's one of the ones that occurs in the just-teams setting too, use 
     // the just-teams dispatch code
     return teamBranching::minionDispatch(opCode);
+  }
+
+
+  //  Printout of processor configuration.
+
+  void parallelTeamBranching::printConfiguration(ostream& stream)
+  {
+    if (!iDoSearchIO)
+      return;
+    CommonIO::end_tagging();
+    stream << "\nPEBBL Configuration:\n";
+    hyphens(stream,19) << '\n';
+    int worldSize = passedComm.mySize();
+    int pWidth = digitsNeededFor(worldSize);
+    stream.width(pWidth);
+    stream << numHubs() << " cluster" << plural(numHubs()) << " overall" << endl;
+    int mod  = searchSize % cluster.typicalSize;
+    printTeamClusterConfig(stream, 
+                           numHubs() - (mod > 0), 
+                           cluster.typicalSize, 
+                           cluster.typicallySeparated,
+                           pWidth);
+    if (mod > 0)
+      printTeamClusterConfig(stream,
+                             1,
+                             cluster.lastClusterSize,
+                             cluster.lastSeparated,
+                             pWidth);
+    printHubsAndWorkers(stream,pWidth,worldSize);
+    int totalMinions = totalWorkers()*(teamSize - 1);
+    configLine(stream,pWidth,totalMinions, "minion",worldSize);
+    configLine(stream,pWidth,unusedProcs, "unused",worldSize,false);
+    stream << "\nSearching using teams of size " << teamSize << "\n\n";
+    printTimeSlice(stream);
+    CommonIO::end_tagging();
+  }
+
+
+  void parallelTeamBranching::printTeamClusterConfig(ostream& stream,
+                                                     int      howMany, 
+                                                     int      numHeads,
+                                                     bool     separated,
+                                                     int      pWidth)
+  {
+    int nTeams = numHeads - separated;
+    int minionsPerCluster = nTeams*(teamSize - 1);
+    stream.width(pWidth);
+    stream << howMany << " cluster" << plural(howMany)
+           << " of size " << fullClusterSize(separated,numHeads)
+           << ", containing 1 ";
+    if (!separated)
+      stream << "worker-";
+    stream << "hub";
+    if (numHeads > 1)
+      stream << ", " << numHeads - 1 << " pure worker" << plural(numHeads - 1) << ",";
+    stream << " and " << nTeams*(teamSize - 1)
+           << " minion" << plural(minionsPerCluster) << endl;
   }
 
 }
