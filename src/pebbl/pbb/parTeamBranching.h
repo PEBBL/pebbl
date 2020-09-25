@@ -63,24 +63,22 @@ enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode};
       
       void reset(bool VBFlag=true) {
         teamMessageCount = 0;
-        if (iAmHead()) {
+        if (iAmSearcher())
           parallelBranching::reset(VBFlag);
-        }
-        else {
+        else 
           branching::reset(VBFlag);
-        }
       }
 
       // Override the solutionToFile method as only search processors participate
       virtual void solutionToFile() {
-        if (iAmHead()) {
+        if (iAmSearcher()) {
           parallelBranching::solutionToFile();
         }
       }
 
       // Override the printSPStatistics method as only search processors participate
       virtual void printSPStatistics() {
-        if (iAmHead()) {
+        if (iAmSearcher()) {
           parallelBranching::printSPStatistics();
         }
       }
@@ -105,17 +103,26 @@ enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode};
         unusedProcs(0)
       { }
 
-
       bool iAmIdle() { return idleFlag; }
+
+      bool iAmSearcher() 
+      { 
+        return !searchComm.isNull();
+      }
+
+      bool inATeam()
+      {
+        return !teamComm.isNull();
+      }
 
       bool iAmHead()
       {
-        return (!iAmIdle()) && (teamComm.myRank() == getHeadRank()); 
+        return iAmSearcher() && inATeam(); 
       }
 
       bool iAmMinion()
       {
-        return (!iAmIdle()) && !(teamComm.myRank() == getHeadRank());
+        return !iAmSearcher() && inATeam();
       }
 
       // Only heads participate in problem broadcast.  Communication to the minions
@@ -123,7 +130,7 @@ enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode};
       
       void broadcastProblem() 
       {
-        if (iAmHead())
+        if (iAmSearcher())
           parallelBranching::broadcastProblem();
       }
 

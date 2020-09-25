@@ -53,9 +53,8 @@ namespace pebbl {
       // to all processors in the team containing the op that needs to be performed.
       // Does nothing if the processor is not a head.
       bool alertTeam(parallelOp op) {
-        if(!iAmHead()){
+        if(!iAmHead())
           return false;
-        }
         DEBUGPR(1,ucout << "Sending team opCode " << op << std::endl);
         teamComm.broadcast(&op, 1, MPI_INT, teamComm.myRank());
         return true;
@@ -116,9 +115,7 @@ namespace pebbl {
 
       // Returns the rank of this team's head
       // Currently this is always 0
-      int getHeadRank() {
-        return 0;
-      }
+      int getHeadRank() { return 0; }
 
       // Overrides branching::setup to only print from the head processor
       bool setup(int& argc, char**& argv);

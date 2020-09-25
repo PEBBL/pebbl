@@ -221,13 +221,15 @@ class parallelTeamBinaryKnapsack :
   void rampUpSetup()
   {
     ucout << "Ramp-up setup called\n";
-    teamComm.barrier();
+    if (inATeam())
+      teamComm.barrier();
   }
 
   void rampUpCleanUp()
   {
     ucout << "Ramp-up clean-up called\n";
-    teamComm.barrier();
+    if (inATeam())
+      teamComm.barrier();
   }
 
   public:

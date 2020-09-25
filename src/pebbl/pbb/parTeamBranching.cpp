@@ -90,6 +90,7 @@ namespace pebbl {
 
     // create group for the team communicator
     MPI_Group teamGroup = MPI_GROUP_NULL;
+    int teamGroupRank   = -1;
 
     // Only followers need a team Communicator
     if(!idleFlag && fc.iAmFollower) 
@@ -99,16 +100,12 @@ namespace pebbl {
       // In the case of a pure hub, we must exclude the head of the cluster from the group
       int firstIncluded = fc.leader + fc.separateFunctions;
       int teamNumber    = (fc.positionInCluster - fc.separateFunctions)/teamSize;
-      int teamLeader    = firstIncluded + teamNumber*teamSize;
-      // range = [[teamLeader, teamLeader + teamSize - 1, 1]]
-      mpiComm::setRange(range,teamLeader, teamLeader + teamSize - 1, 1);
+      int firstInTeam   = firstIncluded + teamNumber*teamSize;
+      // range = [[firstInTeam, firstInTeam + teamSize - 1, 1]]
+      mpiComm::setRange(range,firstInTeam, firstInTeam + teamSize - 1, 1);
       MPI_Group_range_incl(usedGroup, 1, range, &teamGroup);
-    }
-
-    // Determine which processesors are "heads" and thus part of the search communicator
-    int teamGroupRank = -1;
-    if(teamGroup != MPI_GROUP_NULL)
       MPI_Group_rank(teamGroup, &teamGroupRank);
+    }
 
     // create group for the search communicator
     MPI_Group searchGroup = MPI_GROUP_NULL;
@@ -120,52 +117,35 @@ namespace pebbl {
         DEBUGPR(10,"Setup with pure hubs\n");
         // This group will contain all processors with a team, that is,
         // everything except pure hubs
-        MPI_Group workerGroup = MPI_GROUP_NULL; 
+        MPI_Group workerAndMinionGroup = MPI_GROUP_NULL; 
         // This group will contain all workers minions 
         MPI_Group minionGroup = MPI_GROUP_NULL; 
         // Beginning of second to last cluster if last cluster does not have a pure hub
-        int lastPureHub = (numClusters - 1)*fc.typicalSize 
+        int lastPureHub = (fc.numClusters - 1)*fc.typicalSize 
                               - (fc.typicalSize * !fc.lastSeparated); 
         DEBUGPR(10, ucout << "lastPureHub = " << lastPureHub << std::endl);
         // range = [[0, lastPureHub, typicalSize]]
         mpiComm::setRange(range,0,lastPureHub,fc.typicalSize);
         // Pull all the pure hubs out of the used group to make the group of all workers
-        MPI_Group_range_excl(usedGroup, 1, range, &workerGroup);
-        // range = [[0, worldSize - numPureLeaders - 1, teamSize]]
-        mpiComm::setRange(range,0,worldSize - fc.numPureLeaders - 1,teamSize);
+        MPI_Group_range_excl(usedGroup, 1, range, &workerAndMinionGroup);
+        // range = [[0, usedSize - numPureLeaders - 1, teamSize]]
+        mpiComm::setRange(range,0,usedSize - fc.numPureLeaders - teamSize,teamSize);
         // Yank out the first of each span of "teamSize" of those to get the minions
-        MPI_Group_range_excl(workerGroup, 1, range, &minionGroup);
-        // All the non-minons are part of the search
-        MPI_Group_difference(worldGroup, minionGroup, &searchGroup);
-        MPI_Group_free(&workerGroup);
+        MPI_Group_range_excl(workerAndMinionGroup, 1, range, &minionGroup);
+        // All the non-minions are part of the search
+        MPI_Group_difference(usedGroup, minionGroup, &searchGroup);
+        MPI_Group_free(&workerAndMinionGroup);
         MPI_Group_free(&minionGroup);
       }
       else 
       {
         DEBUGPR(10,ucout << "Setup without pure hubs\n");
         // Every processor is in a team so we just group by team size
-        // range = [[0, worldSize - 1, teamSize]]
+        // range = [[0, usedSize - 1, teamSize]]
         mpiComm::setRange(range,0,usedSize - 1,teamSize);
-        MPI_Group_range_incl(worldGroup, 1, range, &searchGroup);
+        MPI_Group_range_incl(usedGroup, 1, range, &searchGroup);
       }
     }
-
-    MPI_Group_free(&usedGroup);
-
-  // MPI_Comm teamComm = MPI_COMM_NULL;
-  // if(teamGroup != MPI_GROUP_NULL){
-  //   MPI_Comm_create_group(passedComm.myComm(), teamGroup, 0, &teamComm);
-  //   *team = mpiComm(teamComm);
-  // }
-  // else {
-  //   *team = mpiComm();
-  // }
-
-    int searchGroupSize = 0;  //DBG
-    if (searchGroup != MPI_GROUP_NULL)
-      MPI_Group_size(searchGroup,&searchGroupSize);  //DBG
-
-    DEBUGPR(10, ucout << "Search group size is " << searchGroupSize << std::endl);  //DBG
 
     searchComm.setup(passedComm,searchGroup);
     teamComm.setup(passedComm,teamGroup);
@@ -177,6 +157,14 @@ namespace pebbl {
     DEBUGPR(10,ucout << "teamComm rank " 
                      << teamComm.myRank() << " out of " 
                      << teamComm.mySize() << std::endl);
+
+    if (searchGroup != MPI_GROUP_NULL)
+      MPI_Group_free(&searchGroup);
+    if (teamGroup != MPI_GROUP_NULL)
+      MPI_Group_free(&teamGroup);
+    MPI_Group_free(&usedGroup);
+    MPI_Group_free(&worldGroup);
+
   }
 
 
@@ -186,10 +174,12 @@ namespace pebbl {
     if (!teamComm.isNull())
       setTeam(teamComm);
     // Participate in the search if this is a PEBBL search processor
-    if(iAmHead())
+    if(iAmSearcher())
     {
       double objVal = parallelSearchFramework(NULL);
-      alertTeam(exitOp);
+      // If there are minions, tell them we're done
+      if (iAmHead())
+        alertTeam(exitOp);
       return objVal;
     }
     // If a minion, just await commands
