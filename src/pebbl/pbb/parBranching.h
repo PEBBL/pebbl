@@ -392,7 +392,7 @@ public:
   double rampUpWCTime; // wallclock time
 
   int    crossoverFlag;
-  
+
   int rampingUp()    { return rampUpFlag;    };
   int crossingOver() { return crossoverFlag; };
 
@@ -404,6 +404,13 @@ public:
 
   void rampUpIncumbentSync();
 
+  // Overridable function to decide whether there should be any real ramp-up
+  // at all.  If not, the ramp up short-circuits its main loop and doesn't really
+  // do anything except create the root problem.  The default is just to return
+  // the value of the command-line parameter --useRampUp (which defaults to true).
+
+   virtual bool wantRampUp() { return useRampUp; };
+  
   // Decides whether the ramp-up phase should continue
 
   bool keepRampingUp()
@@ -416,8 +423,8 @@ public:
   virtual bool continueRampUp() 
     { 
       if (spCount() <= rampUpPoolLimit)
-	       return true;
-      return spCount() <= rampUpPoolLimitFac*(searchSize);
+	return true;
+      return spCount() <= rampUpPoolLimitFac*searchSize;
     };
 
   // Force a longer ramp up.  This is useful when we need more careful

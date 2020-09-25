@@ -198,7 +198,7 @@ void parallelBranching::reset(bool VBFlag)
   // Set up cluster tracking
 
   cluster.reset(searchRank, searchSize, clusterSize, numClusters, 
-		hubsDontWorkSize);
+                hubsDontWorkSize);
 
   // Initialize outgoing buffer objects
   // Hold two tokens and two acks
@@ -210,7 +210,7 @@ void parallelBranching::reset(bool VBFlag)
   // Initialize stuff to do with scattering
 
   DEBUGPR(20,ucout << "hubLoadFac=" << hubLoadFac 
-	  << " workerLoadFac=" << 1 - hubLoadFac << endl);
+          << " workerLoadFac=" << 1 - hubLoadFac << endl);
 
   if (!parameter_initialized("targetScatterProb"))
     targetScatterProb = scatterFac*hubLoadFac;
@@ -220,22 +220,22 @@ void parallelBranching::reset(bool VBFlag)
     targetScatterProb = maxScatterProb;
 
   releaseDecision.reset(lowLoadFac,
-			highLoadFac,
-			minScatterProb,
-			targetScatterProb,  // Initialize scattering decision
-			maxScatterProb);    // information.
+                        highLoadFac,
+                        minScatterProb,
+                        targetScatterProb,  // Initialize scattering decision
+                        maxScatterProb);    // information.
 
   DEBUGPR(20,ucout << "releaseDecision: "; 
-	  releaseDecision.write(ucout); ucout << endl);
+          releaseDecision.write(ucout); ucout << endl);
 
   otherHubRelease.reset(clusterLowLoadRatio,
-			clusterHighLoadRatio,
-			minNonLocalScatterProb,
-			targetNonLocalScatterProb,
-			maxNonLocalScatterProb);
+                        clusterHighLoadRatio,
+                        minNonLocalScatterProb,
+                        targetNonLocalScatterProb,
+                        maxNonLocalScatterProb);
 
   DEBUGPR(20,ucout << "otherHubRelease: "; 
-	  otherHubRelease.write(ucout); ucout << endl);
+          otherHubRelease.write(ucout); ucout << endl);
 
   // Initialize buffer objects
 
@@ -246,10 +246,10 @@ void parallelBranching::reset(bool VBFlag)
   // three are in use.  Starting size is set later.
 
   dispatchSPBuffers.reset(maxDispatchPacking,
-			  forwardSPTag,
-			  3*clusterSize);
+                          forwardSPTag,
+                          3*clusterSize);
   hubAuxBufferQ.reset(3*clusterSize,
-		      workerAuxObj::computeBufferSize(this));
+                      workerAuxObj::computeBufferSize(this));
 
   // Initialize worker pool -- this must be done on all processors
   // now, because of the ramp-up phase.
@@ -273,12 +273,12 @@ void parallelBranching::reset(bool VBFlag)
       serverPool.setGlobal(this); 
 
       if (!iAmHub())
-	{
-	  spAckAddress.resize(maxSPAcks);
-	  spAckBound.resize(maxSPAcks);
-	  spAckCount = 0;
-	  boundKnownToHub = sense*MAXDOUBLE;
-	}
+        {
+          spAckAddress.resize(maxSPAcks);
+          spAckBound.resize(maxSPAcks);
+          spAckCount = 0;
+          boundKnownToHub = sense*MAXDOUBLE;
+        }
 
       releaseProbCount = 0;
       releaseTestCount = 0;
@@ -299,14 +299,14 @@ void parallelBranching::reset(bool VBFlag)
   if (iAmHub())
     {
       if ( depthFirst )
-      	hubPool = 
-	  new doublyLinkedPool<spToken,parLoadObject>(true);   //stack
+        hubPool = 
+          new doublyLinkedPool<spToken,parLoadObject>(true);   //stack
       else if ( breadthFirst )
-      	hubPool = 
-	  new doublyLinkedPool<spToken,parLoadObject>(false);  //queue
+        hubPool = 
+          new doublyLinkedPool<spToken,parLoadObject>(false);  //queue
       else
-	hubPool = 
-	  new heapPool<spToken,parLoadObject,DynamicSPCompare<spToken> >();
+        hubPool = 
+          new heapPool<spToken,parLoadObject,DynamicSPCompare<spToken> >();
 
       hubPool->setGlobal(this); 
     
@@ -330,21 +330,21 @@ void parallelBranching::reset(bool VBFlag)
       qHeapOfWorkers.clear();
 
       for (int w=0; w < numWorkers(); w++)
-	{
-	  wantLoadInform[w]       = false;
-	  workerReportCount[w]    = 0;
-	  workerRebalanceCount[w] = 0;
+        {
+          wantLoadInform[w]       = false;
+          workerReportCount[w]    = 0;
+          workerRebalanceCount[w] = 0;
 
-	  workerTransitPool[w].setGlobal(this);
+          workerTransitPool[w].setGlobal(this);
 
-	  workerHeapObj[w].global = this; 
-	  workerHeapObj[w].w = w;
+          workerHeapObj[w].global = this; 
+          workerHeapObj[w].w = w;
 
-	  workerQHeapObj[w].global = this; 
-	  workerQHeapObj[w].w = w;
+          workerQHeapObj[w].global = this; 
+          workerQHeapObj[w].w = w;
 
-	  // Don't form worker heaps here; do it after ramp-up
-	}
+          // Don't form worker heaps here; do it after ramp-up
+        }
 
       termCheckInProgress  = false;
       wantAnotherTermCheck = false;
@@ -359,58 +359,58 @@ void parallelBranching::reset(bool VBFlag)
     {
       qualityBalance = false;
       if (iDoSearchIO && parameter_initialized("qualityBalance"))
-	{
-	  CommonIO::end_tagging();
-	  ucout << "\nQuality balancing inhibited because "
-	    "search is not best-first.\n";
-	  CommonIO::begin_tagging();
-	}
+        {
+          CommonIO::end_tagging();
+          ucout << "\nQuality balancing inhibited because "
+            "search is not best-first.\n";
+          CommonIO::begin_tagging();
+        }
     }
 
   if (rebalLoadFac < highLoadFac)
     if (iDoSearchIO)
       {
-	CommonIO::end_tagging();
-	ucout << "\n*** Warning *** rebalLoadFac=" << rebalLoadFac
-	      << " is less than highLoadFac=" << highLoadFac << endl;
-	CommonIO::begin_tagging();
+        CommonIO::end_tagging();
+        ucout << "\n*** Warning *** rebalLoadFac=" << rebalLoadFac
+              << " is less than highLoadFac=" << highLoadFac << endl;
+        CommonIO::begin_tagging();
       }
 
   if (minScatterProb > targetScatterProb)
     {
       if (iDoSearchIO)
-	{
-	  CommonIO::end_tagging();
-	  ucout << "\nParameter minScatterProb=" << minScatterProb
-		<< " is larger than targetScatterProb=" << targetScatterProb
-		<< "; minScatterProb reset to " << targetScatterProb << endl;
-	  CommonIO::begin_tagging();
-	}
+        {
+          CommonIO::end_tagging();
+          ucout << "\nParameter minScatterProb=" << minScatterProb
+                << " is larger than targetScatterProb=" << targetScatterProb
+                << "; minScatterProb reset to " << targetScatterProb << endl;
+          CommonIO::begin_tagging();
+        }
       minScatterProb = targetScatterProb;
     }
 
   if (maxScatterProb < targetScatterProb)
     {
       if (iDoSearchIO)
-	{
-	  CommonIO::end_tagging();
-	  ucout << "\nParameter maxScatterProb=" << maxScatterProb
-		<< " is less than targetScatterProb=" << targetScatterProb
-		<< "; maxScatterProb reset to " << targetScatterProb << endl;
-	  CommonIO::begin_tagging();
-	}
+        {
+          CommonIO::end_tagging();
+          ucout << "\nParameter maxScatterProb=" << maxScatterProb
+                << " is less than targetScatterProb=" << targetScatterProb
+                << "; maxScatterProb reset to " << targetScatterProb << endl;
+          CommonIO::begin_tagging();
+        }
       maxScatterProb = targetScatterProb;
     }
 
   if (logTransitions && (loadLogSeconds == 0))
     {
       if (iDoSearchIO)
-	{
-	  CommonIO::end_tagging();
-	  ucout << "Parameter logTransitions meaningless if loadLogSeconds"
-		<< " is zero; ignoring" << endl;
-	  CommonIO::begin_tagging();
-	}
+        {
+          CommonIO::end_tagging();
+          ucout << "Parameter logTransitions meaningless if loadLogSeconds"
+                << " is zero; ignoring" << endl;
+          CommonIO::begin_tagging();
+        }
       logTransitions = false;
     }
 
@@ -462,17 +462,17 @@ void parallelBranching::reset(bool VBFlag)
       rampUpSolsPending = 0;
 
       reposArrayBufSize = 
-	sizeof(int) + max(enumCount,0)*solutionIdentifier::packSize();
+        sizeof(int) + max(enumCount,0)*solutionIdentifier::packSize();
 
       DEBUGPR(100,ucout << "reposArrayBufSize=" << reposArrayBufSize << endl);
 
       solHashQ.reset(3,solBufSize);
       reposArrayQ.reset(1,reposArrayBufSize);
       newLastSolQ.reset(reposTreeRadix,
-			sizeof(int)+solutionIdentifier::packSize());
+                        sizeof(int)+solutionIdentifier::packSize());
 
       if (reposTree)
-	delete reposTree;
+        delete reposTree;
       reposTree = new nAryTreeRememberParent(reposTreeRadix,
                                              0,
                                              searchRank,
@@ -484,43 +484,43 @@ void parallelBranching::reset(bool VBFlag)
       reposArrayHeap.clear();
 
       for(int child=0; child<reposChildren; child++)
-	{
-	  childMergeObject[child].setup(childReposArray[child]);
-	  reposArrayHeap.add(childMergeObject[child]);
-	}
+        {
+          childMergeObject[child].setup(childReposArray[child]);
+          reposArrayHeap.add(childMergeObject[child]);
+        }
 
       localMergeObject.setup(localReposArray);
       reposArrayHeap.add(localMergeObject);
 
       if (enumCount > 1)
-	{
-	  reposSkewSeconds    = (1 + reposMergeSkew)*reposMergeSeconds;
-	  childArraysReceived = 0;
-	  lastMergeTime       = WallClockSeconds();
+        {
+          reposSkewSeconds    = (1 + reposMergeSkew)*reposMergeSeconds;
+          childArraysReceived = 0;
+          lastMergeTime       = WallClockSeconds();
 
-	  gotChildArray.resize(reposChildren);
-	  for(int child=0; child<reposChildren; child++)
-	    gotChildArray[child] = false;
-	}
+          gotChildArray.resize(reposChildren);
+          for(int child=0; child<reposChildren; child++)
+            gotChildArray[child] = false;
+        }
 
       finalReposSyncDone = false;
 
       queuedSolutions = 0;
 
       if (enumFlowControl)
-	{
-	  nProcessorBits = bitWidth(searchSize - 1);
-	  solJustSent.resize(nProcessorBits);
-	  solSendQ.resize(nProcessorBits);
-	  
-	  for(size_type b=0; b<nProcessorBits; b++)
-	    {
-	      solJustSent[b] = NULL;
-	      solSendQ[b].clear();
-	    }
+        {
+          nProcessorBits = bitWidth(searchSize - 1);
+          solJustSent.resize(nProcessorBits);
+          solSendQ.resize(nProcessorBits);
+          
+          for(size_type b=0; b<nProcessorBits; b++)
+            {
+              solJustSent[b] = NULL;
+              solSendQ[b].clear();
+            }
 
-	  solAckQ.reset(nProcessorBits,sizeof(int));
-	}
+          solAckQ.reset(nProcessorBits,sizeof(int));
+        }
     }
 
   // Set up the scheduler
@@ -547,11 +547,11 @@ void parallelBranching::reset(bool VBFlag)
       // For hub pool, pick up message counts if not a worker
       hubPool->load().init(this,false,!iAmWorker()); 
       for (int w=0; w < numWorkers(); w++)
-	{
-	  workerLoadReport[w].init(this);
-	  workerLoadEstimate[w].init(this);
-	  workerTransitPool[w].load().init(this);
-	}
+        {
+          workerLoadReport[w].init(this);
+          workerLoadEstimate[w].init(this);
+          workerTransitPool[w].load().init(this);
+        }
     }
 
   // Set up handler -- may overwrite later if the user is supplying
@@ -804,7 +804,7 @@ double parallelBranching::parallelSearchFramework(parSPHandler* handler_)
   if (handler_)
     {
       if (handler)
-	delete handler;
+        delete handler;
       handler = handler_;
       handler->setPGlobal(this);
     }
@@ -836,20 +836,20 @@ double parallelBranching::parallelSearchFramework(parSPHandler* handler_)
       readingCheckpoint = true;
 
       if (iDoSearchIO)
-	ucout << "Trying to restart from checkpoint\n\n";
+        ucout << "Trying to restart from checkpoint\n\n";
       ucout.flush();
 
       restarted = restartFromCheckpoint();
 
       if (iDoSearchIO)
-	{
-	  if (restarted)
-	    ucout << "Checkpoint loaded successfully.\n";
-	  else
-	    ucout << "Warning: unable to read checkpoint files.  "
-		  << "Reverting to normal ramp-up.\n\n";
-	  ucout.flush();
-	}
+        {
+          if (restarted)
+            ucout << "Checkpoint loaded successfully.\n";
+          else
+            ucout << "Warning: unable to read checkpoint files.  "
+                  << "Reverting to normal ramp-up.\n\n";
+          ucout.flush();
+        }
 
       readingCheckpoint = false;
     }
@@ -898,7 +898,7 @@ double parallelBranching::parallelSearchFramework(parSPHandler* handler_)
   if (validateLog)
     {
       if (searchRank == 0)
-	valLogFathomPrint();
+        valLogFathomPrint();
       delete vout;
     }
 
@@ -932,10 +932,10 @@ size_type parallelBranching::registerSolution(solution* referenceSolution)
   refSolArray[id] = referenceSolution;
   referenceSolution->typeId = id;
   DEBUGPR(5,ucout << "Registered " 
-	  << referenceSolution->typeDescription()
-	  << " as having type " << id 
-	  << ", with buffer size " << referenceSolution->maxBufferSize()
-	  << endl);
+          << referenceSolution->typeDescription()
+          << " as having type " << id 
+          << ", with buffer size " << referenceSolution->maxBufferSize()
+          << endl);
   return id;
 }
 
@@ -953,7 +953,7 @@ void parallelBranching::clearRegisteredSolutions()
 
 // To compute the maximum buffer size we need to receive a solution.
 // It's the maximum buffer size needed among all registed reference
-// solution.
+// solutions
 
 int parallelBranching::computeSolBufferSize()
 {
@@ -962,10 +962,10 @@ int parallelBranching::computeSolBufferSize()
     {
       int s = refSolArray[i]->maxBufferSize();
       if (s > toReturn)
-	toReturn = s;
+        toReturn = s;
     }
   DEBUGPR(5,ucout << "computeSolBufferSize yields " << toReturn 
-	  << " numRefSols=" << numRefSols << endl);
+          << " numRefSols=" << numRefSols << endl);
   return toReturn;
 }
 
@@ -979,7 +979,7 @@ solution* parallelBranching::unpackSolution(UnPackBuffer& inBuf)
   inBuf >> typeId;
   if ((typeId < 0) || ((unsigned) typeId >= numRefSols))
     EXCEPTION_MNGR(runtime_error,"Unpacked solution type id "
-		   << typeId << " is out of range 0.." << numRefSols-1);
+                   << typeId << " is out of range 0.." << numRefSols-1);
   solution* sol = refSolArray[typeId]->blankClone();
   sol->unpack(inBuf);
   return sol;
@@ -1018,8 +1018,8 @@ void parallelBranching::placeTasks()
                           useIncumbentThread;
   incumbentSearcher = createIncumbentSearchThread();
   placeTask(incumbentSearcher,
-	    iAmWorker() && incumbentThreadExists,
-	    baseGroup);
+            iAmWorker() && incumbentThreadExists,
+            baseGroup);
 
   hub = new hubObj(this);
   placeTask(hub,iAmHub(),highPriorityGroup);
@@ -1037,9 +1037,9 @@ void parallelBranching::placeTasks()
     {
       knownBufferSize.resize(searchSize);
       for (int i=0; i < searchRank; i++)
-	knownBufferSize[i] = spReceiver->sizeOfBuffer();
+        knownBufferSize[i] = spReceiver->sizeOfBuffer();
       DEBUGPR(100,ucout <<"Initialized knownBufferSize to " 
-	      << spReceiveBuf << '/' << knownBufferSize[0] << endl);
+              << spReceiveBuf << '/' << knownBufferSize[0] << endl);
     }
 
   // Back to creating threads...
@@ -1064,10 +1064,10 @@ void parallelBranching::placeTasks()
       reposReceiver = new reposRecvObj(this);
       placeTask(reposReceiver,true,highPriorityGroup);
       if (enumCount > 1)
-	{
-	  reposMerger = new reposMergeObj(this);
-	  placeTask(reposMerger,true,highPriorityGroup);
-	}
+        {
+          reposMerger = new reposMergeObj(this);
+          placeTask(reposMerger,true,highPriorityGroup);
+        }
     }
 
   if ((loadLogSeconds > 0)      && 
@@ -1081,8 +1081,8 @@ void parallelBranching::placeTasks()
 
 
 void parallelBranching::placeTask(parBranchingThreadObj* thread,
-				  int cond,
-				  int group)
+                                  int cond,
+                                  int group)
 {
   DEBUGPR(200,ucout << "parallelBranching::placeTask" << endl);
   DEBUGPR(300,thread->dump(ucout));
@@ -1180,14 +1180,15 @@ bool parallelBranching::setup(int& argc, char**& argv)
 
   // Broadcast the read-in success flag to everbody
 
-  DEBUGPR(10, ucout << "Initiating problem broadcast\n");
+  DEBUGPR(10, ucout << "Initiating flag broadcast, local=" << flag << endl);
   passedComm.broadcast(&flag,1,MPI_C_BOOL,passedComm.myIoProc());
-  DEBUGPR(10, ucout << "Out of broadcastProblem\n");
+  DEBUGPR(10, ucout << "Broadcast flag value is " << flag << endl);
 
   // If things worked, broadcast the problem to everybody
 
   if (flag)
     broadcastProblem();
+  DEBUGPR(10, ucout << "Out of broadcastProblem\n");
 
   return flag;
 }
@@ -1210,13 +1211,13 @@ void parallelBranching::broadcastProblem()
       int probSize = outBuf.size();        // Figure out length.
       DEBUGPR(70,ucout << "Broadcast size is " << probSize << " bytes.\n");
       searchComm.broadcast(&probSize,          // Broadcast length.
-		                       1,
-		                       MPI_INT,
-		                       passedComm.myIoProc());
+                                       1,
+                                       MPI_INT,
+                                       passedComm.myIoProc());
       searchComm.broadcast((void*) outBuf.buf(), // Now broadcast buffer itself.
-		                       probSize,
-		                       MPI_PACKED,
-		                       passedComm.myIoProc());
+                                       probSize,
+                                       MPI_PACKED,
+                                       passedComm.myIoProc());
     }
 
   else   // On the other processors, we receive the same information...
@@ -1224,16 +1225,16 @@ void parallelBranching::broadcastProblem()
     {
       int probSize;                          // Get length of buffer
       searchComm.broadcast(&probSize,        // we're going to get.
-		                       1,
-		                       MPI_INT,
-		                       passedComm.myIoProc());
+                                       1,
+                                       MPI_INT,
+                                       passedComm.myIoProc());
       DEBUGPR(70,ucout << "Received broadcast size is " << probSize << " bytes.\n");
       UnPackBuffer inBuf(probSize);               // Create a big enough
       inBuf.reset(probSize);                      // temporary buffer.
       searchComm.broadcast((void *) inBuf.buf(),  // Get the data...
-		                       probSize,
-		                       MPI_PACKED,
-		                       passedComm.myIoProc());
+                                       probSize,
+                                       MPI_PACKED,
+                                       passedComm.myIoProc());
       DEBUGPR(100,ucout << "Broadcast received.\n");
       unpackAll(inBuf);                      // ... and unpack it.
       DEBUGPR(100,ucout << "Unpack seems successful.\n");
@@ -1249,7 +1250,7 @@ void parallelBranching::broadcastProblem()
   // Compute and remember size of packed subproblems.
   rememberPackSize = spAllPackSize();
   DEBUGPR(50,ucout << "Packed subproblem size is " 
-	                 << rememberPackSize << ".\n");
+                         << rememberPackSize << ".\n");
   deliverSPBuffers.bufferQ.setStartingBufferSize(rememberPackSize);
 }
 
@@ -1257,7 +1258,7 @@ void parallelBranching::broadcastProblem()
 void parallelBranching::rampUpIncumbentSync()
 {
   DEBUGPR(100,ucout << "Entered rampUpIncumbentSync(): value=" 
-	  << incumbentValue << ", source=" << incumbentSource << endl);
+          << incumbentValue << ", source=" << incumbentSource << endl);
   MPI_Op reduceOp = MPI_MIN;    // For minimization
   if (sense == maximization)    // Change if maximization
     reduceOp = MPI_MAX;
@@ -1277,10 +1278,10 @@ void parallelBranching::rampUpIncumbentSync()
       needPruning = true;
       newIncumbentEffect(bestIncumbent);
       if ((searchRank == 0) && trackIncumbent)
-	ucout << "New incumbent found: value=" << bestIncumbent
-	      << ", source=" << lowestRank
-	      << ", time=" << CPUSeconds() - baseTime 
-	      << (rampingUp() ? " (ramp-up)" : "") << endl;
+        ucout << "New incumbent found: value=" << bestIncumbent
+              << ", source=" << lowestRank
+              << ", time=" << CPUSeconds() - baseTime 
+              << (rampingUp() ? " (ramp-up)" : "") << endl;
     }
   
   incumbentValue  = bestIncumbent;
@@ -1290,7 +1291,7 @@ void parallelBranching::rampUpIncumbentSync()
      resetIncumbent();
 
   DEBUGPR(100,ucout << "Leaving rampUpIncumbentSync(): value=" 
-	  << incumbentValue << ", source=" << incumbentSource << endl);
+          << incumbentValue << ", source=" << incumbentSource << endl);
 
   if (searchRank > 0)
     rampUpMessages += 4;
@@ -1310,10 +1311,15 @@ void parallelBranching::rampUpSearch()
   double startRampUpWCTime = WallClockSeconds();
   UTILIB_LOG_EVENT(1,start,rampUpLogState);
   rampUpFlag = true;
-  DEBUGPR(1,ucout << "Starting ramp-up phase\n");
+  bool rampUpWanted = wantRampUp();
+  DEBUGPR(1,ucout << "Starting ramp-up phase, wanted flag = " 
+                  << rampUpWanted << endl);
 
-  rampUpInternalSetup();         // Hook for parallelTeamBranching derived class
-  rampUpSetup();                 // For applications to get ready if they need to
+  if (rampUpWanted)
+  {
+     rampUpInternalSetup();         // Hook for parallelTeamBranching derived class
+     rampUpSetup();                 // For applications to get ready if they need to
+  }       
 
   foundSolution(initialGuess(),synchronous);
   rampUpIncumbentSync();
@@ -1324,26 +1330,27 @@ void parallelBranching::rampUpSearch()
 
   workerPool->insert(makeParRoot());
 
-  while((spCount() > 0) && keepRampingUp())
+  while(rampUpWanted && (spCount() > 0) && keepRampingUp())
     {
       processSubproblem();
       if (searchRank == 0)
-	{
-	  loadObject lo = updatedPLoad();
-	  statusPrint(workerLastPrint,workerLastPrintTime,lo,"r");
-	  recordLoadLogIfNeeded();
-	}
+        {
+          loadObject lo = updatedPLoad();
+          statusPrint(workerLastPrint,workerLastPrintTime,lo,"r");
+          recordLoadLogIfNeeded();
+        }
     }
 
   DEBUGPR(1,ucout << "Synchronous ramp-up loop complete.\n");
 
-  rampUpInternalCleanUp();     // Hook for parallelTeamBranching
-  rampUpCleanUp();             // For applications to clean up if they need to
-
-  if (haveCurrentSP())
-    unloadCurrentSPtoPool();
-
-  rampUpIncumbentSync();
+  if (rampUpWanted)
+  {
+    if (haveCurrentSP())
+      unloadCurrentSPtoPool();
+    rampUpInternalCleanUp();     // Hook for parallelTeamBranching
+    rampUpCleanUp();             // For applications to clean up if they need to
+    rampUpIncumbentSync();
+  }
 
   double aggBoundAtCrossover = workerPool->updatedLoad().aggregateBound;
   
@@ -1354,7 +1361,7 @@ void parallelBranching::rampUpSearch()
   // is set, in which case it's a queue.
 
   DEBUGPR(10,ucout << "Starting ramp-up crossover, bounded="
-	  << subCount[bounded] << endl);
+          << subCount[bounded] << endl);
   DEBUGPR(10,statusLine(workerPool->updatedLoad(),"X"));
   
   crossoverFlag = true;
@@ -1398,7 +1405,7 @@ void parallelBranching::rampUpSearch()
       parallelBranchSub* sp = workerPool->remove();
       globalLoad += *sp;
       DEBUGPR(100,ucout << "Ramp-up crossover: " << sp 
-	      << ", global load " << globalLoad << endl);
+              << ", global load " << globalLoad << endl);
 
       // Figure out which processor will be the worker for this SP.
       // workerRank is the rank in the set of workers, and 
@@ -1412,32 +1419,32 @@ void parallelBranching::rampUpSearch()
       // information
 
       if (whichCluster(procRank) == whichCluster(searchRank))
-	{
-	  clusterLoad += *sp;
-	  DEBUGPR(100,ucout << "My cluster, load " << clusterLoad << endl);
-	  if (iAmHub())
-	    {
-	      int workerClusterRank = whichWorker(procRank);
-	      DEBUGPR(100,ucout << "Worker rank in cluster = " 
-		      << workerClusterRank << endl);
-	      workerLoadReport[workerClusterRank]   += *sp;
-	      workerLoadEstimate[workerClusterRank] += *sp;
-	    }
-	}
+        {
+          clusterLoad += *sp;
+          DEBUGPR(100,ucout << "My cluster, load " << clusterLoad << endl);
+          if (iAmHub())
+            {
+              int workerClusterRank = whichWorker(procRank);
+              DEBUGPR(100,ucout << "Worker rank in cluster = " 
+                      << workerClusterRank << endl);
+              workerLoadReport[workerClusterRank]   += *sp;
+              workerLoadEstimate[workerClusterRank] += *sp;
+            }
+        }
 
       // If this is the worker processor owning the subproblem,
       // save it in the temporary pool; otherwise, discard.
 
       if (procRank == searchRank)
-	{
-	  DEBUGPR(100,ucout << "Keeping...\n");
-	  tempPool.insert(sp);
-	}
+        {
+          DEBUGPR(100,ucout << "Keeping...\n");
+          tempPool.insert(sp);
+        }
       else
-	{
-	  DEBUGPR(100,ucout << "Eliminating.\n");
-	  sp->recycle();
-	}
+        {
+          DEBUGPR(100,ucout << "Eliminating.\n");
+          sp->recycle();
+        }
 
       // Update worker rank for next problem (if we have one...)
       workerRank = (workerRank + skipFactor) % totalWorkers();
@@ -1485,14 +1492,14 @@ void parallelBranching::rampUpSearch()
   if (iAmHub())
     {
       for (int w=0; w<numWorkers(); w++)
-	{
-	  workerLoadEstimate[w].update();
-	  heapOfWorkers.add(workerHeapObj[w]);
-	  qHeapOfWorkers.add(workerQHeapObj[w]);
-	}
+        {
+          workerLoadEstimate[w].update();
+          heapOfWorkers.add(workerHeapObj[w]);
+          qHeapOfWorkers.add(workerQHeapObj[w]);
+        }
       if (iAmFirstHub())
       {
-	DEBUGPR(1,statusLine(globalLoad,"x"));
+        DEBUGPR(1,statusLine(globalLoad,"x"));
       }
     }
 
@@ -1509,8 +1516,8 @@ void parallelBranching::rampUpSearch()
   // Declare ramp-up to be over and tidy up.
 
   DEBUGPR(1,ucout << "Ramp-up phase complete, bounded=" << rampUpBounds
-	  << " global-pool=" << rampUpPool 
-	  << " local-pool=" << workerPool->size() << endl);
+          << " global-pool=" << rampUpPool 
+          << " local-pool=" << workerPool->size() << endl);
 
   rampUpFlag = false;
   UTILIB_LOG_EVENT(1,end,rampUpLogState);
@@ -1567,7 +1574,7 @@ void parallelBranching::setupAbort()
   if (iAmHub())
     {
       if (clusterNumber() == 0)
-	ucout << "\nStarting to abort (" << abortReason << ")\n";
+        ucout << "\nStarting to abort (" << abortReason << ")\n";
       alertWorkers(startAbortSignal);
     }
 }
@@ -1590,7 +1597,7 @@ void parallelBranching::clearAllSPsForAbort()
   if (iAmWorker())
     {
       if (haveCurrentSP())
-	unloadCurrentSPtoPool();
+        unloadCurrentSPtoPool();
       workerPool->clear();
       serverPool.clear();
     }
@@ -1602,14 +1609,14 @@ spToken::spToken(parallelBranchSub* sp,int childNum,int childCount) :
 {
   if (!sp->canTokenize())
     EXCEPTION_MNGR(runtime_error, "Attempt to make a token from a subproblem "
-		   "for which canTokenize() == false");
+                   "for which canTokenize() == false");
   spProcessor         = sp->pGlobal()->searchRank;
   whichChild          = childNum;
   memAddress          = sp;
   childrenRepresented = childCount;
   sp->tokenCount     += childCount;
   globalPtr           = sp->bGlobal();
-  depth		      = -1;			// dummy initialization
+  depth               = -1;                     // dummy initialization
 };
 
 
@@ -1680,8 +1687,8 @@ void parallelBranching::setHubTimeBlock(pbTimeTrackBlock& tt)
 
 
 double parallelBranching::hubBusyFractionCalc(bool separated, 
-					      int n, 
-					      pbTimeTrackBlock& track)
+                                              int n, 
+                                              pbTimeTrackBlock& track)
 {
   if (separated)       // If hub is "pure"...
     return 1;          // it spends all its time being a hub
@@ -1696,7 +1703,7 @@ double parallelBranching::hubBusyFractionCalc(bool separated,
   double ratio     = numerator/denominator;
 
   return std::min(ratio*hubBusyInflate,
-		  ratio + hubBusyAdjust*(1 - ratio));
+                  ratio + hubBusyAdjust*(1 - ratio));
 }
 
 
@@ -1705,19 +1712,19 @@ void parallelBranching::setHubBusyFractions()
   int nminus1 = numHubs() - 1;
 
   typicalHubBusyFraction = hubBusyFractionCalc(typicalHubsPure(),
-					       nminus1,
-					       globalLoad.hubTrack);
+                                               nminus1,
+                                               globalLoad.hubTrack);
 
   lastHubBusyFraction = hubBusyFractionCalc(lastHubPure(),
-					    1,
-					    globalLoad.lastHubTrack);
+                                            1,
+                                            globalLoad.lastHubTrack);
 
   adjustedWorkerCount = searchSize - nminus1*typicalHubBusyFraction
                                    - lastHubBusyFraction;
 
   DEBUGPR(100,ucout << "typicalHubBusyFraction=" << typicalHubBusyFraction
-	  << " lastHubBusyFraction=" << lastHubBusyFraction
-	  << " adjustedWorkerCount=" << adjustedWorkerCount << '\n');
+          << " lastHubBusyFraction=" << lastHubBusyFraction
+          << " adjustedWorkerCount=" << adjustedWorkerCount << '\n');
 
   if (iAmWorker())
     setMyWorkerTimeFrac();

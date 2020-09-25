@@ -113,6 +113,13 @@ namespace pebbl {
         return !iAmHead();
       }
 
+      // This is the same as iAmHead with just teams, but will be different in 
+      // some cases when there is parallel search + teams
+
+      virtual bool iAmSearcher() {
+        return iAmHead();
+      }
+
       // Returns the rank of this team's head
       // Currently this is always 0
       int getHeadRank() { return 0; }
@@ -165,7 +172,7 @@ namespace pebbl {
       }
 
       virtual void printAllStatistics(std::ostream& stream = std::cout){
-        if(iAmHead()){
+        if(iAmSearcher()){
           branching::printAllStatistics(stream);
         }
       }

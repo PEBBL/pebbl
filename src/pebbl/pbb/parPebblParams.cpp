@@ -44,6 +44,12 @@ parallelPebblParams::parallelPebblParams()
 
 /// RAMP-UP
 
+  useRampUp=true;
+  create_categorized_parameter("useRampUp",useRampUp,
+		"<bool>","true",
+		"Use a ramp-up phase",
+		"Ramp-up");
+
   rampUpPoolLimit=0;
   create_categorized_parameter("rampUpPoolLimit",rampUpPoolLimit,"<int>","0",
 		"Pool size beyond which ramp-up phase may end\n\t"

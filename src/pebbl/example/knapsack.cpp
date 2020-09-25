@@ -245,7 +245,7 @@ class parallelTeamBinaryKnapsack :
    void reset(bool VBflag=true)
     {
       binaryKnapsack::reset();
-      if (iAmHead())
+      if (iAmSearcher())
         registerFirstSolution(new binKnapSolution(this));
       parallelTeamBranching::reset();
     }

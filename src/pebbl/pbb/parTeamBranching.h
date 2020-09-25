@@ -134,6 +134,14 @@ enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode};
           parallelBranching::broadcastProblem();
       }
 
+      // For now, turn off ramp up when there are pure hubs.  That's probabably do-able
+      // but could be a bit hairy to set up
+
+      bool wantRampUp()
+      {
+        return useRampUp && !(cluster.typicallySeparated);
+      }
+
       int fullClusterSize(bool separated, int clusterSize)
       {
         return separated + (clusterSize - separated) * teamSize;

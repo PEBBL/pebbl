@@ -44,6 +44,10 @@ public:
   // Controls the size of teams when doing parallel computation
   int teamSize;
 
+  // Controls whether we really use ramp-up at all
+
+  bool useRampUp;
+
   // Controls how long we do the synchronous ramp-up phase.  This may have
   // no effect if the continueRampUp() method has been overridden.
 
