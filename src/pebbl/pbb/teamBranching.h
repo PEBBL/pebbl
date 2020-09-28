@@ -181,11 +181,40 @@ namespace pebbl {
       // into the waiting for work loop.
       virtual double search();
   
-      // Solution to file is the same as in serial, but only on the head processor
+      // Override regular solution output procedure
       void solutionToFile()
       {
-        if (iAmHead())
+        if (iAmSearcher())
           branching::solutionToFile();
+        if (iAmMinion())
+        {
+          broadcastProbNameToTeam();
+          teamSolutionOutput();
+        }
+      }
+
+      // This is also overridden now
+      void directSolutionToFile()
+      {
+        broadcastProbNameToTeam();
+        teamSolutionOutput();
+      }
+
+      // This takes care of making sure all minions know the name of the 
+      // current problem
+
+      void broadcastProbNameToTeam();
+
+      // Default routine called on all processors at output time
+      // problemName is guaranteed to be set everywhere.  The default
+      // assumes that the only the head has the result
+
+      virtual void teamSolutionOutput()
+      {
+        DEBUGPR(10,ucout << "Default implementation of teamBranching::teamSolutionOutput"
+                         << " for problem named " << problemName << std::endl);
+        if (iAmSearcher())
+          branching::directSolutionToFile();
       }
 
   protected:

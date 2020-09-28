@@ -979,7 +979,9 @@ public:
 
   void branchingInitGuts();
 
-  void directSolutionToFile();
+  // This function can be overridden now, to accommodate teamBranching applications
+  virtual void directSolutionToFile();
+  
   int  serialNeedEarlyOutput();
   void recordEarlyOutput(double outputVal);
 

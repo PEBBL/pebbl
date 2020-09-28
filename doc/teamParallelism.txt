@@ -98,8 +98,20 @@ the root.
 In your teamBranching-derived class, make sure to override the method
 blankSub() so that it makes a team-aware blank subproblem.  
 
+If your application requires the team to cooperate in writing the final
+solution to a file (or multiple files), override the method
+teamSolutionOutput() in the branching class.  This method will be called
+synchronously on all processors at the end of the run.  This method is
+responsible for opening, writing, and closing all necessary files.  On all
+processors, the "problemName" member of the branching class will be a
+std::string containing the name of the problem; this information is typically
+used to construct the output file name(s).
 
-Defining a Two-Way Parallel PEBBL Application
+Currently the teamSolutionOutput() does not coordinate with the early output
+and enumeration features of PEBBL.  This functionality may be added later.
+
+
+Defining a Two-Way-Parallel PEBBL Application
 =============================================
 
 You will need two classes, one derived from parallelTeamBranching, and one for
@@ -204,3 +216,15 @@ version of the incumbent (*incumbent) solution to outStream.  It is acceptable
 to just invoke the printSolution method of the search-parallelism-only base
 class, if you have one.
 
+As with a team-only-parallel application, you should override the method
+teamSolutionOutput() if you require multiple processors to cooperation output.
+At the end of the run, this method will be called synchronously on all
+processors in the team which created the incumbent solution.  All these
+processors may rely on the "problemName" member of the branching class (of
+type std::string) containing the name of the current problem (for use in
+constructing output file names).  If you have a team-only-parallelism only
+version of the application and it has a teamSolutionOutput() method, it should
+be called automatically and should be sufficient.  As in the
+team-only-parallelism case, early output of solutions and output of multiple
+enumerated solutions is not yet supported; this functionality may be added
+later.

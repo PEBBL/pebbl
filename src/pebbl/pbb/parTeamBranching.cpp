@@ -266,6 +266,31 @@ namespace pebbl {
            << " minion" << plural(minionsPerCluster) << endl;
   }
 
+
+  // Makes sure teamBranching hook for solution output gets called when
+  // outputting solution
+
+  void parallelTeamBranching::solutionToFile()
+  {
+    DEBUGPR(10,ucout << "In parallelTeamBranching::solutionToFile\n");
+    // Flag that's true is the solution is stored locally
+    bool haveSolution = iAmSearcher() && (incumbentSource == searchRank);
+    if (inATeam())
+    {
+      // If part of a team, spread the value of haveSolution to all minions
+      teamComm.broadcast(&haveSolution,1,MPI_C_BOOL,0);
+      // If the local team has the solution, use the teamBranching solution
+      // output method just in this team
+      if (haveSolution)
+        teamBranching::directSolutionToFile();
+    }
+    else if (haveSolution)
+      // In some cases a pure hub could have the solution, if it was created
+      // in ramp-up and ramp up included hubs.  In this case, just guess that
+      // direct output on that on this one processor will work
+      branching::directSolutionToFile();
+  }
+
 }
 
 

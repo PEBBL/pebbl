@@ -69,12 +69,8 @@ enum PEBBL_mode {serialMode, parallelMode, teamMode, parallelTeamMode};
           branching::reset(VBFlag);
       }
 
-      // Override the solutionToFile method as only search processors participate
-      virtual void solutionToFile() {
-        if (iAmSearcher()) {
-          parallelBranching::solutionToFile();
-        }
-      }
+      // Override the solutionToFile to possibly orchestrate team output
+      virtual void solutionToFile();
 
       // Override the printSPStatistics method as only search processors participate
       virtual void printSPStatistics() {

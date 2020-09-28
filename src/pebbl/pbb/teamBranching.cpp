@@ -111,6 +111,26 @@ double teamBranching::search() {
   }
 }
 
+
+void teamBranching::broadcastProbNameToTeam()
+{
+  if (iAmHead())
+  {
+    int nameLen = problemName.length();
+    teamComm.broadcast(&nameLen,1,MPI_INT,0);
+    teamComm.broadcast((void *) problemName.c_str(),nameLen,MPI_CHAR,0);
+  }
+  else if (iAmMinion())
+  {
+    int nameLen = -1;
+    teamComm.broadcast(&nameLen,1,MPI_INT,0);
+    char* nameBuf = new char[nameLen + 1];
+    nameBuf[nameLen] = 0;
+    teamComm.broadcast(nameBuf,nameLen,MPI_CHAR,0);
+    problemName.assign(nameBuf);
+  }
+}
+
 }
 #endif 
 
