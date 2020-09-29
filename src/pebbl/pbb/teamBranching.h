@@ -8,6 +8,9 @@
 
 
 #include <pebbl/comm/mpiComm.h>
+#include <pebbl/bb/branching.h>
+#include <pebbl/pbb/parPebblParams.h>
+
  
 #ifndef pebbl_teamBranching_h
 #define pebbl_teamBranching_h
