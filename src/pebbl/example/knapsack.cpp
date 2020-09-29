@@ -38,11 +38,12 @@ protected:
   // Just (very inefficiently) compute the size of the team communicator
   void teamOrganize() 
   { 
-    ucout << "teamBinaryKnapsack teamOrganize called\n";
+    DEBUGPR(1,ucout << "teamBinaryKnapsack teamOrganize called\n");
     int one = 1;
     int countedSize = -1;
     teamComm.reduceCast(&one,&countedSize,1,MPI_INT,MPI_SUM);
-    ucout << "teamComm current appears to have " << countedSize << " MPI ranks\n";
+    DEBUGPR(1,ucout << "teamComm current appears to have " << countedSize 
+                    << " MPI ranks\n");
   }
 
   // Utility routine for minion operations
@@ -51,8 +52,8 @@ protected:
   {
     int serialNumber = -1;
     teamComm.broadcast(&serialNumber,1,MPI_INT,0);
-    ucout << "Minion " << teamComm.myRank() << ' ' << descrip << " subproblem " 
-          << serialNumber << std::endl;
+    DEBUGPR(1,ucout << "Minion " << teamComm.myRank() << ' ' << descrip << " subproblem " 
+                    << serialNumber << std::endl);
    
   }
 
@@ -197,8 +198,8 @@ class parallelTeamBinaryKnapsack :
   {
     int idArray[2];
     teamComm.broadcast(idArray,2,MPI_INT,0);
-    ucout << "Parallel minion " << teamComm.myRank() << ' ' << opDescrip
-          << " subproblem " << idArray[0] << ':' << idArray[1] << std::endl;
+    DEBUGPR(1,ucout << "Parallel minion " << teamComm.myRank() << ' ' << opDescrip
+                    << " subproblem " << idArray[0] << ':' << idArray[1] << std::endl);
   }
 
   // In this test application, the minions don't really do anything; they just
@@ -220,14 +221,14 @@ class parallelTeamBinaryKnapsack :
 
   void rampUpSetup()
   {
-    ucout << "Ramp-up setup called\n";
+    DEBUGPR(1,ucout << "Ramp-up setup called\n");
     if (inATeam())
       teamComm.barrier();
   }
 
   void rampUpCleanUp()
   {
-    ucout << "Ramp-up clean-up called\n";
+    DEBUGPR(1,ucout << "Ramp-up clean-up called\n");
     if (inATeam())
       teamComm.barrier();
   }
