@@ -608,7 +608,7 @@ parallelPebblParams::parallelPebblParams()
 		"(default is first hub only)",
 		"Debugging");
 
-  printSolutionSynch=true;
+  printSolutionSynch=false;
   create_categorized_parameter("printSolutionSynch",printSolutionSynch,
 		"<bool>","true",
 		"Only the designated IO processor (typically 0)\n\t"

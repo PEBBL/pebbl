@@ -1027,6 +1027,8 @@ double branching::searchFramework(spHandler* handler_)
       if ((earlyOutputMinutes > 0) && serialNeedEarlyOutput())
 	{
 	  directSolutionToFile();
+          if (earlyOutputLog)
+             ucout << "Solution file written\n";
 	  recordEarlyOutput(incumbentValue);
 	}
 

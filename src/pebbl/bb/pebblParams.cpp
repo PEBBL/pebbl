@@ -32,7 +32,7 @@ extern size_t randomSeed;
 pebblParams::pebblParams()
   : statusPrintCount(100000),
     statusPrintSeconds(10.0),
-		forceTeam(false),
+    forceTeam(false),
     depthFirst(false),
     breadthFirst(false),
     initialDive(false),
@@ -42,6 +42,7 @@ pebblParams::pebblParams()
     relTolerance(1e-7),
     absTolerance(0.0),
     earlyOutputMinutes(0.0),
+    earlyOutputLog(false),
     startIncumbent(0.0),
     validateLog(false),    
     heurLog(false),
@@ -165,6 +166,12 @@ pebblParams::pebblParams()
 		"Output",
 		ParameterNonnegative<double>());
 
+  create_categorized_parameter("earlyOutputLog",earlyOutputLog,
+		"<bool>","feasible",
+		"Send a log message to stdout when writing earlyOutputLog\n\t"
+		"output solutions",
+		"Output");
+
   create_categorized_parameter("validateLog",validateLog,
 		"<bool>","false",
 		"Output validation log files val*.log for logAnalyze",
@@ -185,8 +192,8 @@ pebblParams::pebblParams()
 		"Debugging",
 		ParameterNonnegative<double>());
 
-	create_categorized_parameter("forceTeam",forceTeam,
-	  "<bool>","false",
+  create_categorized_parameter("forceTeam",forceTeam,
+                "<bool>","false",
 		"Force the use of teamwork on subproblems for debugging",
 		"Debugging");
 

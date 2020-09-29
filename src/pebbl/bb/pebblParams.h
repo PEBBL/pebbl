@@ -68,6 +68,9 @@ public:
   double earlyOutputMinutes;
 
   ///
+  bool earlyOutputLog;
+
+  ///
   double startIncumbent;
 
   ///

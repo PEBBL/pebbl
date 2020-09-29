@@ -149,6 +149,8 @@ void earlyOutputObj::writeEarlyOutput()
   if (iDoIO() || !global->printSolutionSynch) // Can just print ourselves.
     {
       DEBUGPR(100,ucout << "Writing locally.\n");
+      if (global->earlyOutputLog)
+        ucout << "Solution file written (locally)\n";
       global->directSolutionToFile();
       confirmEarlyOutput(global->incumbentValue);
     }
@@ -159,7 +161,7 @@ void earlyOutputObj::writeEarlyOutput()
       outBuf.reset();
       outBuf << (int) outputDeliverSignal;  // Indicate this is a solution
       global->incumbent->pack(outBuf);      // Pack in the solution
-      sendMessage(myIoProc());            // Send!
+      sendMessage(myIoProc());              // Send!
     }
 }
 
