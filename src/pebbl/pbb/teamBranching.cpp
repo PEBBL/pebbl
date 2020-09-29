@@ -57,6 +57,9 @@ bool teamBranching::minionDispatch(teamBranching::parallelOp opCode)
     case makeChildOp:
       minionMakeChild();
       break;
+    case writeSolOp:
+      directSolutionToFile();
+      break;
     case exitOp:
       return true;
     default:

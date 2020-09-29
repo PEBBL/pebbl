@@ -971,19 +971,26 @@ public:
   virtual loadObject load();
   virtual loadObject updatedLoad();
 
-  void branchingInit(optimType   direction = minimization,
+  void branchingInit(optimType  direction = minimization,
 		    double      relTolSet = -1.0,
 		    double      absTolSet = -1.0,
 		    double      bluff = -1,
-		    bool bluffReal = false); 
+		    bool        bluffReal = false); 
 
   void branchingInitGuts();
 
-  // This function can be overridden now, to accommodate teamBranching applications
+  // This function can be overridden to accommodate teamBranching applications
   virtual void directSolutionToFile();
   
   int  serialNeedEarlyOutput();
   void recordEarlyOutput(double outputVal);
+
+  // This can be overriddent to accommodate teamBranching applications
+  virtual void earlyOutputAction() { directSolutionToFile(); }
+
+  // Don't bother writing at end if solution already written
+  // This is overwritten in teamBranching to keep things synched.
+  virtual bool alwaysWriteAtEnd() { return false; }
 
   void printSPTable(std::ostream& stream,int* table,int nameWidth);
   void printSPLine(std::ostream&    stream,

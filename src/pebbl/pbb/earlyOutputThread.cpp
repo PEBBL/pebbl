@@ -151,7 +151,7 @@ void earlyOutputObj::writeEarlyOutput()
       DEBUGPR(100,ucout << "Writing locally.\n");
       if (global->earlyOutputLog)
         ucout << "Solution file written (locally)\n";
-      global->directSolutionToFile();
+      global->earlyOutputAction();
       confirmEarlyOutput(global->incumbentValue);
     }
   else                                      // Have to send it.

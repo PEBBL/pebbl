@@ -1026,7 +1026,7 @@ double branching::searchFramework(spHandler* handler_)
 
       if ((earlyOutputMinutes > 0) && serialNeedEarlyOutput())
 	{
-	  directSolutionToFile();
+	  earlyOutputAction();
           if (earlyOutputLog)
              ucout << "Solution file written\n";
 	  recordEarlyOutput(incumbentValue);
@@ -1600,7 +1600,9 @@ void branching::solutionToFile()
 
   // If we already wrote the solution, do nothing.
 
-  if ((earlyOutputMinutes > 0) && (lastSolValOutput == incumbentValue))
+  if (!alwaysWriteAtEnd() && 
+      (earlyOutputMinutes > 0) && 
+      (lastSolValOutput == incumbentValue))
     return;
 
   // Otherwise, write it.

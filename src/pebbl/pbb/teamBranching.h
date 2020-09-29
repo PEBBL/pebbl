@@ -32,10 +32,11 @@ namespace pebbl {
 
       enum parallelOp { boundOp, 
                         separateOp, 
-                        makeChildOp, 
+                        makeChildOp,
+                        writeSolOp,
                         exitOp,
                         rampUpStartOp,    // The last two are used only in the 
-                        rampUpEndOp };    // derived paralleTeamBranching class
+                        rampUpEndOp };    // derived parallelTeamBranching class
 
       /// Initialize base classes and reset the state of the solver
       virtual void reset()
@@ -216,6 +217,16 @@ namespace pebbl {
         if (iAmSearcher())
           branching::directSolutionToFile();
       }
+
+      // Override standard early output on head to send an alert to teams
+      void earlyOutputAction()
+      {
+        alertTeam(writeSolOp);
+        directSolutionToFile();
+      }
+
+      // Force write at end even if early output happened, to keep things in synch
+      bool alwaysWriteAtEnd() { return true; }
 
   protected:
 
