@@ -632,13 +632,16 @@ void parallelBranching::printConfiguration(ostream& stream)
   if (mod)
     stream << ", 1 of size " << mod;
   stream << '\n';
-  printHubsAndWorkers(stream,pWidth,searchSize);
+  printHubsAndWorkers(stream,pWidth,searchSize,"pure worker");
   printTimeSlice(stream);
   CommonIO::begin_tagging();
 }
 
 
-void parallelBranching::printHubsAndWorkers(ostream& stream, int pWidth, int worldSize)
+void parallelBranching::printHubsAndWorkers(ostream& stream, 
+                                            int pWidth, 
+                                            int worldSize,
+                                            const char* workerName)
 {
   stream.width(pWidth);
   stream << worldSize << " processor" 
@@ -646,7 +649,7 @@ void parallelBranching::printHubsAndWorkers(ostream& stream, int pWidth, int wor
   int pureHubs    = searchSize - totalWorkers();
   int workerHubs  = numHubs() - pureHubs;
   int pureWorkers = totalWorkers() - workerHubs;
-  configLine(stream,pWidth,pureWorkers,"pure worker",worldSize);
+  configLine(stream,pWidth,pureWorkers,workerName,worldSize);
   configLine(stream,pWidth,pureHubs,   "pure hub",worldSize);
   configLine(stream,pWidth,workerHubs, "worker-hub",worldSize);
 }
@@ -663,11 +666,11 @@ void parallelBranching::printTimeSlice(ostream& stream)
 
 
 void parallelBranching::configLine(ostream&   stream,
-				                          int         pWidth,
-				                          int         number,
-				                          const char* kind,
-                                  int         percentDenom,
-                                  bool        usePlural)
+				   int         pWidth,
+				   int         number,
+				   const char* kind,
+                                   int         percentDenom,
+                                   bool        usePlural)
 {
   if (number == 0)
     return;

@@ -174,7 +174,10 @@ public:
 
   void printConfiguration(std::ostream& stream = ucout);
 
-  void printHubsAndWorkers(std::ostream& stream, int pWidth, int worldSize);
+  void printHubsAndWorkers(std::ostream& stream, 
+                           int pWidth, 
+                           int worldSize,
+                           const char* workerName);
   void printTimeSlice(std::ostream& stream);
 
   virtual void printSPStatistics(std::ostream& stream = ucout);

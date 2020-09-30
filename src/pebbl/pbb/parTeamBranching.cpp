@@ -235,7 +235,7 @@ namespace pebbl {
                              cluster.lastClusterSize,
                              cluster.lastSeparated,
                              pWidth);
-    printHubsAndWorkers(stream,pWidth,worldSize);
+    printHubsAndWorkers(stream,pWidth,worldSize,"worker");
     int totalMinions = totalWorkers()*(teamSize - 1);
     configLine(stream,pWidth,totalMinions, "minion",worldSize);
     configLine(stream,pWidth,unusedProcs, "unused",worldSize,false);
