@@ -255,6 +255,7 @@ parallelPebblParams::parallelPebblParams()
 		"Parallel Search",
 		ParameterBounds<double>(0.0,1.0));
 
+  maxTokenQueuing = 128;
   create_categorized_parameter("maxTokenQueuing",maxTokenQueuing,"<int>","128",
 		"Largest number of tokens released to a hub in one message",
 		"Parallel Search",
