@@ -33,7 +33,7 @@ namespace pebbl {
 // Code for coTree that surveys and broadcasts load information
 
 loadBalSurvey::loadBalSurvey(coTreeReadyPBThread* thread_,
-			     treeTopology*        treeP_) :
+           treeTopology*        treeP_) :
   parBranchingCoTree(MPI_PACKED,
                      thread_,
                      treeP_),
@@ -56,7 +56,7 @@ void loadBalSurvey::upMessageAction()
 {
   parLoadObject childLoad(global);
   DEBUGPR(160,ucout << "Survey message from child " 
-	  << thread->statusP()->MPI_SOURCE << endl);
+    << thread->statusP()->MPI_SOURCE << endl);
   inBuf.reset(thread->statusP());
   inBuf >> childLoad;
   DEBUGPR(160,childLoad.dump(ucout,"reported by child"));
@@ -111,14 +111,14 @@ void loadBalSurvey::downReceiveAction()
       inBuf >> cpDown;
       DEBUGPR(160,ucout << "cpDown=" << cpDown << endl);
       if (cpDown && !(global->checkpointing))
-	global->setupCheckpoint();
+  global->setupCheckpoint();
     }
   if (t->numChildren() > 0)
     {
       outBuf.reset();
       outBuf << global->globalLoad << global->aborting;
       if (global->checkpointsEnabled)
-	outBuf << global->checkpointing;
+  outBuf << global->checkpointing;
     }
 }
 
@@ -128,10 +128,10 @@ void loadBalSurvey::downReceiveAction()
 // Constructor.
 
 loadBalCount::loadBalCount(loadBalObj*   balThread_,
-			   treeTopology* treeP_) :
+         treeTopology* treeP_) :
   parBranchingCoTree(MPI_INT,
-		     balThread_,
-		     treeP_),
+         balThread_,
+         treeP_),
   childCount(treeP_->numChildren()),
   balThread(balThread_),
   upBuf(2),
@@ -154,7 +154,7 @@ void loadBalCount::upMessageAction()
   receivedValues.donors    = upBuf[0];
   receivedValues.receivers = upBuf[1];
   DEBUGPR(150,ucout << "Child [" << status->MPI_SOURCE << "] reports "
-	  << receivedValues << endl);
+    << receivedValues << endl);
   childCount[childNum] = receivedValues;
   clusterCount += receivedValues;
 }
@@ -209,14 +209,14 @@ void loadBalCount::downRelayLoopAction(int i)
 loadBalObj::loadBalObj(parallelBranching* global_) :
 
 coTreeReadyPBThread(global_,
-		    (char*)((global_->numHubs() == 1) ?
-		     "Termination Check"     :
-		     "Load Balance/Termination"),
-		    (char*)((global_->numHubs() == 1) ?
-		     "Term Check"            :
-		     "Load Bal"),
-		    "blue",
-		    2,150),
+        (char*)((global_->numHubs() == 1) ?
+         "Termination Check"     :
+         "Load Balance/Termination"),
+        (char*)((global_->numHubs() == 1) ?
+         "Term Check"            :
+         "Load Bal"),
+        "blue",
+        2,150),
 
 tree(global_->cluster, global_->loadBalTreeRadix),
 surveyObject(this,&tree),
@@ -229,6 +229,7 @@ outBufQ(&(global_->searchComm)),
 inBuf(bufferSize),
 lastLoadBalTime(WallClockSeconds()),
 surveyRestartFlag(false),
+quiescencePollInProgress(false),
 roundNumber(0),
 surveyRestarts(0),
 quiescencePolls(0),
@@ -285,10 +286,10 @@ bool loadBalObj::canStart()
   if (global->numHubs() == 1)     // If only one hub, start this thread
     {                             // Only start if things look quiet
       DEBUGPR(1000,ucout << "Single-hub canStart, busy="
-	      << global->globalLoad.busy() << ", cpbusy="
-	      << global->globalLoad.cpBusy() << endl);
+        << global->globalLoad.busy() << ", cpbusy="
+        << global->globalLoad.cpBusy() << endl);
       DEBUGPR(1000,ucout << "needReposMerge=" 
-	      << global->needReposMerge << endl);
+        << global->needReposMerge << endl);
       DEBUGPR(1100,global->globalLoad.dump(ucout,"globalLoad"));
       return global->globalLoad.readyToPoll();
     }
@@ -314,7 +315,7 @@ bool loadBalObj::canStart()
   if (global->suspending())
     {
       DEBUGPR(250,ucout << "Can start load balancing "
-	      "(checkpoint or abort).\n");
+        "(checkpoint or abort).\n");
       return true;
     }
 
@@ -323,7 +324,7 @@ bool loadBalObj::canStart()
   if (surveyRestartFlag || !global->clusterLoad.busy())
     gap = gap / global->loadBalIdleIncrease;
   DEBUGPR(300,ucout << wTime - lastLoadBalTime 
-	  << " seconds since last start, gap=" << gap << endl);
+    << " seconds since last start, gap=" << gap << endl);
   
   if (wTime - lastLoadBalTime >= gap)
     {
@@ -344,9 +345,9 @@ ThreadObj::ThreadState loadBalObj::state()
     if (canStart())
       state_flag = ThreadReady;
   DEBUGPR(1000,ucout << "Load balancer state query: " <<
-	  (state_flag == ThreadReady ? "ready" :
-	   (state_flag == ThreadBlocked ? "blocked" :
-	    (state_flag == ThreadWaiting ? "waiting" : "?"))) << '\n');
+    (state_flag == ThreadReady ? "ready" :
+     (state_flag == ThreadBlocked ? "blocked" :
+      (state_flag == ThreadWaiting ? "waiting" : "?"))) << '\n');
   return state_flag;
 };
 
@@ -366,15 +367,69 @@ int loadBalObj::subproblemsProcessed()
 void loadBalObj::waitToReceive(MessageID& tag_)
 {
   DEBUGPR(300,ucout << "Load balancer about to wait on tag " 
-	  << (int) tag_ << ".\n");
+    << (int) tag_ << ".\n");
   irecv((void*) inBuf.buf(),
-	bufferSize,
-	MPI_PACKED,
-	MPI_ANY_SOURCE,
-	tag_,
-	&request);
+  bufferSize,
+  MPI_PACKED,
+  MPI_ANY_SOURCE,
+  tag_,
+  &request);
   tag = tag_;
   state_flag = ThreadWaiting;
+}
+
+
+//  This method is used for a hub to poll all its workers so as to be sure to 
+//  have a current view of their states.  It is used at several points in the 
+//  the main state machine.  The return value is true if it needs to be called 
+//  again to complete the, and false if the poll is complete.
+
+bool loadBalObj::operateQuiescencePoll()
+{
+  DEBUGPR(150,ucout << "Entered operateQuiescencePoll\n");
+  // If a poll is not in progress, start a new one
+  if (!quiescencePollInProgress)
+  {
+    quiescencePollInProgress = true;
+    quiescencePolls++;
+    DEBUGPR(150,ucout << "Starting quiescence poll " << quiescencePolls << endl);
+    global->alertWorkers(quiescencePollSignal);
+    workersReplied = global->iAmWorker();
+  }
+  else
+  // If a poll is already in progress, that means a message must have arrived
+  {
+    workersReplied++;
+    inBuf.reset(&status);
+    int w = global->whichWorker(status.MPI_SOURCE);
+    DEBUGPR(150,ucout << "Reply is from processor " << status.MPI_SOURCE
+      << ", worker number " << w << endl);
+#ifdef ACRO_VALIDATING
+    if ((w < 0) || (w >= global->numWorkers()))
+      EXCEPTION_MNGR(runtime_error,"Bad quiescence poll response");
+#endif
+    inBuf >> global->workerLoadReport[w];
+    DEBUGPR(150,global->workerLoadReport[w].dump(ucout,"Report load"));
+      global->repositionWorker(w);   // Get hub in consistent state
+  }
+
+  // If we have heard from every worker, then recompute the cluster load
+  // and let the calling state know we're done
+
+  if (workersReplied == global->numWorkers())
+  {
+    DEBUGPR(150,"Quiescence polling complete\n");
+    global->hubCalculateLoads();
+    DEBUGPR(150,global->clusterLoad.dump(ucout,"clusterload"));
+    DEBUGPR(150,global->globalLoad.dump(ucout,"globalLoad"));
+    quiescencePollInProgress = false;
+    return false;
+  }
+
+  // Otherwise, we are not done, and we need to get another message.
+
+  waitToReceive(global->quiescencePollTag);
+  return true;
 }
 
 
@@ -383,8 +438,8 @@ void loadBalObj::waitToReceive(MessageID& tag_)
 void loadBalObj::stateEntryDebugPrint(const char* stateName)
 {
   ucout << "Load balancer <" << stateName << "> state, round "
-	<< roundNumber << ", at time " 
-	<< WallClockSeconds() - global->baseWallTime << ".\n";
+  << roundNumber << ", at time " 
+  << WallClockSeconds() - global->baseWallTime << ".\n";
 }
 
 
@@ -397,9 +452,9 @@ ThreadObj::RunStatus loadBalObj::runWithinLogging(double* controlParam)
 #define jumpState(newState) { myState = newState; canContinue = true; break; }
 
   DEBUGPR(150,ucout << "Load balancer running at time=" 
-	  << WallClockSeconds() - global->baseWallTime 
-	  << " checkpointing=" << global->checkpointing 
-	  << " aborting=" << global->aborting << endl);
+    << WallClockSeconds() - global->baseWallTime 
+    << " checkpointing=" << global->checkpointing 
+    << " aborting=" << global->aborting << endl);
 
   do 
 
@@ -409,485 +464,441 @@ ThreadObj::RunStatus loadBalObj::runWithinLogging(double* controlParam)
 
       switch(myState) 
 
-	{
+  {
 
-	case start:      // Start out here, but maybe block.
+  case start:      // Start out here, but maybe block.
 
-	  DEBUGPR(150,stateEntryDebugPrint("start"));
+    DEBUGPR(150,stateEntryDebugPrint("start"));
 
-	  myState = blockPoint;
+    myState = blockPoint;
 
-	  if (!canStart())
-	    {
-	      DEBUGPR(150,ucout << "Blocking...\n");
-	      state_flag = ThreadBlocked;
-	      break;
-	    }
+    if (!canStart())
+      {
+        DEBUGPR(150,ucout << "Blocking...\n");
+        state_flag = ThreadBlocked;
+        break;
+      }
 
-	case blockPoint:
+  case blockPoint:
 
-	  DEBUGPR(150,stateEntryDebugPrint("blockPoint"));
+    DEBUGPR(150,stateEntryDebugPrint("blockPoint"));
 
-	  // If only one hub and and we arrive here, then just start
-	  // checking for message balance.
+    // If only one hub and and we arrive here, then just start
+    // checking for message balance.
 
-	  if (global->numHubs() == 1)
-	    jumpState(startIdleCheck);
+    if (global->numHubs() == 1)
+      jumpState(startIdleCheck);
 
-	  myState = startSurvey;
+    myState = startSurvey;
 
-	case startSurvey:
+  case startSurvey:
 
-	  DEBUGPR(150,stateEntryDebugPrint("startSurvey"));
+    DEBUGPR(150,stateEntryDebugPrint("startSurvey"));
 
-	  roundNumber++;
-	  lastLoadBalTime = WallClockSeconds();
-	  surveyRestartFlag = false;
+    roundNumber++;
+    lastLoadBalTime = WallClockSeconds();
+    surveyRestartFlag = false;
 
-	  DEBUGPR(150,ucout << "Starting round " << roundNumber
-		  << " at time " << lastLoadBalTime << endl);
+    DEBUGPR(150,ucout << "Starting round " << roundNumber
+      << " at time " << lastLoadBalTime << endl);
 
-	  DEBUGPR(150,ucout << "Own general messages: " 
-		  << global->messages.general << endl);
+    DEBUGPR(150,ucout << "Own general messages: " 
+      << global->messages.general << endl);
 
-	  myState = surveying;
+    myState = surveying;
 
-	case surveying:             // Figure out loads.
+  case surveying:             // Figure out loads.
 
-	  DEBUGPR(150,stateEntryDebugPrint("surveying"));
+    DEBUGPR(150,stateEntryDebugPrint("surveying"));
 
-	  if (surveyObject.run())
-	    break;
-	  
-	  surveyObject.reset();
+    if (surveyObject.run())
+      break;
+    
+    surveyObject.reset();
 
-	  if (global->globalLoad.mismatch() ||
-	      (global->enumerating && global->globalLoad.fathomMismatch()))
-	    {
-	      DEBUGPR(150,ucout << "Survey restart\n");
-	      surveyRestarts++;
-	      surveyRestartFlag = true;
-	      jumpState(start);
-	    }
+    if (global->globalLoad.mismatch() ||
+        (global->enumerating && global->globalLoad.fathomMismatch()))
+      {
+        DEBUGPR(150,ucout << "Survey restart\n");
+        surveyRestarts++;
+        surveyRestartFlag = true;
+        jumpState(start);
+      }
 
- 	  if (global->globalLoad.readyToPoll())
-	    {
-	      jumpState(startIdleCheck);
- 	    }
+    if (global->globalLoad.readyToPoll())
+      {
+        jumpState(startIdleCheck);
+      }
 
-	  global->decideLoadBalAvailability(eligible);
-	  DEBUGPR(50,ucout << "Eligible: " << eligible << '\n');
+    global->decideLoadBalAvailability(eligible);
+    DEBUGPR(50,ucout << "Eligible: " << eligible << '\n');
 
-	  myState = counting;
-	  
-	case counting:
+    myState = counting;
+    
+  case counting:
 
-	  DEBUGPR(150,stateEntryDebugPrint("counting"));
+    DEBUGPR(150,stateEntryDebugPrint("counting"));
 
-	  if (countObject.run())
-	    break;
+    if (countObject.run())
+      break;
 
-	  countObject.reset();
+    countObject.reset();
 
-	  DEBUGPR(50,ucout << "LB Total: " << total << '\n');
-	  DEBUGPR(50,ucout << "myID: " << myID << '\n');
+    DEBUGPR(50,ucout << "LB Total: " << total << '\n');
+    DEBUGPR(50,ucout << "myID: " << myID << '\n');
 
-	  lbPairs = std::min(total.donors,total.receivers);
-	  DEBUGPR(50,ucout << lbPairs 
-		  << " possible load balancing pairs.\n");
-	  if (lbPairs == 0)
-	    jumpState(start);
+    lbPairs = std::min(total.donors,total.receivers);
+    DEBUGPR(50,ucout << lbPairs 
+      << " possible load balancing pairs.\n");
+    if (lbPairs == 0)
+      jumpState(start);
 
-	  {
-	    int offset     = lbRandom.asLong() % total.donors;
-	    DEBUGPR(200,ucout << "offset=" << offset << '\n');
-	    myID.donors    = (myID.donors + offset) % total.donors;
-	    offset         = lbRandom.asLong() % total.receivers;
-	    DEBUGPR(200,ucout << "offset=" << offset << '\n');
-	    myID.receivers = (myID.receivers + offset) % total.receivers;
-	    DEBUGPR(50,ucout << "myID: " << myID << '\n');
-	  }
+    {
+      int offset     = lbRandom.asLong() % total.donors;
+      DEBUGPR(200,ucout << "offset=" << offset << '\n');
+      myID.donors    = (myID.donors + offset) % total.donors;
+      offset         = lbRandom.asLong() % total.receivers;
+      DEBUGPR(200,ucout << "offset=" << offset << '\n');
+      myID.receivers = (myID.receivers + offset) % total.receivers;
+      DEBUGPR(50,ucout << "myID: " << myID << '\n');
+    }
 
-	  iAmDonor    = eligible.donors    && (myID.donors    < lbPairs);
-	  iAmReceiver = eligible.receivers && (myID.receivers < lbPairs);
-	  iAmRVPoint  = myCluster < lbPairs;
+    iAmDonor    = eligible.donors    && (myID.donors    < lbPairs);
+    iAmReceiver = eligible.receivers && (myID.receivers < lbPairs);
+    iAmRVPoint  = myCluster < lbPairs;
 
 #ifdef ACRO_VALIDATING
-	  if (iAmDonor)
-	  {
-	    DEBUGPR(50,ucout << "I am a donor.\n");
-	  }
-	  if (iAmReceiver)
-	  {
-	    DEBUGPR(50,ucout << "I am a receiver.\n");
-	  }
-	  if (iAmRVPoint)
-	  {
-	    DEBUGPR(150,ucout << "I am a rendezvous point.\n");
-	  }
+    if (iAmDonor)
+    {
+      DEBUGPR(50,ucout << "I am a donor.\n");
+    }
+    if (iAmReceiver)
+    {
+      DEBUGPR(50,ucout << "I am a receiver.\n");
+    }
+    if (iAmRVPoint)
+    {
+      DEBUGPR(150,ucout << "I am a rendezvous point.\n");
+    }
 #endif
 
-	  donorProc    = unknown;
-	  receiverProc = unknown;
-	  myReceiver   = unknown;
+    donorProc    = unknown;
+    receiverProc = unknown;
+    myReceiver   = unknown;
 
-	  if (!iAmDonor)
-	    jumpState(receiverInfo);
+    if (!iAmDonor)
+      jumpState(receiverInfo);
 
-	  // Donor processors must now send their address to the rendezvous
-	  // point.  If that is the same processor we're on, it's trivial.
+    // Donor processors must now send their address to the rendezvous
+    // point.  If that is the same processor we're on, it's trivial.
 
-	  if (myID.donors == myCluster)
-	    {
-	      donorProc = myRank();
-	      DEBUGPR(150,ucout << "Donor is rendezvous point.\n");
-	    }
-	  else
-	    {
-	      DEBUGPR(150,ucout << "Sending null message to ["
-		      << global->hubProc(myID.donors) << "].\n");
-	      isend((void*) &myID,      // This address does not matter
-		    0,                  // Envelope-only message!
-		    MPI_PACKED,
-		    global->hubProc(myID.donors),
-		    donorRVTag);
-	    }
-	  myState = receiverInfo;
+    if (myID.donors == myCluster)
+      {
+        donorProc = myRank();
+        DEBUGPR(150,ucout << "Donor is rendezvous point.\n");
+      }
+    else
+      {
+        DEBUGPR(150,ucout << "Sending null message to ["
+          << global->hubProc(myID.donors) << "].\n");
+        isend((void*) &myID,      // This address does not matter
+        0,                  // Envelope-only message!
+        MPI_PACKED,
+        global->hubProc(myID.donors),
+        donorRVTag);
+      }
+    myState = receiverInfo;
 
-	case receiverInfo:
+  case receiverInfo:
 
-	  DEBUGPR(150,stateEntryDebugPrint("receiverInfo"));
+    DEBUGPR(150,stateEntryDebugPrint("receiverInfo"));
 
-	  if (!iAmReceiver)
-	    jumpState(rendezvous);
+    if (!iAmReceiver)
+      jumpState(rendezvous);
 
-	  // Receiver processors now send there addressed to the rendezvous
-	  // point too.  Again, this might be trivial.
+    // Receiver processors now send there addressed to the rendezvous
+    // point too.  Again, this might be trivial.
 
-	  if (myID.receivers == myCluster)
-	    {
-	      receiverProc = myRank();
-	      receiverLoad = global->clusterLoad;
-	      DEBUGPR(150,ucout << "Receiver is rendezvous point.\n");
-	    }
-	  else
-	    {
-	      PackBuffer* outBufP = outBufQ.getFree();
-	      *outBufP << global->clusterLoad;
-	      outBufQ.send(outBufP,
-			   global->hubProc(myID.receivers),
-			   receiverRVTag);
-	      DEBUGPR(150,ucout << "Send load " << 
-		      global->clusterLoad << " to ["
-		      << global->hubProc(myID.receivers) << "].\n");
-	    }
-	  myState = rendezvous;
+    if (myID.receivers == myCluster)
+      {
+        receiverProc = myRank();
+        receiverLoad = global->clusterLoad;
+        DEBUGPR(150,ucout << "Receiver is rendezvous point.\n");
+      }
+    else
+      {
+        PackBuffer* outBufP = outBufQ.getFree();
+        *outBufP << global->clusterLoad;
+        outBufQ.send(outBufP,
+         global->hubProc(myID.receivers),
+         receiverRVTag);
+        DEBUGPR(150,ucout << "Send load " << 
+          global->clusterLoad << " to ["
+          << global->hubProc(myID.receivers) << "].\n");
+      }
+    myState = rendezvous;
 
-	case rendezvous:
+  case rendezvous:
 
-	  DEBUGPR(150,stateEntryDebugPrint("rendezvous"));
+    DEBUGPR(150,stateEntryDebugPrint("rendezvous"));
 
-	  if (!iAmRVPoint)
-	    jumpState(rendezvousDone);
+    if (!iAmRVPoint)
+      jumpState(rendezvousDone);
 
-	  // At this point, we know we are a rendezvous point.
-	  // First make sure the information from the donor is here.
+    // At this point, we know we are a rendezvous point.
+    // First make sure the information from the donor is here.
 
-	  if (donorProc != unknown)
-	    jumpState(knowDonor);
+    if (donorProc != unknown)
+      jumpState(knowDonor);
 
-	  waitToReceive(donorRVTag);
-	  myState = donorWait;
-	  break;
+    waitToReceive(donorRVTag);
+    myState = donorWait;
+    break;
 
-	case donorWait:      // Come back here when donor message arrives.
+  case donorWait:      // Come back here when donor message arrives.
 
-	  DEBUGPR(150,stateEntryDebugPrint("donorWait"));
+    DEBUGPR(150,stateEntryDebugPrint("donorWait"));
 
-	  messagesReceived++;
-	  donorProc = status.MPI_SOURCE;
-	  DEBUGPR(150,ucout << "Donor is [" << donorProc <<"].\n");
-	  myState = knowDonor;
+    messagesReceived++;
+    donorProc = status.MPI_SOURCE;
+    DEBUGPR(150,ucout << "Donor is [" << donorProc <<"].\n");
+    myState = knowDonor;
 
-	case knowDonor:         //  Now we do much the same for the receiver.
+  case knowDonor:         //  Now we do much the same for the receiver.
 
-	  DEBUGPR(150,stateEntryDebugPrint("knowDonor"));
+    DEBUGPR(150,stateEntryDebugPrint("knowDonor"));
 
-	  if (receiverProc != unknown)
-	    jumpState(knowReceiver);
+    if (receiverProc != unknown)
+      jumpState(knowReceiver);
 
-	  waitToReceive(receiverRVTag);
-	  myState = receiverWait;
-	  break;
+    waitToReceive(receiverRVTag);
+    myState = receiverWait;
+    break;
 
-	case receiverWait:  // Come back here when receiver message arrives.
+  case receiverWait:  // Come back here when receiver message arrives.
 
-	  DEBUGPR(150,stateEntryDebugPrint("receiverWait"));
+    DEBUGPR(150,stateEntryDebugPrint("receiverWait"));
 
-	  messagesReceived++;
-	  receiverProc = status.MPI_SOURCE;
-	  inBuf.reset(&status);
-	  inBuf >> receiverLoad;
-	  DEBUGPR(150,ucout << "Receiver is [" << receiverProc 
-		  << "], with load " << receiverLoad << ".\n");
-	  myState = knowReceiver;
-	                                 // Now we know donor and receiver.
-	case knowReceiver:               // Get info to the donor, if it's   
+    messagesReceived++;
+    receiverProc = status.MPI_SOURCE;
+    inBuf.reset(&status);
+    inBuf >> receiverLoad;
+    DEBUGPR(150,ucout << "Receiver is [" << receiverProc 
+      << "], with load " << receiverLoad << ".\n");
+    myState = knowReceiver;
+                                   // Now we know donor and receiver.
+  case knowReceiver:               // Get info to the donor, if it's   
                                          // a different processor.
 
-	  DEBUGPR(150,stateEntryDebugPrint("knowReceiver"));
+    DEBUGPR(150,stateEntryDebugPrint("knowReceiver"));
 
-	  if (donorProc == myRank())
-	    {
-	      myReceiver = receiverProc;
-	      DEBUGPR(150,ucout << "Rendezvous point is also donor.\n");
-	    }
-	  else
-	    {
-	      PackBuffer* outBufP = outBufQ.getFree();
-	      *outBufP << receiverLoad;
-	      *outBufP << receiverProc;
-	      DEBUGPR(150,ucout << "Forwarding information to [" 
-		      << donorProc << "].\n");
-	      outBufQ.send(outBufP,donorProc,returnRVTag);
-	    }
-	  myState = rendezvousDone;
-	  
-	case rendezvousDone:
+    if (donorProc == myRank())
+      {
+        myReceiver = receiverProc;
+        DEBUGPR(150,ucout << "Rendezvous point is also donor.\n");
+      }
+    else
+      {
+        PackBuffer* outBufP = outBufQ.getFree();
+        *outBufP << receiverLoad;
+        *outBufP << receiverProc;
+        DEBUGPR(150,ucout << "Forwarding information to [" 
+          << donorProc << "].\n");
+        outBufQ.send(outBufP,donorProc,returnRVTag);
+      }
+    myState = rendezvousDone;
+    
+  case rendezvousDone:
 
-	  DEBUGPR(150,ucout << "Load balancer <rendezvousDone> state, round "
-		  << roundNumber << ".\n");
+    DEBUGPR(150,ucout << "Load balancer <rendezvousDone> state, round "
+      << roundNumber << ".\n");
 
-	  if (iAmDonor)
-	    {
-	      if (myReceiver != unknown)
-		jumpState(donorKnowsReceiver);
+    if (iAmDonor)
+      {
+        if (myReceiver != unknown)
+    jumpState(donorKnowsReceiver);
 
-	      waitToReceive(returnRVTag);
-	      myState = returnWait;
-	      break;
-	    }
-	  else if (iAmReceiver)
-	    {
-	      waitToReceive(loadBalTag);
-	      myState = workWait;
-	      break;
-	    }
-	  else
-	    jumpState(start);
+        waitToReceive(returnRVTag);
+        myState = returnWait;
+        break;
+      }
+    else if (iAmReceiver)
+      {
+        waitToReceive(loadBalTag);
+        myState = workWait;
+        break;
+      }
+    else
+      jumpState(start);
 
-	case returnWait:                 // Come here when message from
-	                                 // the rendezvous processor arrives.
+  case returnWait:                 // Come here when message from
+                                   // the rendezvous processor arrives.
 
-	  DEBUGPR(150,stateEntryDebugPrint("returnWait"));
+    DEBUGPR(150,stateEntryDebugPrint("returnWait"));
 
-	  messagesReceived++;
-	  inBuf.reset(&status);
-	  inBuf >> receiverLoad;
-	  inBuf >> myReceiver;
-	  DEBUGPR(150,ucout << "Receiver is [" << myReceiver 
-		  << "], with load " << receiverLoad << ".\n");
-	  myState = donorKnowsReceiver;
-	  
-	case donorKnowsReceiver:         // Now start the actual transfer.
-	  
-	  DEBUGPR(150,stateEntryDebugPrint("donorKnowsReceiver"));
-	  
-	  {
-	    PackBuffer* outBufP = outBufQ.getFree();
-	    global->fillLoadBalBuffer(*outBufP,receiverLoad,myReceiver);
-	    outBufQ.send(outBufP,myReceiver,loadBalTag);
-	  }
-	  
-	  DEBUGPR(150,ucout << "Work sent to [" << myReceiver << "].\n");
-	  jumpState(start);
-
-	case workWait:                   // Come here when work arrives.
-
-	  DEBUGPR(150,stateEntryDebugPrint("workWait"));
-
-	  messagesReceived++;
-	  inBuf.reset(&status);
-	  global->unloadLoadBalBuffer(inBuf);
-	  jumpState(start);
-
-	case startIdleCheck:
-
-	  // If a higher level of debugging was requested for termination,
-	  // increase the debug level.
-	  if (global->termDebug > debug)
-	    {
-	      setDebugLevel(global->termDebug);
-	      if (global->enumCount > 1)
-		{
-		  global->reposMerger->setDebugLevel(global->termDebug);
-		  global->reposReceiver->setDebugLevel(global->termDebug);
-		}
-	    }
-
-	  DEBUGPR(150,stateEntryDebugPrint("startIdleCheck"));
-
-	  DEBUGPR(150,global->globalLoad.dump(ucout,"globalLoad"));
-
-	  // If general messages look balanced and no repository merge
-	  // is pending, then everything *seems* balanced here, and we
-	  // go to the Mattern-style termination check.
-
-	  if (global->globalLoad.seemsReallyDone())
-	    jumpState(startTermCheck);
-
-	  // Otherwise, conduct a poll to see what's going on with
-	  // general messages and repository merging.  Tell all
-	  // workers to send back their load information.
-
-	  quiescencePolls++;
-	  global->alertWorkers(quiescencePollSignal);
-	  workersReplied = global->iAmWorker();
-
-	  myState = quiescencePoll;
-
-	case quiescencePoll:
-
-	  DEBUGPR(150,stateEntryDebugPrint("quiescencePoll"));
-
-	  // If all workers have replied, go back to the beginning.
-	  // If general messages are now known to be balanced, we'll
-	  // go to the startTermCheck state in the test above.
-
-	  if (workersReplied == global->numWorkers())
-	    {
-	      global->hubCalculateLoads();
-	      DEBUGPR(150,global->clusterLoad.dump(ucout,"clusterload"));
-	      DEBUGPR(150,global->globalLoad.dump(ucout,"globalLoad"));
-	      jumpState(start);
-	    }
-
-	  waitToReceive(global->quiescencePollTag);
-	  myState = quiescencePollWait;
-	  break;
-
-	case quiescencePollWait:
-	  
-	  DEBUGPR(150,stateEntryDebugPrint("quiescencePollWait"));
-
-	  workersReplied++;
-	  inBuf.reset(&status);
-	  {
-	    int w = global->whichWorker(status.MPI_SOURCE);
-	    DEBUGPR(150,ucout << "Reply is from processor " << status.MPI_SOURCE
-		    << ", worker number " << w << endl);
-#ifdef ACRO_VALIDATING
-	    if ((w < 0) || (w >= global->numWorkers()))
-	      EXCEPTION_MNGR(runtime_error,"Bad quiescence poll response");
-#endif
-	    inBuf >> global->workerLoadReport[w];
-	    DEBUGPR(150,global->workerLoadReport[w].dump(ucout,"Report load"));
-	    global->repositionWorker(w);   // Get hub in consistent state
-	  }
-
-	  jumpState(quiescencePoll);
-
-	case startTermCheck:
-
-	  DEBUGPR(150,stateEntryDebugPrint("startTermCheck"));
-
-	  termChecks++;
-	  global->alertWorkers(terminateCheckSignal);
-	  workersReplied = global->iAmWorker();
-	  termCheckObject.reset();
-	  termCheckTarget = global->globalLoad.messages.general.received + 
-	                    global->globalLoad.messages.nonLocalScatter.received;
-	  termCheckObject.value = global->messages.general.sent +
-	                          global->messages.nonLocalScatter.sent;
-	  DEBUGPR(150,ucout << "Cluster check:  Target sum = " 
-		  << termCheckTarget 
-		  << ", my value = " << termCheckObject.value  
-		  << ", workersReplied = " << workersReplied << '\n');
-
-	  myState = termCheckCluster;
-
-	case termCheckCluster:
-
-	  DEBUGPR(150,stateEntryDebugPrint("termCheckCluster"));
-
-	  DEBUGPR(160,ucout << "workersReplied = " << workersReplied << endl);
-
-	  if (workersReplied == global->numWorkers())
-	    jumpState(termCheckTree);
-
-	  tag = global->termCheckTag;
-	  irecv((void *) &workerCount,
-		1,
-		MPI_INT,
-		MPI_ANY_SOURCE,
-		tag,
-		&request);
-	  state_flag = ThreadWaiting;
-	  myState = termCheckClusterWait;
-	  break;
-
-	case termCheckClusterWait:
-
-	  DEBUGPR(150,stateEntryDebugPrint("termCheckClusterWait"));
-
-	  messagesReceived++;
-	  termCheckObject.value += workerCount;
-	  DEBUGPR(150,ucout << "workerCount = " << workerCount 
-		  << ", sum = " << termCheckObject.value << '\n');
-	  workersReplied++;
-	  jumpState(termCheckCluster);
-
-	case termCheckTree:
-
-	  DEBUGPR(150,stateEntryDebugPrint("termCheckTree"));
-
-	  if (termCheckObject.run())
-	    break;
-
-	  if(termCheckObject.value == termCheckTarget)
-	    {
-	      // The termCheckInProgress variable is no longer in use
-	      // global->termCheckInProgress = false;
-	      if (global->checkpointing)
-		{
-		  global->writeCheckpoint();
-		  jumpState(start);
-		}
-	      DEBUGPR(150,ucout << "Termination confirmed.\n");
-	      global->clusterTerminate();
-	      jumpState(dead);
-	    }
-	      
-	  DEBUGPR(150,ucout << "Termination disproved: target = "
-		  << termCheckTarget << ", sum = " 
-		  << termCheckObject.value << ".\n");
-
-	  // This is greatly simplified now... just go back to beginning
-	  // and run another sweep if termination was disproved
-
-	  jumpState(start);
-
-	case dead:
-
-	  DEBUGPR(150,stateEntryDebugPrint("dead"));
-
-	  break;
-
-	}
-
+    messagesReceived++;
+    inBuf.reset(&status);
+    inBuf >> receiverLoad;
+    inBuf >> myReceiver;
+    DEBUGPR(150,ucout << "Receiver is [" << myReceiver 
+      << "], with load " << receiverLoad << ".\n");
+    myState = donorKnowsReceiver;
+    
+  case donorKnowsReceiver:         // Now start the actual transfer.
+    
+    DEBUGPR(150,stateEntryDebugPrint("donorKnowsReceiver"));
+    
+    {
+      PackBuffer* outBufP = outBufQ.getFree();
+      global->fillLoadBalBuffer(*outBufP,receiverLoad,myReceiver);
+      outBufQ.send(outBufP,myReceiver,loadBalTag);
     }
+    
+    DEBUGPR(150,ucout << "Work sent to [" << myReceiver << "].\n");
+    jumpState(start);
+
+  case workWait:                   // Come here when work arrives.
+
+    DEBUGPR(150,stateEntryDebugPrint("workWait"));
+
+    messagesReceived++;
+    inBuf.reset(&status);
+    global->unloadLoadBalBuffer(inBuf);
+    jumpState(start);
+
+  case startIdleCheck:
+
+    // If a higher level of debugging was requested for termination,
+    // increase the debug level.
+    if (global->termDebug > debug)
+      {
+        setDebugLevel(global->termDebug);
+        if (global->enumCount > 1)
+    {
+      global->reposMerger->setDebugLevel(global->termDebug);
+      global->reposReceiver->setDebugLevel(global->termDebug);
+    }
+      }
+
+    DEBUGPR(150,stateEntryDebugPrint("startIdleCheck"));
+
+    DEBUGPR(150,global->globalLoad.dump(ucout,"globalLoad"));
+
+    myState = gatherCluster;
+
+  case gatherCluster:
+
+    DEBUGPR(150,stateEntryDebugPrint("gatherCluster"));
+
+    // Force all workers to report to their hubs
+
+    if (operateQuiescencePoll())
+      break;
+
+    myState = resurvey;
+
+  case resurvey:
+
+    DEBUGPR(150,stateEntryDebugPrint("resurvey"));
+     
+    // Now recalcuate all loads and message counts up and down the hub tree
+
+    if (surveyObject.run())
+      break;
+
+    surveyObject.reset();
+
+    // Go back to the top if we don't really seem to be done
+
+    if (!(global->globalLoad.seemsReallyDone()))
+    {
+      jumpState(start);
+    }
+
+    // At this point we appear to be done.  Commence a Mattern-style termination
+    // check.  Compute the number of messages we expect to count in that check
+
+    termCheckTarget = global->globalLoad.messages.general.received + 
+                      global->globalLoad.messages.nonLocalScatter.received;
+
+    DEBUGPR(150,ucout << "Target message count for termination is " 
+                      << termCheckTarget << endl);
+
+    myState = termCheckCluster;
+
+  case termCheckCluster:
+
+    DEBUGPR(150,stateEntryDebugPrint("termCheckCluster"));
+
+    // Force all workers to report again
+
+    if (operateQuiescencePoll())
+      break;
+
+    // Compute message counts in this cluster
+
+    termCheckObject.value = global->clusterLoad.messages.general.sent +
+                            global->clusterLoad.messages.nonLocalScatter.sent;
+
+    DEBUGPR(150,ucout << "This cluster's termination check count is "
+                      << termCheckObject.value << endl);
+
+    termCheckObject.reset();
+
+    myState = termCheckTree;
+
+  case termCheckTree:
+
+    DEBUGPR(150,stateEntryDebugPrint("termCheckTree"));
+
+    // Collect all the message counts up and down the tree
+
+    if (termCheckObject.run())
+      break;
+
+    // End the run if the count matches the original target
+
+    if (termCheckObject.value == termCheckTarget)
+    {
+      if (global->checkpointing)
+      {
+        global->writeCheckpoint();
+        jumpState(start);
+      }
+      DEBUGPR(150,ucout << "Termination confirmed.\n");
+      global->clusterTerminate();
+      jumpState(dead);
+    }
+
+    // Otherwise, try again when able
+
+    DEBUGPR(150,ucout << "Termination disproved: target = "
+      << termCheckTarget << ", sum = " 
+      << termCheckObject.value << ".\n");
+
+    jumpState(start);
+
+  case dead:
+
+     DEBUGPR(150,stateEntryDebugPrint("dead"));
+
+     break;
+
+  }
+
+  }
 
   while(canContinue);
 
   DEBUGPR(200,ucout << "LB messages: "
-	  << messagesReceived                 << " general + "
-	  << surveyObject.messagesReceived    << " survey + "
-	  << countObject.messagesReceived     << " count + "
-	  << termCheckObject.messagesReceived << " term = "
-	  << messageCount() << '\n');
+    << messagesReceived                 << " general + "
+    << surveyObject.messagesReceived    << " survey + "
+    << countObject.messagesReceived     << " count + "
+    << termCheckObject.messagesReceived << " term = "
+    << messageCount() << '\n');
 
   DEBUGPR(150,ucout << "Load balancer relinquishing control at time=" 
-	  << WallClockSeconds() - global->baseWallTime << endl);
+    << WallClockSeconds() - global->baseWallTime << endl);
 
   return RunOK;
 

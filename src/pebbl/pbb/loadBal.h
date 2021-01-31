@@ -222,11 +222,10 @@ private:
       donorKnowsReceiver,
       workWait,
       startIdleCheck,
+      gatherCluster,       // Secondary state in quiescencePollInProgress, workerReplied
+      resurvey,            // This state has secondary state in surveyObject
       quiescencePoll,
-      quiescencePollWait,
-      startTermCheck,
-      termCheckCluster,
-      termCheckClusterWait,
+      termCheckCluster,    // Secondary state in quiescencePollInProgress, workerReplied
       termCheckTree,       // This state has secondary state in termCheckObject
       dead
     };
@@ -287,6 +286,7 @@ private:
   double lastLoadBalTime;
 
   // Whether doing a survey restart
+
   bool surveyRestartFlag;
 
   // Used by final termination check.
@@ -294,6 +294,8 @@ private:
   int workersReplied;
   int termCheckTarget;
   int workerCount;
+
+  bool quiescencePollInProgress;
   
   // Functions used within the class.
 
@@ -302,6 +304,7 @@ private:
   void waitToReceive(MessageID& tag_);
   int  subproblemsProcessed();
   void stateEntryDebugPrint(const char* stateName);
+  bool operateQuiescencePoll();
 
   // For end-of-run statisics, debugging, and error checking.
 

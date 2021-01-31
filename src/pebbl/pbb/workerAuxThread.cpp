@@ -74,8 +74,7 @@ ThreadObj::RunStatus workerAuxObj::handleMessage(double* controlParam)
   // If a higher level of debuging was requested for termination,
   // increase the debug level.
   if ((signal == quiescencePollSignal  || 
-       signal == terminateSignal       ||
-       signal == terminateCheckSignal) &&
+       signal == terminateSignal     ) &&
       (global->termDebug > debug))
        setDebug(global->termDebug);
 
@@ -114,15 +113,18 @@ ThreadObj::RunStatus workerAuxObj::handleMessage(double* controlParam)
       DEBUGPR(150,ucout << "load information.\n");
       global->getLoadInfoFromHub(inBuf);
       break;
-      
-    case terminateCheckSignal:
 
-      terminateCheckValue = global->messages.nonLocalScatter.sent +
-	                      global->messages.general.sent;
-      DEBUGPR(150,ucout << "termination check query.\n");
-      DEBUGPR(150,ucout << terminateCheckValue << " messages.\n");
-      isend(&terminateCheckValue,1,MPI_INT,global->myHub(),global->termCheckTag);
-      break;
+    // No more terminateCheckSignal; this is now done by the same scheme that
+    // does the "quiescence check"
+
+    // case terminateCheckSignal:
+
+    //   terminateCheckValue = global->messages.nonLocalScatter.sent +
+	   //                    global->messages.general.sent;
+    //   DEBUGPR(150,ucout << "termination check query.\n");
+    //   DEBUGPR(150,ucout << terminateCheckValue << " messages.\n");
+    //   isend(&terminateCheckValue,1,MPI_INT,global->myHub(),global->termCheckTag);
+    //   break;
       
     case startCheckpointSignal:
 

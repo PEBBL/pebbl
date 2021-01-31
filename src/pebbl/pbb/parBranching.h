@@ -539,7 +539,7 @@ protected:
   MessageID hubTag;            // Anything sent to a hub.
   MessageID workerTag;         // Messages from hub to worker.
   MessageID quiescencePollTag; // Check for general message balance.
-  MessageID termCheckTag;      // worker->hub messages for termination confirm.
+  // MessageID termCheckTag;   // Termination check and quiescence poll now the same
   MessageID earlyOutputTag;    // Early output signals.
   MessageID incumbCastTag;     // Incumbent broadcast.
   MessageID printSolutionTag;  // For solution printout

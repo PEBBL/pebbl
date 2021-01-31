@@ -56,7 +56,7 @@ public:
     { 
       loadInfoSignal, 
       quiescencePollSignal,
-      terminateCheckSignal, 
+      // terminateCheckSignal,     // This is now folded into quiescence polling
       terminateSignal,
       startCheckpointSignal,
       writeCheckpointSignal,
