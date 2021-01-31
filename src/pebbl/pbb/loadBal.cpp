@@ -846,7 +846,8 @@ ThreadObj::RunStatus loadBalObj::runWithinLogging(double* controlParam)
 
 	  if(termCheckObject.value == termCheckTarget)
 	    {
-	      global->termCheckInProgress = false;
+	      // The termCheckInProgress variable is no longer in use
+	      // global->termCheckInProgress = false;
 	      if (global->checkpointing)
 		{
 		  global->writeCheckpoint();

@@ -346,8 +346,9 @@ void parallelBranching::reset(bool VBFlag)
 	  // Don't form worker heaps here; do it after ramp-up
 	}
 
-      termCheckInProgress  = false;
-      wantAnotherTermCheck = false;
+      // These variables no longer in use
+      // termCheckInProgress  = false;
+      // wantAnotherTermCheck = false;
 
     }
 

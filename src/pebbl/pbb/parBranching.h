@@ -799,13 +799,13 @@ protected:
   int    hubLastPrint;
   double hubLastPrintTime;
 
-  // These are required to prevent spurious activation of hub logic,
-  // and to prevent race conditions between the hub and termination check
-  // (when there is only one hub).
+  // Indicates whether a search is going on
 
   int searchInProgress;
-  int termCheckInProgress;
-  int wantAnotherTermCheck;
+
+  // These variables are no longer used
+  // int termCheckInProgress;
+  // int wantAnotherTermCheck;
   
   // Methods needed by hub.
 
