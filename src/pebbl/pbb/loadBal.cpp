@@ -234,9 +234,9 @@ surveyRestarts(0),
 quiescencePolls(0),
 termChecks(0)
 {
-  myState   = start;
-  myCluster = global->clusterNumber();
-  state_flag     = ThreadReady;        // Make sure ready to start (?)
+  myState    = start;
+  myCluster  = global->clusterNumber();
+  state_flag = ThreadReady;               // Make sure ready to start (?)
   outBufQ.reset(1,bufferSize);
 }
 
@@ -713,7 +713,7 @@ ThreadObj::RunStatus loadBalObj::runWithinLogging(double* controlParam)
 
 	case startIdleCheck:
 
-	  // If a higher level of debuging was requested for termination,
+	  // If a higher level of debugging was requested for termination,
 	  // increase the debug level.
 	  if (global->termDebug > debug)
 	    {
@@ -796,7 +796,7 @@ ThreadObj::RunStatus loadBalObj::runWithinLogging(double* controlParam)
 	  workersReplied = global->iAmWorker();
 	  termCheckObject.reset();
 	  termCheckTarget = global->globalLoad.messages.general.received + 
-	                 global->globalLoad.messages.nonLocalScatter.received;
+	                    global->globalLoad.messages.nonLocalScatter.received;
 	  termCheckObject.value = global->messages.general.sent +
 	                          global->messages.nonLocalScatter.sent;
 	  DEBUGPR(150,ucout << "Cluster check:  Target sum = " 
