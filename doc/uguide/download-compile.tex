@@ -349,11 +349,14 @@ PEBBL provides a testing script to verify the success of the compilation
 process.  In the same \texttt{buildpebbl} directory as you performed the
 \texttt{make} operation, you launch the testing script by giving the command
 \begin{codeblock}
-../pebbl/scripts/testScript.py
+python3 ../pebbl/scripts/testScript.py
 \end{codeblock}
-The script will only work correctly when run with the current working
-directory set to the top of the build directory tree.  The test script does
-not require the install step described at the end of the previous section.
+This command assumes that a Python 3.\emph{x} interpreter on your system may
+be invoked by the command \texttt{python3}.  If not, substitute a different
+command for \texttt{python3}. The script will only work correctly when run
+with the current working directory set to the top of the build directory tree.
+The test script does not require the install step described at the end of the
+previous section.
 
 If you only configured with the serial layer, the testing script will only
 perform serial testing.  In this case, the output should look like:

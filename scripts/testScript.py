@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 # Python script for minimal confidence testing of a PEBBL build
 
 
