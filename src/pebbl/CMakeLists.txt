@@ -17,7 +17,7 @@ if(enable_mpi)
   if(MPI_CXX_COMPILE_FLAGS)
     target_compile_options(pebbl PUBLIC ${MPI_CXX_COMPILE_FLAGS})
   endif()
-  set_target_properties(pebbl PROPERTIES LINK_FLAGS ${MPI_CXX_LINK_FLAGS})
+  set_target_properties(pebbl PROPERTIES LINK_FLAGS "${MPI_CXX_LINK_FLAGS}")
   target_link_libraries(pebbl PUBLIC ${MPI_CXX_LIBRARIES})
 endif()
 
