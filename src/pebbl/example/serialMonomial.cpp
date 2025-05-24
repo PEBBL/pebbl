@@ -205,7 +205,7 @@ namespace pebblMonom {
   };
 
 
-  MPI_Datatype branchChoice::mpiType     = MPI_UB;
+  MPI_Datatype branchChoice::mpiType     = MPI_INT;       // Will get overwritten
   MPI_Op       branchChoice::mpiCombiner = MPI_OP_NULL;
 
 #endif
